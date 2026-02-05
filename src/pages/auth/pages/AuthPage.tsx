@@ -21,12 +21,11 @@ export default function AuthPage() {
     const [msg, contextHolder] = message.useMessage();
 
     const onLogin = async (values: LoginValues) => {
-        // TODO: gọi API login
         msg.success(`Đăng nhập thành công (demo): ${values.email}`);
     };
 
     const onRegister = async (values: RegisterValues) => {
-        // TODO: gọi API register
+        
         msg.success(`Tạo tài khoản thành công (demo): ${values.email}`);
     };
 
@@ -34,7 +33,7 @@ export default function AuthPage() {
         <ConfigProvider
             theme={{
                 token: {
-                    colorPrimary: "#22c55e", // spring green
+                    colorPrimary: "#22c55e", 
                     borderRadius: 14,
                     fontSize: 14,
                 },
@@ -47,22 +46,22 @@ export default function AuthPage() {
             {contextHolder}
 
             <div className="min-h-screen w-full bg-gradient-to-br from-emerald-50 via-sky-50 to-pink-50">
-                {/* decorative blobs */}
+                
                 <div className="pointer-events-none absolute inset-0 overflow-hidden">
                     <div className="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-emerald-200/40 blur-3xl" />
                     <div className="absolute top-24 -right-24 h-96 w-96 rounded-full bg-sky-200/40 blur-3xl" />
                     <div className="absolute -bottom-24 left-1/3 h-96 w-96 rounded-full bg-pink-200/40 blur-3xl" />
-                    {/* subtle sparkles */}
+                    
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.7),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(255,255,255,0.6),transparent_35%),radial-gradient(circle_at_30%_80%,rgba(255,255,255,0.55),transparent_40%)]" />
                 </div>
 
                 <div className="relative mx-auto flex min-h-screen max-w-6xl items-center justify-center px-4 py-10">
                     <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-2">
-                        {/* left: brand panel */}
+                        
                         <div className="hidden lg:flex">
                             <div className="w-full rounded-3xl border border-white/60 bg-white/40 p-10 shadow-[0_10px_30px_rgba(0,0,0,0.08)] backdrop-blur-xl">
                                 <div className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-4 py-2 text-white shadow-sm">
-                                    <span className="text-lg font-semibold">SpringStay</span>
+                                    <span className="text-lg font-semibold">VietStay</span>
                                     <span className="text-xs opacity-90">Hotel</span>
                                 </div>
 
@@ -99,7 +98,7 @@ export default function AuthPage() {
                             </div>
                         </div>
 
-                        {/* right: auth card */}
+                        
                         <div className="flex items-center justify-center">
                             <div className="w-full max-w-md rounded-3xl border border-white/60 bg-white/55 p-6 shadow-[0_10px_30px_rgba(0,0,0,0.08)] backdrop-blur-xl sm:p-8">
                                 <div className="mb-4">

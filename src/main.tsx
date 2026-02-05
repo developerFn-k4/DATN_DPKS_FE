@@ -23,7 +23,7 @@ const queryClient = new QueryClient({
 const showDevtools = false
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <BrowserRouter>   {/* 👈 BẮT BUỘC phải có cái này */}
+  <BrowserRouter>   
     <QueryClientProvider client={queryClient}>
       <App />
       {showDevtools && <ReactQueryDevtools initialIsOpen={false} />}
