@@ -5,6 +5,7 @@ import { EnvironmentOutlined, SearchOutlined } from "@ant-design/icons";
 import { motion, useScroll, useTransform } from "framer-motion"; 
 import type { CityOption, SearchState } from "../../types/types";
 
+
 const { RangePicker } = DatePicker;
 
 const container = {

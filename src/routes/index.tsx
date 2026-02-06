@@ -4,7 +4,7 @@ import HomePage from '../components/Layouts/HomePage'
 const Routers = () => {
     return (
         <Routes>
-            <Route path='/auth' element={<AuthPage />} />
+            <Route path='/login' element={<AuthPage />} />
             <Route path='/' element={<HomePage />} />
 
         </Routes>

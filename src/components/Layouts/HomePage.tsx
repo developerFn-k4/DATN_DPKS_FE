@@ -1,6 +1,4 @@
 import React, { useMemo, useState } from "react";
-import type { SearchState } from "../../types/types";
-import { cities, sampleHotels } from "../../services/data";
 import { SpringBackdrop } from "../HomeLayout/SpringBackdrop";
 import { HomeHeader } from "../Header/HomeHeader";
 import { HomeHero } from "../HomeLayout/HomeHero";
@@ -11,6 +9,8 @@ import { HomeFooter } from "../Footer/HomeFooter";
 import { HomeBanner } from "../HomeLayout/HomeBanner";
 import { HomeQuickFilters } from "../HomeLayout/HomeQuickFilters";
 import { HomeTestimonials } from "../HomeLayout/HomeTestimonials";
+import type { SearchState } from "../../types/types";
+import { cities, sampleHotels } from "../../services/data";
 
 export default function HomePage() {
     const [search, setSearch] = useState<SearchState>({
