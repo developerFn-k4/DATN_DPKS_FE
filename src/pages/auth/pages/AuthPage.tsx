@@ -298,7 +298,7 @@ export default function AuthPage() {
                                                             type="primary"
                                                             className="w-full rounded-xl font-semibold"
                                                         >
-                                                            Tạo tài khoản
+                                                            Tạo Tài Khoản 
                                                         </Button>
                                                     </Form>
 
