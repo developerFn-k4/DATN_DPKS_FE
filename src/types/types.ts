@@ -10,6 +10,18 @@ export type HotelItem = {
     img: string;
 };
 
+export type RoomItem = {
+    id: number;
+    name: string;
+    city: string;
+    type: string;
+    features: string[];
+    price: number;
+    image: string;
+    label?: string;
+    labelColor?: string;
+};
+
 export type SearchState = {
     city: string;
     keyword: string;
