@@ -32,13 +32,13 @@ export function HomeHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link to="/auth">
+          <Link to="/login">
             <Button type="default" className="hidden md:inline-flex">
               Đăng nhập
             </Button>
           </Link>
 
-          <Link to="/auth">
+          <Link to="/login">
             <Button
               type="primary"
               className="!bg-emerald-600 hover:!bg-emerald-700"
