@@ -37,6 +37,10 @@ type Props = {
     onSearch?: () => void;
 };
 
+const gradientBackground = {
+    backgroundImage: "radial-gradient(800px 300px at 20% 20%, rgba(16,185,129,0.25), transparent 60%), radial-gradient(700px 280px at 80% 30%, rgba(163,230,53,0.22), transparent 60%), radial-gradient(900px 340px at 50% 80%, rgba(34,197,94,0.12), transparent 60%)"
+};
+
 export function HomeHero({ cities, value, onChange, onSearch }: Props) {
     const { scrollY } = useScroll();
     const bgY = useTransform(scrollY, [0, 400], [0, 80]);
@@ -47,10 +51,7 @@ export function HomeHero({ cities, value, onChange, onSearch }: Props) {
             <motion.div style={{ y: bgY }} className="absolute inset-0 -z-10">
                 <div
                     className="h-[560px] w-full"
-                    style={{
-                        backgroundImage:
-                            "radial-gradient(800px 300px at 20% 20%, rgba(16,185,129,0.25), transparent 60%), radial-gradient(700px 280px at 80% 30%, rgba(163,230,53,0.22), transparent 60%), radial-gradient(900px 340px at 50% 80%, rgba(34,197,94,0.12), transparent 60%)",
-                    }}
+                    style={gradientBackground}
                 />
             </motion.div>
 
