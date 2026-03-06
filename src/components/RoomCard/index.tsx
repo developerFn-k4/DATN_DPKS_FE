@@ -1,5 +1,6 @@
 import { Card } from "antd";
 import { EnvironmentOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 import type { RoomItem } from "../../types/types";
 
 interface RoomCardProps {
@@ -7,6 +8,12 @@ interface RoomCardProps {
 }
 
 export function RoomCard({ room }: RoomCardProps) {
+  const navigate = useNavigate();
+
+  const handleViewDetails = () => {
+    navigate('/booking');
+  };
+
   return (
     <Card
       hoverable
@@ -58,7 +65,10 @@ export function RoomCard({ room }: RoomCardProps) {
                 </span>
                 <span className="text-sm text-slate-500">/đêm</span>
               </div>
-              <button className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700">
+              <button 
+                onClick={handleViewDetails}
+                className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+              >
                 Xem chi tiết
               </button>
             </div>
