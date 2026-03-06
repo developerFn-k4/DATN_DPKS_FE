@@ -32,6 +32,7 @@ export default function AuthPage() {
             name: values.fullName,
             email: values.email,
             password: values.password,
+            password_confirmation: values.confirmPassword,
         });
 
         if (res) msg.success(res.message ?? `Tạo tài khoản thành công: ${values.email}`);

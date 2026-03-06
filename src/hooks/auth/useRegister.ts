@@ -21,7 +21,7 @@ export function useRegister() {
       const user =
         res.user ??
         (res as any)?.payload?.user;
- 
+
       if (token) {
         localStorage.setItem(
           "user",
@@ -38,7 +38,15 @@ export function useRegister() {
 
       if (axios.isAxiosError(e)) {
         const data: any = e.response?.data;
-        msg = data?.message || data?.error || e.message || msg;
+
+        if (data?.errors) {
+          const firstError = Object.values(data.errors)[0];
+          if (Array.isArray(firstError)) {
+            msg = firstError[0];
+          }
+        } else {
+          msg = data?.message || data?.error || e.message || msg;
+        }
       }
 
       setError(msg);
