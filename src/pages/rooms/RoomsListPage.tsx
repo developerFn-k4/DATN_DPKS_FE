@@ -1,19 +1,86 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HomeHeader } from "../../components/Header/HomeHeader";
 import { HomeFooter } from "../../components/Footer/HomeFooter";
 import { RoomCard } from "../../components/RoomCard";
-import { sampleRooms } from "../../services/data";
-import { Select } from "antd";
+import { Select, Spin, message } from "antd";
+import { API_BASE_URL, ENDPOINTS } from "../../services/endpoints/common";
+import type { ApiRoomsResponse, ApiRoom, RoomItem } from "../../types/types";
 
 const { Option } = Select;
 
+// Helper function to convert API data to RoomItem format
+const convertApiRoomToRoomItem = (apiRoom: ApiRoom): RoomItem => {
+  const price = parseFloat(apiRoom.room_type.base_price);
+  
+  // Determine label and color based on price range
+  let label = "";
+  let labelColor = "";
+  if (price >= 3000000) {
+    label = "Luxury";
+    labelColor = "bg-amber-600";
+  } else if (price >= 2000000) {
+    label = "VIP";
+    labelColor = "bg-rose-600";
+  } else if (price >= 1500000) {
+    label = "Suite";
+    labelColor = "bg-emerald-600";
+  } else if (price >= 1000000) {
+    label = "Premium";
+    labelColor = "bg-purple-600";
+  }
+
+  return {
+    id: apiRoom.id,
+    name: `${apiRoom.room_type.name} - Phòng ${apiRoom.room_number}`,
+    city: `Tầng ${apiRoom.floor}`,
+    type: apiRoom.room_type.description,
+    features: [
+      `${apiRoom.room_type.capacity} người`,
+      apiRoom.room_type.bed_type,
+      apiRoom.status === "available" ? "Có sẵn" : "Đã đặt",
+    ],
+    price: price,
+    image: `https://images.unsplash.com/photo-${1582719508461 + apiRoom.id}?w=800`,
+    label,
+    labelColor,
+  };
+};
+
 export default function RoomsListPage() {
-  const [filterCity, setFilterCity] = useState<string>("all");
+  const [rooms, setRooms] = useState<RoomItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+
+  useEffect(() => {
+    fetchRooms();
+  }, []);
+
+  const fetchRooms = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ROOMS}`);
+      const data: ApiRoomsResponse = await response.json();
+      
+      if (data.success && data.data) {
+        const convertedRooms = data.data.map(convertApiRoomToRoomItem);
+        setRooms(convertedRooms);
+      }
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+      message.error("Không thể tải danh sách phòng");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredRooms =
-    filterCity === "all"
-      ? sampleRooms
-      : sampleRooms.filter((room) => room.city === filterCity);
+    filterStatus === "all"
+      ? rooms
+      : rooms.filter((room) => 
+          filterStatus === "available" 
+            ? room.features.includes("Có sẵn")
+            : !room.features.includes("Có sẵn")
+        );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-slate-50">
@@ -33,32 +100,40 @@ export default function RoomsListPage() {
         {/* Filter Section */}
         <div className="mb-8 flex items-center gap-4">
           <span className="text-sm font-medium text-slate-700">
-            Lọc theo địa điểm:
+            Lọc theo trạng thái:
           </span>
           <Select
-            value={filterCity}
-            onChange={setFilterCity}
+            value={filterStatus}
+            onChange={setFilterStatus}
             className="w-48"
             size="large"
           >
             <Option value="all">Tất cả</Option>
-            <Option value="Đà Nẵng">Đà Nẵng</Option>
-            <Option value="Đà Lạt">Đà Lạt</Option>
-            <Option value="Phú Quốc">Phú Quốc</Option>
+            <Option value="available">Có sẵn</Option>
+            <Option value="booked">Đã đặt</Option>
           </Select>
           <span className="text-sm text-slate-500">
             ({filteredRooms.length} phòng)
           </span>
         </div>
 
-        {/* Rooms Grid */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredRooms.map((room) => (
-            <RoomCard key={room.id} room={room} />
-          ))}
-        </div>
+        {/* Loading State */}
+        {loading && (
+          <div className="flex justify-center py-20">
+            <Spin size="large" tip="Đang tải danh sách phòng..." />
+          </div>
+        )}
 
-        {filteredRooms.length === 0 && (
+        {/* Rooms Grid */}
+        {!loading && (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredRooms.map((room) => (
+              <RoomCard key={room.id} room={room} />
+            ))}
+          </div>
+        )}
+
+        {!loading && filteredRooms.length === 0 && (
           <div className="py-20 text-center">
             <p className="text-lg text-slate-500">
               Không tìm thấy phòng nào phù hợp
