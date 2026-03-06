@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, DatePicker, Input, Select, Tag, Rate } from "antd";
 import type { RangePickerProps } from "antd/es/date-picker";
 import { EnvironmentOutlined, SearchOutlined } from "@ant-design/icons";
@@ -10,12 +9,25 @@ const { RangePicker } = DatePicker;
 
 const container = {
     hidden: { opacity: 0, y: 14 },
-    show: { opacity: 1, y: 0, transition: { staggerChildren: 0.08, duration: 0.55, ease: "easeOut" } },
+    show: { 
+        opacity: 1, 
+        y: 0, 
+        transition: { 
+            staggerChildren: 0.08, 
+            duration: 0.55 
+        } 
+    },
 };
 
 const item = {
     hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+    show: { 
+        opacity: 1, 
+        y: 0, 
+        transition: { 
+            duration: 0.45 
+        } 
+    },
 };
 
 type Props = {
