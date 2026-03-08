@@ -8,7 +8,6 @@ import { HomeWhy } from "../HomeLayout/HomeWhy";
 import { HomeFooter } from "../Footer/HomeFooter";
 import { HomeBanner } from "../HomeLayout/HomeBanner";
 import { HomeQuickFilters } from "../HomeLayout/HomeQuickFilters";
-import { HomeTestimonials } from "../HomeLayout/HomeTestimonials";
 import type { SearchState } from "../../types/types";
 import { cities, sampleHotels } from "../../services/data";
 
@@ -47,7 +46,6 @@ export default function HomePage() {
                 <HomeQuickFilters value={quick} onChange={(p) => setQuick((s) => ({ ...s, ...p }))} />
                 <HomeDeals />
                 <HomePopular hotels={hotelsFiltered} cities={cities} />
-                <HomeTestimonials />
                 <HomeWhy />
             </main>
 
