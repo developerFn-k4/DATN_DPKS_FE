@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 import type { CityOption, HotelItem } from "../../types/types";
 
 
-
 type Props = {
     hotels: HotelItem[];
     cities: CityOption[];
