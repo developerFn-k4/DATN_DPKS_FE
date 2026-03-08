@@ -1,7 +1,8 @@
 import React from "react";
 import { Form, Input, Button, Tabs, Checkbox, Divider, ConfigProvider, message } from "antd";
 import { MailOutlined, LockOutlined, UserOutlined, PhoneOutlined } from "@ant-design/icons";
-import { useRegister } from "../../../hooks/auth/useRegister";
+import { useLogin, useRegister } from "../../../hooks/auth/useRegister";
+import { useNavigate } from "react-router-dom";
 
 type LoginValues = {
     email: string;
@@ -20,13 +21,26 @@ type RegisterValues = {
 
 export default function AuthPage() {
     const [msg, contextHolder] = message.useMessage();
-
+    const navigate = useNavigate();
+    const { login, loading: loginLoading, error: loginError } = useLogin();
     const onLogin = async (values: LoginValues) => {
-        msg.success(`Đăng nhập thành công (demo): ${values.email}`);
+        const res = await login({
+            email: values.email,
+            password: values.password,
+        });
+
+        if (res) {
+            msg.success(res.message ?? "Đăng nhập thành công");
+
+            // chuyển sang trang chủ
+            navigate("/");
+        } else {
+            msg.error(loginError ?? "Đăng nhập thất bại");
+        }
     };
 
 
-    const { register, loading, error } = useRegister();
+    const { register, error } = useRegister();
     const onRegister = async (values: RegisterValues) => {
         const res = await register({
             name: values.fullName,
@@ -174,6 +188,7 @@ export default function AuthPage() {
                                                         <Button
                                                             htmlType="submit"
                                                             type="primary"
+                                                            loading={loginLoading}
                                                             className="w-full rounded-xl font-semibold"
                                                         >
                                                             Đăng nhập
