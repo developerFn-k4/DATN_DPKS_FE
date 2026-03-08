@@ -3,6 +3,7 @@ import { Avatar, Button, Descriptions, Dropdown, Modal, type MenuProps } from "a
 import { Link } from "react-router-dom";
 import { useAuth, useMe } from "../../hooks/auth/useRegister";
 import ProfileModal from "./ProfileModal";
+import logoHome from "../../assets/logo.png";
 
 export function HomeHeader() {
   const { user, isLogin, logout } = useAuth();
@@ -32,12 +33,12 @@ export function HomeHeader() {
     <header className="sticky top-0 z-40 border-b border-white/40 bg-white/70 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-400 to-lime-400 shadow-sm" />
-          <div className="leading-tight">
-            <div className="text-sm font-semibold">VietStay</div>
-            <div className="text-xs text-slate-500">
-              Hotel booking • Fresh vibes
-            </div>
+          <div className="flex h-18 w-18 items-center justify-center" role="button">
+            <img
+              src={logoHome}
+              alt="VietStay"
+              className="h-full w-full object-contain"
+            />
           </div>
         </div>
 
@@ -47,9 +48,6 @@ export function HomeHeader() {
           </a>
           <a className="hover:text-slate-900" href="#popular">
             Phổ biến
-          </a>
-          <a className="hover:text-slate-900" href="#why">
-            Vì sao chọn
           </a>
           <a className="hover:text-slate-900" href="#footer">
             Liên hệ
