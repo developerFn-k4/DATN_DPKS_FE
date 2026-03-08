@@ -4,19 +4,16 @@ import HomePage from '../components/Layouts/HomePage'
 import RoomDetailPage from '../pages/products/pages/roomdetail/pages/RoomDetail'
 import AdminDashboard from '../admin/pages/AdminPage'
 import QuanLyRoomPage from '../admin/pages/adminroom/pages/quanLyRoomPage'
+import BookingPage from '../pages/products/pages/booking-room/BookingPage'
 const Routers = () => {
     return (
         <Routes>
             <Route path='/admin' element={<AdminDashboard />} >
-             <Route path='qlroom' element={<QuanLyRoomPage />} />
-
             </Route>
-
-
-
             <Route path='/auth' element={<AuthPage />} />
             <Route path='/' element={<HomePage />} />
             <Route path='/room/detail/:id' element={<RoomDetailPage />} />
+            <Route path='/booking' element={<BookingPage />} />
         </Routes>
     )
 }
