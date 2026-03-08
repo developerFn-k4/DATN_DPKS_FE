@@ -3,7 +3,7 @@ import { FiSearch, FiBell, FiChevronDown } from 'react-icons/fi';
 
 const HeaderAdmin = ({ user = { name: "Quản trị viên", role: "Administrator" } }) => {
   return (
-    <header className="h-20 bg-white border-b border-gray-100 px-8 flex items-center justify-between sticky top-0 z-10">
+    <header className="h-20 w-3xl bg-white border-b border-gray-100 px-8 flex items-center justify-between sticky top-0 z-10">
       {/* Search Bar - Bên trái */}
       <div className="relative w-1/3 group">
         <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 group-focus-within:text-emerald-600 transition-colors">
