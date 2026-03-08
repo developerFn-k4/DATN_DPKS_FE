@@ -9,10 +9,7 @@ const Routers = () => {
         <Routes>
             <Route path='/admin' element={<AdminDashboard />} >
              <Route path='qlroom' element={<QuanLyRoomPage />} />
-
             </Route>
-
-
 
             <Route path='/auth' element={<AuthPage />} />
             <Route path='/' element={<HomePage />} />
