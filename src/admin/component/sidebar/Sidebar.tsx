@@ -1,24 +1,31 @@
 import React from 'react';
 import { 
   FiGrid, FiHome, FiCalendar, FiUsers, 
-  FiCreditCard, FiBarChart2, FiSettings 
+  FiCreditCard, FiBarChart2, FiSettings, 
+  FiFileText,
+  FiLayers,
+  FiActivity
 } from 'react-icons/fi';
 import { NavLink } from "react-router-dom";
 import logo from '../../../assets/logoa.png';
+
 const Sidebar: React.FC = () => {
   const menuItems = [
-    { icon: <FiGrid />, label: 'Bảng điều khiển', path: ''},
-    { icon: <FiHome />, label: 'Quản lý phòng', path: '' },
+    { icon: <FiGrid />, label: 'Dashboard', path: ''},
+    { icon: <FiHome />, label: 'Quản lý phòng', path: 'qlroom' },
+    { icon: <FiLayers />, label: 'Quản lý loại phòng', path: '' }, 
+    { icon: <FiActivity />, label: 'Trạng thái phòng', path: '' }, 
     { icon: <FiCalendar />, label: 'Quản lý đặt phòng', path: '' },
-    { icon: <FiUsers />, label: 'Khách hàng', path: '' },
-    { icon: <FiCreditCard />, label: 'Thanh toán', path: '' },
-    { icon: <FiBarChart2 />, label: 'Báo cáo', path: '' },
+    { icon: <FiFileText />, label: 'Quản lý Đơn đặt phòng', path: '' }, 
+    { icon: <FiUsers />, label: 'Quản lý Khách hàng', path: '' },
+    { icon: <FiCreditCard />, label: 'Quản lý Thanh toán', path: '' },
+    { icon: <FiBarChart2 />, label: 'Thống kê', path: '' },
     { icon: <FiSettings />, label: 'Cài đặt', path: '' },
   ];
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-100 flex flex-col h-screen sticky top-0">
-     <div className="px-8 pt-8 pb-4 flex flex-col items-center">
+    <aside className="w-92 bg-white border-r border-gray-100 flex flex-col h-screen sticky top-0">
+      <div className="px-8 pt-8 pb-4 flex flex-col items-center">
         <img 
           src={logo} 
           alt="VietStay Logo" 
@@ -38,7 +45,7 @@ const Sidebar: React.FC = () => {
       className={({ isActive }) =>
         `flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all ${
           isActive
-            ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100 font-bold"
+            ? " text-white shadow-lg shadow-emerald-100 font-bold"
             : "text-gray-500 hover:bg-gray-50"
         }`
       }
@@ -49,6 +56,7 @@ const Sidebar: React.FC = () => {
   ))}
 </nav>
 
+      
     </aside>
   );
 };
