@@ -1,5 +1,4 @@
-import React from "react";
-import { Button, Divider, Input } from "antd";
+import { Button, Input } from "antd";
 
 import logoHome from "../../assets/logo.png";
 
