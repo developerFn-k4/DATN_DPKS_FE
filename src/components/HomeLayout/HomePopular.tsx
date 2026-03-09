@@ -10,7 +10,6 @@ import { useRooms } from "../../hooks/roomsHomePage/useRooms";
 import { RoomDetailModal } from "./RoomDetailModal";
 
 
-
 type Props = {
     hotels: HotelItem[];
     cities: CityOption[];

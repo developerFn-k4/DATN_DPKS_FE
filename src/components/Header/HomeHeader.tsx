@@ -43,6 +43,9 @@ export function HomeHeader() {
         </div>
 
         <nav className="hidden items-center gap-5 text-sm text-slate-600 md:flex">
+          <Link to="/rooms" className="hover:text-slate-900">
+            Danh sách phòng
+          </Link>
           <a className="hover:text-slate-900" href="#deals">
             Ưu đãi
           </a>
