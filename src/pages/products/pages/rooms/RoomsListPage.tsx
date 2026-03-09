@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { HomeHeader } from "../../components/Header/HomeHeader";
-import { HomeFooter } from "../../components/Footer/HomeFooter";
-import { RoomCard } from "../../components/RoomCard";
 import { Select, Spin, message } from "antd";
-import { API_BASE_URL, ENDPOINTS } from "../../services/endpoints/common";
-import type { ApiRoomsResponse, ApiRoom, RoomItem } from "../../types/types";
+import { HomeHeader } from "../../../../components/Header/HomeHeader";
+import { HomeFooter } from "../../../../components/Footer/HomeFooter";
+import type { ApiRoom, ApiRoomsResponse, RoomItem } from "../../../../types/types";
+import { API_BASE_URL, ENDPOINTS } from "../../../../services/endpoints/common";
+import { RoomCard } from "../../../../components/RoomCard";
 
 const { Option } = Select;
 
@@ -86,7 +86,7 @@ export default function RoomsListPage() {
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-slate-50">
       <HomeHeader />
 
-      <main className="mx-auto max-w-7xl px-4 py-12">
+      <main className="px-4 py-12 mx-auto max-w-7xl">
         {/* Header Section */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-slate-800">
@@ -98,7 +98,7 @@ export default function RoomsListPage() {
         </div>
 
         {/* Filter Section */}
-        <div className="mb-8 flex items-center gap-4">
+        <div className="flex items-center gap-4 mb-8">
           <span className="text-sm font-medium text-slate-700">
             Lọc theo trạng thái:
           </span>
