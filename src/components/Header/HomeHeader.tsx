@@ -33,11 +33,11 @@ export function HomeHeader() {
     <header className="sticky top-0 z-40 border-b border-white/40 bg-white/70 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-18 w-18 items-center justify-center" role="button">
+          <div className="flex items-center justify-center" role="button">
             <img
               src={logoHome}
               alt="VietStay"
-              className="h-full w-full object-contain"
+              className="h-[60px] w-[100px] "
             />
           </div>
         </div>
