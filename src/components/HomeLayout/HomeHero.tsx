@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, DatePicker, Input, Select, Tag, Rate } from "antd";
 import type { RangePickerProps } from "antd/es/date-picker";
 import { EnvironmentOutlined, SearchOutlined } from "@ant-design/icons";
@@ -10,12 +9,25 @@ const { RangePicker } = DatePicker;
 
 const container = {
     hidden: { opacity: 0, y: 14 },
-    show: { opacity: 1, y: 0, transition: { staggerChildren: 0.08, duration: 0.55, ease: "easeOut" } },
+    show: { 
+        opacity: 1, 
+        y: 0, 
+        transition: { 
+            staggerChildren: 0.08, 
+            duration: 0.55 
+        } 
+    },
 };
 
 const item = {
     hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+    show: { 
+        opacity: 1, 
+        y: 0, 
+        transition: { 
+            duration: 0.45 
+        } 
+    },
 };
 
 type Props = {
@@ -23,6 +35,10 @@ type Props = {
     value: SearchState;
     onChange: (patch: Partial<SearchState>) => void;
     onSearch?: () => void;
+};
+
+const gradientBackground = {
+    backgroundImage: "radial-gradient(800px 300px at 20% 20%, rgba(16,185,129,0.25), transparent 60%), radial-gradient(700px 280px at 80% 30%, rgba(163,230,53,0.22), transparent 60%), radial-gradient(900px 340px at 50% 80%, rgba(34,197,94,0.12), transparent 60%)"
 };
 
 export function HomeHero({ cities, value, onChange, onSearch }: Props) {
@@ -35,10 +51,7 @@ export function HomeHero({ cities, value, onChange, onSearch }: Props) {
             <motion.div style={{ y: bgY }} className="absolute inset-0 -z-10">
                 <div
                     className="h-[560px] w-full"
-                    style={{
-                        backgroundImage:
-                            "radial-gradient(800px 300px at 20% 20%, rgba(16,185,129,0.25), transparent 60%), radial-gradient(700px 280px at 80% 30%, rgba(163,230,53,0.22), transparent 60%), radial-gradient(900px 340px at 50% 80%, rgba(34,197,94,0.12), transparent 60%)",
-                    }}
+                    style={gradientBackground}
                 />
             </motion.div>
 
