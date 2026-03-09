@@ -4,6 +4,9 @@ import { MailOutlined, LockOutlined, UserOutlined, PhoneOutlined } from "@ant-de
 import { useLogin, useRegister } from "../../../hooks/auth/useRegister";
 import { useNavigate } from "react-router-dom";
 
+
+import logoHome from "../../../assets/logo.png";
+
 type LoginValues = {
     email: string;
     password: string;
@@ -83,9 +86,12 @@ export default function AuthPage() {
 
                         <div className="hidden lg:flex">
                             <div className="w-full rounded-3xl border border-white/60 bg-white/40 p-10 shadow-[0_10px_30px_rgba(0,0,0,0.08)] backdrop-blur-xl">
-                                <div className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-4 py-2 text-white shadow-sm">
-                                    <span className="text-lg font-semibold">VietStay</span>
-                                    <span className="text-xs opacity-90">Hotel</span>
+                                <div className="flex items-center justify-center" role="button">
+                                    <img
+                                        src={logoHome}
+                                        alt="VietStay"
+                                        className="h-[60px] w-[100px] "
+                                    />
                                 </div>
 
                                 <h1 className="mt-6 text-4xl font-semibold tracking-tight text-slate-900">

@@ -29,7 +29,7 @@ export default function HomePage() {
 
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-white text-slate-900">
+        <div className="min-h-screen max-w-full bg-gradient-to-b from-emerald-50 via-white to-white text-slate-900">
             <SpringBackdrop />
             <HomeHeader />
 
