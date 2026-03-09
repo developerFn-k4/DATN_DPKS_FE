@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom'
 import AuthPage from '../pages/auth/pages/AuthPage'
 import HomePage from '../components/Layouts/HomePage'
-import RoomsListPage from '../pages/rooms/RoomsListPage'
-import BookingPage from '../pages/rooms/BookingPage'
+import RoomsListPage from '../pages/products/pages/rooms/RoomsListPage'
+
 
 const Routers = () => {
     return (
@@ -10,7 +10,6 @@ const Routers = () => {
             <Route path='/auth' element={<AuthPage />} />
             <Route path='/' element={<HomePage />} />
             <Route path='/rooms' element={<RoomsListPage />} />
-            <Route path='/booking' element={<BookingPage />} />
         </Routes>
     )
 }
