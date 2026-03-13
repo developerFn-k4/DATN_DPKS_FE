@@ -1,26 +1,40 @@
 import React from 'react';
 import { 
   FiGrid, FiHome, FiCalendar, FiUsers, 
-  FiCreditCard, FiBarChart2, FiSettings 
+  FiCreditCard, FiBarChart2, FiSettings, 
+  FiFileText,
+  FiLayers,
+  FiActivity
 } from 'react-icons/fi';
 import { NavLink } from "react-router-dom";
+import logo from '../../../assets/logo.png';
 
 const Sidebar: React.FC = () => {
   const menuItems = [
-    { icon: <FiGrid />, label: 'Bảng điều khiển', path: ''},
-    { icon: <FiHome />, label: 'Quản lý phòng', path: '' },
+    { icon: <FiGrid />, label: 'Dashboard', path: ''},
+    { icon: <FiHome />, label: 'Quản lý phòng', path: '/admin/qlroom' },
+    { icon: <FiLayers />, label: 'Quản lý loại phòng', path: '' }, 
+    { icon: <FiActivity />, label: 'Quản lý trạng thái phòng', path: '' }, 
     { icon: <FiCalendar />, label: 'Quản lý đặt phòng', path: '' },
-    { icon: <FiUsers />, label: 'Khách hàng', path: '' },
-    { icon: <FiCreditCard />, label: 'Thanh toán', path: '' },
-    { icon: <FiBarChart2 />, label: 'Báo cáo', path: '' },
+    { icon: <FiFileText />, label: 'Quản lý Đơn đặt phòng', path: '' }, 
+    { icon: <FiUsers />, label: 'Quản lý Khách hàng', path: '' },
+    { icon: <FiCreditCard />, label: 'Quản lý Thanh toán', path: '' },
+    { icon: <FiBarChart2 />, label: 'Thống kê', path: '' },
     { icon: <FiSettings />, label: 'Cài đặt', path: '' },
   ];
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-100 flex flex-col h-screen sticky top-0">
-      <div className="p-8">
-        <h1 className="text-base font-black text-emerald-600 tracking-tight"  style={{ textShadow: "0 3px 8px rgba(16,185,129,0.5)" }}>VietStay</h1>
-        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Hệ thống quản trị</p>
+    <aside className="w-5xl bg-white border-r border-gray-100 flex flex-col h-screen sticky top-0">
+      <div className="px-10 pt-8 pb-8 flex flex-col items-center">
+        <img 
+          src={logo} 
+          alt="VietStay Logo" 
+          className="w-52 h-auto object-contain mb-2"
+          style={{ filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.1))" }}
+        />
+        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] text-center border-t border-gray-50 pt-2 w-full">
+          Hệ thống quản trị
+        </p>
       </div>
 
    <nav className="flex-1 px-4 space-y-1">
@@ -31,7 +45,7 @@ const Sidebar: React.FC = () => {
       className={({ isActive }) =>
         `flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all ${
           isActive
-            ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100 font-bold"
+            ? " text-white shadow-lg shadow-emerald-100 font-bold"
             : "text-gray-500 hover:bg-gray-50"
         }`
       }
@@ -42,13 +56,7 @@ const Sidebar: React.FC = () => {
   ))}
 </nav>
 
-      <div className="p-4 m-4 bg-emerald-600 rounded-2xl text-white">
-        <p className="text-xs font-bold">Cần hỗ trợ?</p>
-        <p className="text-[10px] opacity-80 mt-1">Liên hệ đội ngũ CSKH</p>
-        <button className="w-full mt-1 py-1 bg-white text-emerald-600 text-xs font-black rounded-lg">
-          Gửi hỗ trợ
-        </button>
-      </div>
+      
     </aside>
   );
 };
