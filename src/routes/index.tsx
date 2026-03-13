@@ -5,6 +5,7 @@ import RoomDetailPage from '../pages/products/pages/roomdetail/pages/RoomDetail'
 import AdminDashboard from '../admin/pages/AdminPage';
 import QuanLyRoomPage from '../admin/pages/adminroom/pages/QuanLyRoomPage';
 import BookingPage from '../pages/products/pages/booking-room/BookingPage';
+import RoomsListPage from '../pages/products/pages/rooms/RoomsListPage';
 
 const Routers = () => {
   return (
@@ -20,6 +21,7 @@ const Routers = () => {
       <Route path='/' element={<HomePage />} />
       <Route path='/room/detail/:id' element={<RoomDetailPage />} />
       <Route path='/booking' element={<BookingPage />} />
+      <Route path='/rooms' element={<RoomsListPage />} />
     </Routes>
   );
 };

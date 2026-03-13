@@ -107,6 +107,12 @@ export function HomeHeader() {
 
         </div>
       </div>
+
+      <ProfileModal
+        open={openProfile}
+        onClose={() => setOpenProfile(false)}
+        profile={profile}
+      />
     </header>
   );
 }
