@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+
 import logoHome from "../../../assets/logo.png";
 import {
   Form,
@@ -16,7 +16,8 @@ import {
   PhoneOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { useLogin, useRegister } from "../../../hooks/auth/useRegister";
+import axios from "axios";
+import { useState } from "react";
 
 const api = axios.create({
   baseURL: "https://vietstay.ngrok.dev/api",
@@ -60,7 +61,12 @@ export default function AuthPage() {
       msg.success(res.data.message ?? "Đăng nhập thành công!");
 
       const userRole = res.data?.role || res.data?.user?.role;
-      userRole === "admin" ? navigate("/admin") : navigate("/");
+      if (userRole === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+
     } catch (error: any) {
       msg.error(error.response?.data?.message ?? "Đăng nhập thất bại");
     } finally {
@@ -78,7 +84,7 @@ export default function AuthPage() {
         password_confirmation: values.confirmPassword,
       });
       msg.success("Đăng ký thành công! Hãy đăng nhập.");
-      setActiveTab( "login" );
+      setActiveTab("login");
     } catch (error: any) {
       msg.error(error.response?.data?.message ?? "Đăng ký thất bại");
     } finally {

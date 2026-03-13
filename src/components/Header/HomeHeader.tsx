@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Avatar, Button, Dropdown } from "antd";
 import type { MenuProps } from "antd";
 import {
@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
+// import ProfileModal from "./ProfileModal";
 export function HomeHeader() {
 
   const navigate = useNavigate();
@@ -44,8 +45,8 @@ export function HomeHeader() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-white">
-      <div className="max-w-6xl mx-auto flex justify-between items-center px-4 py-3">
+    <header className="sticky top-0 z-40 bg-white border-b">
+      <div className="flex items-center justify-between max-w-6xl px-4 py-3 mx-auto">
 
         <Link to="/" className="flex items-center gap-3">
           
@@ -53,13 +54,13 @@ export function HomeHeader() {
     <img 
       src={logo} 
       alt="VietStay Logo" 
-      className="w-35 h-auto object-contain"
+      className="object-contain h-auto w-35"
       style={{ filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.1))" }}
     />
     <div className="text-xs text-emerald-700 mt-[-25px]">Hotel booking</div>
   </div>
         </Link>
-        <nav className="hidden items-center gap-5 text-sm text-slate-600 md:flex">
+        <nav className="items-center hidden gap-5 text-sm text-slate-600 md:flex">
           <Link to="/rooms" className="hover:text-slate-900">
             Danh sách phòng
           </Link>
@@ -96,7 +97,7 @@ export function HomeHeader() {
           ) : (
             <>
               <Link to="/auth">
-                <Button className="hidden md:inline-flex border-none shadow-none hover:text-emerald-600">Đăng nhập</Button>
+                <Button className="hidden border-none shadow-none md:inline-flex hover:text-emerald-600">Đăng nhập</Button>
               </Link>
 
               <Link to="/auth">
@@ -108,11 +109,11 @@ export function HomeHeader() {
         </div>
       </div>
 
-      <ProfileModal
+      {/* <ProfileModal
         open={openProfile}
         onClose={() => setOpenProfile(false)}
         profile={profile}
-      />
+      /> */}
     </header>
   );
 }
