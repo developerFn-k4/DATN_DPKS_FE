@@ -3,7 +3,7 @@ import AuthPage from '../pages/auth/pages/AuthPage';
 import HomePage from '../components/Layouts/HomePage';
 import RoomDetailPage from '../pages/products/pages/roomdetail/pages/RoomDetail';
 import AdminDashboard from '../admin/pages/AdminPage';
-import QuanLyRoomPage from '../admin/pages/adminroom/pages/quanLyRoomPage';
+import QuanLyRoomPage from '../admin/pages/adminroom/pages/QuanLyRoomPage';
 import BookingPage from '../pages/products/pages/booking-room/BookingPage';
 
 const Routers = () => {
