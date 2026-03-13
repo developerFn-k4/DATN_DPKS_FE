@@ -12,9 +12,9 @@ import logo from '../../../assets/logo.png';
 const Sidebar: React.FC = () => {
   const menuItems = [
     { icon: <FiGrid />, label: 'Dashboard', path: ''},
-    { icon: <FiHome />, label: 'Quản lý phòng', path: 'qlroom' },
+    { icon: <FiHome />, label: 'Quản lý phòng', path: '/admin/qlroom' },
     { icon: <FiLayers />, label: 'Quản lý loại phòng', path: '' }, 
-    { icon: <FiActivity />, label: 'Trạng thái phòng', path: '' }, 
+    { icon: <FiActivity />, label: 'Quản lý trạng thái phòng', path: '' }, 
     { icon: <FiCalendar />, label: 'Quản lý đặt phòng', path: '' },
     { icon: <FiFileText />, label: 'Quản lý Đơn đặt phòng', path: '' }, 
     { icon: <FiUsers />, label: 'Quản lý Khách hàng', path: '' },
@@ -24,7 +24,7 @@ const Sidebar: React.FC = () => {
   ];
 
   return (
-    <aside className="w-92 bg-white border-r border-gray-100 flex flex-col h-screen sticky top-0">
+    <aside className="w-5xl bg-white border-r border-gray-100 flex flex-col h-screen sticky top-0">
       <div className="px-10 pt-8 pb-8 flex flex-col items-center">
         <img 
           src={logo} 

@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import logoHome from "../../../assets/logo.png";
 import {
   Form,
@@ -6,7 +7,7 @@ import {
   Tabs,
   Checkbox,
   ConfigProvider,
-  message,
+  message as antdMessage,
 } from "antd";
 import {
   MailOutlined,
@@ -16,6 +17,13 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useLogin, useRegister } from "../../../hooks/auth/useRegister";
+
+const api = axios.create({
+  baseURL: "https://vietstay.ngrok.dev/api",
+  headers: {
+    "ngrok-skip-browser-warning": "true",
+  },
+});
 
 type LoginValues = {
   email: string;
@@ -33,53 +41,56 @@ type RegisterValues = {
 };
 
 export default function AuthPage() {
-  const [msg, contextHolder] = message.useMessage();
+  const [msg, contextHolder] = antdMessage.useMessage();
   const navigate = useNavigate();
-
-  const { login, loading: loginLoading, error: loginError } = useLogin();
-  const { register, error: registerError } = useRegister();
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [registerLoading, setRegisterLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("login");
 
   const onLogin = async (values: LoginValues) => {
-    const res = await login({
-      email: values.email,
-      password: values.password,
-    });
+    setLoginLoading(true);
+    try {
+      const res = await api.post("/auth/login", {
+        email: values.email,
+        password: values.password,
+      });
+      const token = res.data.token;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(res.data));
+      msg.success(res.data.message ?? "Đăng nhập thành công!");
 
-    if (res) {
-      msg.success(res.message ?? "Đăng nhập thành công");
-      navigate("/");
-    } else {
-      msg.error(loginError ?? "Đăng nhập thất bại");
+      const userRole = res.data?.role || res.data?.user?.role;
+      userRole === "admin" ? navigate("/admin") : navigate("/");
+    } catch (error: any) {
+      msg.error(error.response?.data?.message ?? "Đăng nhập thất bại");
+    } finally {
+      setLoginLoading(false);
     }
   };
 
   const onRegister = async (values: RegisterValues) => {
-    const res = await register({
-      name: values.fullName,
-      email: values.email,
-      password: values.password,
-      password_confirmation: values.confirmPassword,
-    });
-
-    if (res) {
-      msg.success(res.message ?? `Tạo tài khoản thành công: ${values.email}`);
-    } else {
-      msg.error(registerError ?? "Tạo tài khoản thất bại");
+    setRegisterLoading(true);
+    try {
+      await api.post("/auth/register", {
+        name: values.fullName,
+        email: values.email,
+        password: values.password,
+        password_confirmation: values.confirmPassword,
+      });
+      msg.success("Đăng ký thành công! Hãy đăng nhập.");
+      setActiveTab( "login" );
+    } catch (error: any) {
+      msg.error(error.response?.data?.message ?? "Đăng ký thất bại");
+    } finally {
+      setRegisterLoading(false);
     }
   };
 
   return (
     <ConfigProvider
       theme={{
-        token: {
-          colorPrimary: "#22c55e",
-          borderRadius: 14,
-          fontSize: 14,
-        },
-        components: {
-          Button: { controlHeight: 44 },
-          Input: { controlHeight: 44 },
-        },
+        token: { colorPrimary: "#22c55e", borderRadius: 14, fontSize: 14 },
+        components: { Button: { controlHeight: 44 }, Input: { controlHeight: 44 } },
       }}
     >
       {contextHolder}
@@ -88,19 +99,13 @@ export default function AuthPage() {
         <div className="relative flex items-center justify-center max-w-6xl min-h-screen px-4 py-10 mx-auto">
           <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-2">
 
-            {/* LEFT SIDE */}
             <div className="hidden lg:flex">
               <div className="w-full rounded-3xl border border-white/60 bg-white/40 p-10 shadow-[0_10px_30px_rgba(0,0,0,0.08)] backdrop-blur-xl">
-
                 <div className="flex justify-center">
-                  <img
-                    src={logoHome}
-                    alt="VietStay"
-                    className="h-[60px] w-[100px]"
-                  />
+                  <img src={logoHome} alt="VietStay" className="h-auto w-70" />
                 </div>
 
-                <h1 className="mt-6 text-4xl font-semibold text-slate-900">
+                <h1 className="mt-[-40px] text-2xl font-semibold text-slate-900">
                   Chào mừng bạn trở lại
                 </h1>
 
@@ -115,16 +120,9 @@ export default function AuthPage() {
                     { t: "Hỗ trợ 24/7", d: "Chat & hotline" },
                     { t: "Bảo mật tốt", d: "Chuẩn hoá an toàn" },
                   ].map((it) => (
-                    <div
-                      key={it.t}
-                      className="p-4 border rounded-2xl border-white/70 bg-white/50"
-                    >
-                      <div className="text-sm font-semibold text-slate-900">
-                        {it.t}
-                      </div>
-                      <div className="mt-1 text-xs text-slate-600">
-                        {it.d}
-                      </div>
+                    <div key={it.t} className="p-4 border rounded-2xl border-white/70 bg-white/50">
+                      <div className="text-sm font-semibold text-slate-900">{it.t}</div>
+                      <div className="mt-1 text-xs text-slate-600">{it.d}</div>
                     </div>
                   ))}
                 </div>
@@ -134,11 +132,8 @@ export default function AuthPage() {
             {/* RIGHT SIDE */}
             <div className="flex items-center justify-center">
               <div className="w-full max-w-md p-6 border shadow-lg rounded-3xl border-white/60 bg-white/55 backdrop-blur-xl sm:p-8">
-
                 <div className="mb-4">
-                  <div className="text-2xl font-semibold text-slate-900">
-                    Tài khoản
-                  </div>
+                  <div className="text-2xl font-semibold text-slate-900">Tài khoản</div>
                   <div className="mt-1 text-sm text-slate-600">
                     Đăng nhập hoặc tạo tài khoản để đặt phòng.
                   </div>
@@ -151,11 +146,7 @@ export default function AuthPage() {
                       key: "login",
                       label: "Đăng nhập",
                       children: (
-                        <Form<LoginValues>
-                          layout="vertical"
-                          onFinish={onLogin}
-                          initialValues={{ remember: true }}
-                        >
+                        <Form<LoginValues> layout="vertical" onFinish={onLogin} initialValues={{ remember: true }}>
                           <Form.Item
                             name="email"
                             label="Email"
@@ -164,10 +155,7 @@ export default function AuthPage() {
                               { type: "email", message: "Email không hợp lệ" },
                             ]}
                           >
-                            <Input
-                              prefix={<MailOutlined />}
-                              placeholder="you@example.com"
-                            />
+                            <Input prefix={<MailOutlined />} placeholder="you@example.com" />
                           </Form.Item>
 
                           <Form.Item
@@ -175,27 +163,17 @@ export default function AuthPage() {
                             label="Mật khẩu"
                             rules={[
                               { required: true, message: "Vui lòng nhập mật khẩu" },
+                              { min: 6, message: "Mật khẩu tối thiểu 6 ký tự" },
                             ]}
                           >
-                            <Input.Password
-                              prefix={<LockOutlined />}
-                              placeholder="••••••••"
-                            />
+                            <Input.Password prefix={<LockOutlined />} placeholder="••••••••" />
                           </Form.Item>
 
-                          <Form.Item
-                            name="remember"
-                            valuePropName="checked"
-                          >
+                          <Form.Item name="remember" valuePropName="checked">
                             <Checkbox>Ghi nhớ đăng nhập</Checkbox>
                           </Form.Item>
 
-                          <Button
-                            htmlType="submit"
-                            type="primary"
-                            loading={loginLoading}
-                            className="w-full"
-                          >
+                          <Button htmlType="submit" type="primary" className="w-full" loading={loginLoading}>
                             Đăng nhập
                           </Button>
                         </Form>
@@ -205,18 +183,13 @@ export default function AuthPage() {
                       key: "register",
                       label: "Đăng ký",
                       children: (
-                        <Form<RegisterValues>
-                          layout="vertical"
-                          onFinish={onRegister}
-                        >
+                        <Form<RegisterValues> layout="vertical" onFinish={onRegister}>
                           <Form.Item
                             name="fullName"
                             label="Họ và tên"
-                            rules={[
-                              { required: true, message: "Vui lòng nhập tên" },
-                            ]}
+                            rules={[{ required: true, message: "Vui lòng nhập họ và tên" }]}
                           >
-                            <Input prefix={<UserOutlined />} />
+                            <Input prefix={<UserOutlined />} placeholder="Họ và tên" />
                           </Form.Item>
 
                           <Form.Item
@@ -227,22 +200,31 @@ export default function AuthPage() {
                               { type: "email", message: "Email không hợp lệ" },
                             ]}
                           >
-                            <Input prefix={<MailOutlined />} />
+                            <Input prefix={<MailOutlined />} placeholder="Email" />
                           </Form.Item>
 
-                          <Form.Item name="phone" label="Số điện thoại">
-                            <Input prefix={<PhoneOutlined />} />
+                          <Form.Item
+                            name="phone"
+                            label="Số điện thoại"
+                            rules={[
+                              {
+                                pattern: /^\d{9,12}$/,
+                                message: "Số điện thoại không hợp lệ",
+                              },
+                            ]}
+                          >
+                            <Input prefix={<PhoneOutlined />} placeholder="Số điện thoại" />
                           </Form.Item>
 
                           <Form.Item
                             name="password"
                             label="Mật khẩu"
                             rules={[
-                              { required: true, message: "Nhập mật khẩu" },
-                              { min: 6, message: "Tối thiểu 6 ký tự" },
+                              { required: true, message: "Vui lòng nhập mật khẩu" },
+                              { min: 6, message: "Mật khẩu tối thiểu 6 ký tự" },
                             ]}
                           >
-                            <Input.Password prefix={<LockOutlined />} />
+                            <Input.Password prefix={<LockOutlined />} placeholder="Mật khẩu" />
                           </Form.Item>
 
                           <Form.Item
@@ -250,19 +232,16 @@ export default function AuthPage() {
                             label="Nhập lại mật khẩu"
                             dependencies={["password"]}
                             rules={[
-                              { required: true, message: "Nhập lại mật khẩu" },
+                              { required: true, message: "Vui lòng nhập lại mật khẩu" },
                               ({ getFieldValue }) => ({
                                 validator(_, value) {
-                                  if (!value || getFieldValue("password") === value)
-                                    return Promise.resolve();
-                                  return Promise.reject(
-                                    new Error("Mật khẩu không khớp")
-                                  );
+                                  if (!value || getFieldValue("password") === value) return Promise.resolve();
+                                  return Promise.reject(new Error("Mật khẩu không khớp"));
                                 },
                               }),
                             ]}
                           >
-                            <Input.Password prefix={<LockOutlined />} />
+                            <Input.Password prefix={<LockOutlined />} placeholder="Nhập lại mật khẩu" />
                           </Form.Item>
 
                           <Form.Item
@@ -271,25 +250,15 @@ export default function AuthPage() {
                             rules={[
                               {
                                 validator(_, v) {
-                                  return v
-                                    ? Promise.resolve()
-                                    : Promise.reject(
-                                        new Error("Bạn cần đồng ý điều khoản")
-                                      );
+                                  return v ? Promise.resolve() : Promise.reject(new Error("Bạn cần đồng ý điều khoản"));
                                 },
                               },
                             ]}
                           >
-                            <Checkbox>
-                              Tôi đồng ý với điều khoản và chính sách
-                            </Checkbox>
+                            <Checkbox>Tôi đồng ý với điều khoản và chính sách</Checkbox>
                           </Form.Item>
 
-                          <Button
-                            htmlType="submit"
-                            type="primary"
-                            className="w-full"
-                          >
+                          <Button htmlType="submit" type="primary" className="w-full" loading={registerLoading}>
                             Tạo tài khoản
                           </Button>
                         </Form>
@@ -305,4 +274,8 @@ export default function AuthPage() {
       </div>
     </ConfigProvider>
   );
+}
+
+function setActiveTab(arg0: string) {
+  throw new Error("Function not implemented.");
 }

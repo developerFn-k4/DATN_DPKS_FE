@@ -1,47 +1,64 @@
-import React, { useState } from "react";
-import { Avatar, Button, Descriptions, Dropdown, Modal, type MenuProps } from "antd";
-import { Link } from "react-router-dom";
-import { useAuth, useMe } from "../../hooks/auth/useRegister";
-import ProfileModal from "./ProfileModal";
-import logoHome from "../../assets/logo.png";
-
+import React from "react";
+import { Avatar, Button, Dropdown } from "antd";
+import type { MenuProps } from "antd";
+import {
+  UserOutlined,
+  LogoutOutlined,
+  ProfileOutlined,
+  BookOutlined
+} from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../../assets/logo.png";
 export function HomeHeader() {
-  const { user, isLogin, logout } = useAuth();
-  const [openProfile, setOpenProfile] = useState(false);
-  const { user: profile, fetchMe } = useMe();
-  const openUserProfile = async () => {
-    await fetchMe();
-    setOpenProfile(true);
+
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
+    window.location.reload();
   };
+
   const items: MenuProps["items"] = [
     {
-      key: "profile",
-      label: "Thông tin tài khoản",
-      onClick: openUserProfile,
+      key: "1",
+      icon: <ProfileOutlined />,
+      label: <Link to="#">Thông tin cá nhân</Link>,
+    },
+    {
+      key: "2",
+      icon: <BookOutlined />,
+      label: <Link to="#">Đơn đặt phòng</Link>,
     },
     {
       type: "divider",
     },
     {
-      key: "logout",
-      label: "Đăng xuất",
-      onClick: logout,
+      key: "3",
+      icon: <LogoutOutlined />,
+      label: <span onClick={logout}>Đăng xuất</span>,
     },
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/40 bg-white/70 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center" role="button">
-            <img
-              src={logoHome}
-              alt="VietStay"
-              className="h-[60px] w-[100px] "
-            />
-          </div>
-        </div>
+    <header className="sticky top-0 z-40 border-b bg-white">
+      <div className="max-w-6xl mx-auto flex justify-between items-center px-4 py-3">
 
+        <Link to="/" className="flex items-center gap-3">
+          
+          <div className="flex flex-col items-center">
+    <img 
+      src={logo} 
+      alt="VietStay Logo" 
+      className="w-35 h-auto object-contain"
+      style={{ filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.1))" }}
+    />
+    <div className="text-xs text-emerald-700 mt-[-25px]">Hotel booking</div>
+  </div>
+        </Link>
         <nav className="hidden items-center gap-5 text-sm text-slate-600 md:flex">
           <Link to="/rooms" className="hover:text-slate-900">
             Danh sách phòng
@@ -57,36 +74,37 @@ export function HomeHeader() {
           </a>
         </nav>
 
-        <div className="flex items-center gap-2">
-          {isLogin ? (
+        <div className="flex items-center gap-3">
+
+          {user ? (
             <Dropdown menu={{ items }} placement="bottomRight">
-              <div className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-1 hover:bg-slate-100">
-                <Avatar size={32}>
-                  {user?.name?.charAt(0)?.toUpperCase()}
-                </Avatar>
-                <span className="hidden text-sm font-medium md:block">
-                  {user?.name}
+
+              <div className="flex items-center gap-2 cursor-pointer">
+
+                <span className="text-sm">
+                  Chào, {user.name || "User"}
                 </span>
+
+                <Avatar
+                  icon={<UserOutlined />}
+                  style={{ backgroundColor: "#10b981" }}
+                />
+
               </div>
+
             </Dropdown>
           ) : (
             <>
               <Link to="/auth">
-                <Button type="default" className="hidden md:inline-flex">
-                  Đăng nhập
-                </Button>
+                <Button className="hidden md:inline-flex border-none shadow-none hover:text-emerald-600">Đăng nhập</Button>
               </Link>
 
               <Link to="/auth">
-                <Button
-                  type="primary"
-                  className="!bg-emerald-600 hover:!bg-emerald-700"
-                >
-                  Đăng ký
-                </Button>
+                <Button type="primary" className="!bg-emerald-600 hover:!bg-emerald-700">Đăng ký</Button>
               </Link>
             </>
           )}
+
         </div>
       </div>
 

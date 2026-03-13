@@ -17,7 +17,7 @@ export interface RelatedRoom {
   name: string;
   base_price: string;
   capacity: number;
-  image_url?: string; // Để hiển thị ảnh ở danh sách hàng dọc
+  image_url?: string; 
 }
 
 export interface RoomType {
@@ -30,5 +30,5 @@ export interface RoomType {
   base_price: string;
   hotel?: Hotel;
   room_images?: RoomImage[];
-  other_rooms?: RelatedRoom[]; // Dữ liệu phòng liên quan từ API
+  other_rooms?: RelatedRoom[]; 
 }
