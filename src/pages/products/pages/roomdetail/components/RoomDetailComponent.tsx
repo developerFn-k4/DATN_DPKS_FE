@@ -168,7 +168,7 @@ const RoomDetailView: React.FC<Props> = ({ data }) => {
             </div>
           </div>
 
-          <div className="lg:col-span-1 mt-44">
+          <div className="lg:col-span-1 mt-20">
             <div className="sticky top-24 bg-white border border-slate-200 rounded-3xl p-6 shadow-xl shadow-slate-200/40">
               <h3 className="font-bold text-slate-800 mb-6 text-xl text-center">Đặt phòng ngay</h3>
               <div className="space-y-4 mb-6">
