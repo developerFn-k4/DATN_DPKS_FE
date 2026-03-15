@@ -11,7 +11,7 @@ export function RoomCard({ room }: RoomCardProps) {
   const navigate = useNavigate();
 
   const handleViewDetails = () => {
-    navigate('/booking');
+    navigate(`/room/detail/${room.id}`);
   };
 
   return (

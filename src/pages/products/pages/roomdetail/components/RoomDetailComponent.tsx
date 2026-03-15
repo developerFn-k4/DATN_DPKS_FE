@@ -1,87 +1,240 @@
-import React from "react";
-import { CheckCircleOutlined, RightOutlined } from "@ant-design/icons";
-import type { RoomType } from "../type";
-import { Tag } from "antd";
+import React, { useState } from "react";
+import { DatePicker, Select, Rate, Avatar, Button, Divider, Input, message } from "antd";
+import type { RoomDetailResponse } from "../services/roomDetail";
+import { UserOutlined, CalendarOutlined, SendOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 
-// 1. Component Gallery Ảnh (Layout Traveloka: 1 lớn, 2 nhỏ)
-export const RoomGallery = ({ images }: { images: any[] }) => {
-  // Fallback nếu không có ảnh từ API
-  const displayImages = images?.length > 0 ? images : [{ image_url: 'https://placehold.co/800x450' }];
+const { TextArea } = Input;
+
+interface Props {
+  data: RoomDetailResponse;
+}
+
+const RoomDetailView: React.FC<Props> = ({ data }) => {
+  const { room, rating_summary, reviews } = data;
+  const storageUrl = "https://vietstay.ngrok.dev/storage/";
+  const images = room.images ?? [];
+
+  const [userRating, setUserRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const fallbackMain = "https://placehold.co/800x600/e2e8f0/64748b?text=VietStay+Room";
+  const fallbackSub = "https://placehold.co/400x300/e2e8f0/64748b?text=No+Image";
+
+  const handleSubmitComment = () => {
+    if (!comment.trim()) {
+      message.warning("Vui lòng nhập nội dung bình luận!");
+      return;
+    }
+    setSubmitting(true);
+
+    console.log({
+      room_id: room.id,
+      rating: userRating,
+      comment: comment
+    });
+
+    setTimeout(() => {
+      message.success("Cảm ơn bạn đã đánh giá! Bình luận đang chờ phê duyệt.");
+      setComment("");
+      setUserRating(5);
+      setSubmitting(false);
+    }, 1500);
+  };
 
   return (
-    <section className="grid grid-cols-1 md:grid-cols-3 gap-2 h-[450px] mb-8 overflow-hidden rounded-xl shadow-md">
-      {/* Ảnh lớn bên trái */}
-      <div className="md:col-span-2 h-full overflow-hidden">
-        <img 
-          src={displayImages[0]?.image_url} 
-          className="h-full w-full object-cover hover:scale-105 transition-transform duration-500" 
-          alt="Room Main" 
-        />
-      </div>
-      
-      {/* 2 ảnh nhỏ bên phải */}
-      <div className="grid grid-rows-2 gap-2 h-full">
-        <div className="overflow-hidden">
-          <img 
-            src={displayImages[1]?.image_url || displayImages[0]?.image_url} 
-            className="h-full w-full object-cover hover:scale-105 transition-transform duration-500" 
-            alt="Room Sub 1" 
-          />
+    <div className="max-w-6xl mx-auto p-4 md:p-6 bg-white min-h-screen font-sans">
+      <div className="max-w-6xl mx-auto bg-white rounded-3xl overflow-hidden">
+
+        <div className="relative mb-8 h-[300px] md:h-[450px]">
+          
+          <div className="absolute top-6 left-6 z-10 flex flex-col items-start pointer-events-none">
+            <h2
+              className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter leading-tight"
+              style={{
+                filter: 'drop-shadow(0 0 15px rgba(5, 150, 105, 1)) drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4))'
+              }}
+            >
+              {room.room_type?.name}
+            </h2>
+            <h2
+              className="text-2xl md:text-3xl font-bold text-white leading-none mt-1"
+              style={{
+                filter: 'drop-shadow(0 0 10px rgba(16, 185, 129, 0.9)) drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3))'
+              }}
+            >
+              Phòng {room.room_number}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3 h-full">
+            <div className="col-span-2 overflow-hidden rounded-2xl">
+              <img
+                src={images[0] ? `${storageUrl}${images[0].image_url}` : fallbackMain}
+                alt="Main"
+                onError={(e) => (e.currentTarget.src = fallbackMain)}
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div className="grid grid-rows-2 gap-3">
+              {[1, 2].map((idx) => (
+                <div key={idx} className="overflow-hidden rounded-2xl shadow-sm">
+                  <img
+                    src={images[idx] ? `${storageUrl}${images[idx].image_url}` : fallbackSub}
+                    alt={`Sub ${idx}`}
+                    onError={(e) => (e.currentTarget.src = fallbackSub)}
+                    className="w-full h-64 object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="relative overflow-hidden group">
-          <img 
-            src={displayImages[2]?.image_url || displayImages[0]?.image_url} 
-            className="h-full w-full object-cover hover:scale-105 transition-transform duration-500" 
-            alt="Room Sub 2" 
-          />
-          {/* Lớp phủ "Xem thêm" */}
-          <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white cursor-pointer group-hover:bg-black/50 transition-all">
-            <span className="font-bold text-lg">+{displayImages.length} Ảnh</span>
-            <span className="text-xs">Xem tất cả</span>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="lg:col-span-2 px-2">
+            
+            <div className="mt-20 flex items-center gap-2 mb-6 bg-emerald-50/50 w-fit px-4 py-2 rounded-full border border-emerald-100">
+              <Rate disabled allowHalf defaultValue={rating_summary?.overall || 0} className="text-emerald-500 text-sm" />
+              <span className="font-bold text-emerald-700 ml-2">{rating_summary?.overall || "0.0"}</span>
+              <span className="text-slate-400 text-sm">({rating_summary?.total_reviews || 0} đánh giá tổng)</span>
+            </div>
+
+            <div className="mb-10 mt-12">
+              <h3 className="text-xl font-bold text-slate-800 mb-3 border-l-4 border-emerald-500 pl-3">Mô tả phòng</h3>
+              <p className="text-slate-600 leading-relaxed italic">
+                {room.room_type?.description || "Phòng rộng rãi với đầy đủ tiện nghi cao cấp."}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 p-6 bg-slate-50 rounded-2xl border border-slate-100 mb-12">
+              <AmenityItem icon="📶" label="Wi-Fi miễn phí" />
+              <AmenityItem icon="🍳" label="Bữa sáng miễn phí" />
+              <AmenityItem icon="📺" label="Tivi màn hình phẳng" />
+              <AmenityItem icon="❄️" label="Điều hòa nhiệt độ" />
+              <AmenityItem icon="🍷" label="Minibar" />
+              <AmenityItem icon="🌅" label="Ban công" />
+            </div>
+
+            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 mb-12">
+              <h3 className="text-lg font-bold text-slate-800 mb-4">Viết đánh giá của bạn</h3>
+              <div className="flex items-center gap-4 mb-4">
+                <span className="text-sm text-slate-500">Xếp hạng của bạn:</span>
+                <Rate value={userRating} onChange={setUserRating} className="text-emerald-500" />
+              </div>
+              <TextArea
+                rows={4}
+                placeholder="Chia sẻ trải nghiệm của bạn về căn phòng này..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                className="rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500 mb-4"
+              />
+              <Button
+                type="primary"
+                icon={<SendOutlined />}
+                loading={submitting}
+                onClick={handleSubmitComment}
+                className="bg-emerald-600 hover:bg-emerald-700 h-10 px-6 rounded-lg font-semibold"
+              >
+                Gửi bình luận
+              </Button>
+            </div>
+
+            <div className="mt-8">
+              <h3 className="text-2xl font-bold text-slate-800 mb-8">Đánh giá từ khách hàng</h3>
+              {reviews && reviews.length > 0 ? (
+                <div className="space-y-6">
+                  {reviews.map((review: any) => (
+                    <div key={review.id} className="pb-6 border-b border-slate-100">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex items-center gap-3">
+                          <Avatar icon={<UserOutlined />} className="bg-slate-200" />
+                          <div>
+                            <div className="font-bold text-slate-800 text-sm">{review.user?.name || "Khách hàng"}</div>
+                            <div className="text-[10px] text-slate-400 uppercase">{dayjs(review.created_at).format('DD MMM YYYY')}</div>
+                          </div>
+                        </div>
+                        <Rate disabled defaultValue={review.overall_score} className="text-[10px] text-emerald-500" />
+                      </div>
+                      <p className="text-slate-600 text-sm pl-11">{review.comment}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-slate-400 italic">Chưa có bình luận nào.</div>
+              )}
+            </div>
+          </div>
+
+          <div className="lg:col-span-1 mt-44">
+            <div className="sticky top-24 bg-white border border-slate-200 rounded-3xl p-6 shadow-xl shadow-slate-200/40">
+              <h3 className="font-bold text-slate-800 mb-6 text-xl text-center">Đặt phòng ngay</h3>
+              <div className="space-y-4 mb-6">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] uppercase font-bold text-slate-400 px-1">Thời gian lưu trú</label>
+                  <DatePicker.RangePicker
+                    className="w-full h-12 rounded-xl border-slate-100 bg-slate-50"
+                    placeholder={['Nhận phòng', 'Trả phòng']}
+                    format="DD/MM/YYYY"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] uppercase font-bold text-slate-400 px-1">Số lượng khách</label>
+                  <Select
+                    className="w-full h-12 custom-select"
+                    defaultValue="2-1"
+                    options={[
+                      { value: '2-1', label: '2 Người lớn, 1 Trẻ em' },
+                      { value: '2-0', label: '2 Người lớn' },
+                    ]}
+                  />
+                </div>
+              </div>
+
+              <div className="p-4 bg-emerald-50 rounded-2xl mb-6">
+                <div className="flex justify-between text-base">
+                  <span className="font-bold text-slate-800">Tổng cộng</span>
+                  <span className="font-bold text-emerald-600">{Number(room.price).toLocaleString()} VND</span>
+                </div>
+              </div>
+
+              <Link to="/booking" className="w-full">
+                <Button
+                  type="primary"
+                  size="large"
+                  className="w-full h-14 !bg-emerald-600 hover:!bg-emerald-700 !rounded-xl !border-none font-bold uppercase"
+                >
+                  Xác nhận đặt phòng
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
-    </section>
-  );
-};
 
-// 2. Component Sidebar đặt phòng (Sticky Sidebar)
-export const RoomSidebar = ({ price }: { price: string }) => {
-  return (
-    <div className="sticky top-24 bg-white p-6 rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/40">
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Giá phòng thấp nhất</p>
-          <div className="flex items-baseline gap-1 mt-1">
-            <span className="text-2xl font-black text-orange-500">
-              {Number(price || 0).toLocaleString()} VND
-            </span>
-            <span className="text-xs text-slate-400 font-medium">/đêm</span>
-          </div>
-        </div>
-        <Tag color="orange" className="m-0 border-none font-bold text-[10px]">Ưu đãi nhất</Tag>
-      </div>
-
-      <div className="space-y-3 py-4 border-t border-b border-slate-50 mb-6">
-        <div className="flex items-center gap-2 text-xs text-emerald-600 font-medium">
-          <CheckCircleOutlined /> Hoàn huỷ miễn phí trước 24h
-        </div>
-        <div className="flex items-center gap-2 text-xs text-slate-500">
-          <CheckCircleOutlined /> Xác nhận tức thì
-        </div>
-      </div>
-
-      <button className="group relative w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-lg shadow-lg shadow-emerald-200 transition-all active:scale-[0.98]">
-        <span className="flex items-center justify-center gap-2">
-          Đặt ngay bây giờ <RightOutlined className="text-sm group-hover:translate-x-1 transition-transform" />
-        </span>
-      </button>
-
-      <div className="mt-4 p-3 bg-slate-50 rounded-lg">
-        <p className="text-[10px] text-slate-500 leading-relaxed text-center">
-          ⚡️ <b>12 người</b> khác đang xem phòng này. Đừng bỏ lỡ giá tốt nhất hôm nay!
-        </p>
-      </div>
+      <style>{`
+        .custom-select .ant-select-selector {
+          background-color: #f8fafc !important;
+          border-color: #f1f5f9 !important;
+          border-radius: 12px !important;
+          height: 48px !important;
+          display: flex;
+          align-items: center;
+        }
+      `}</style>
     </div>
   );
 };
+
+const AmenityItem = ({ icon, label }: { icon: string; label: string }) => (
+  <div className="flex items-center gap-3">
+    <div className="w-10 h-10 flex items-center justify-center bg-white rounded-xl shadow-sm border border-emerald-50">
+      <span className="text-xl">{icon}</span>
+    </div>
+    <span className="text-slate-600 font-medium text-sm">{label}</span>
+  </div>
+);
+
+export default RoomDetailView;
