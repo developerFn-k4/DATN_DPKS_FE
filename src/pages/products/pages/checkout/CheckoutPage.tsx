@@ -83,9 +83,13 @@ export default function CheckoutPage() {
               <Card className="mb-6 checkout-card">
                 <div className="flex gap-4">
                   <img 
-                    src="https://via.placeholder.com/120x100" 
+                    src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=300&h=200&fit=crop" 
                     alt={bookingData.hotelName}
                     className="object-cover rounded-lg w-30 h-25"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "https://acihome.vn/uploads/15/thiet-ke-khach-san-hien-dai-co-cac-ban-cong-view-bien-sieu-dep-seaside-mirage-hotel-1.JPG";
+                    }}
                   />
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
@@ -163,9 +167,10 @@ export default function CheckoutPage() {
                     {paymentMethod === "pay-at-hotel" && (
                       <div className="p-4 ml-6 space-y-4 border rounded-lg border-slate-200 bg-slate-50">
                         <div className="flex gap-2">
-                          <img src="https://via.placeholder.com/40x25" alt="Visa" className="h-6" />
-                          <img src="https://via.placeholder.com/40x25" alt="Mastercard" className="h-6" />
-                          <img src="https://via.placeholder.com/40x25" alt="JCB" className="h-6" />
+                          <div className="px-3 py-1 text-xs font-bold text-white bg-blue-600 rounded">VISA</div>
+                          <div className="px-3 py-1 text-xs font-bold text-white bg-red-500 rounded">MASTERCARD</div>
+                          <div className="px-3 py-1 text-xs font-bold text-white bg-blue-700 rounded">JCB</div>
+                          <div className="px-3 py-1 text-xs font-bold text-white bg-green-600 rounded">DEBIT</div>
                         </div>
 
                         <div>

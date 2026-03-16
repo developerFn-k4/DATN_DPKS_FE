@@ -35,8 +35,17 @@ const convertApiRoomToRoomItem = (apiRoom: ApiRoom): RoomItem => {
     ? apiRoom.images.map(img => `${API_STORAGE_URL}/${img.image_url}`)
     : [];
 
-  // Fallback image nếu không có ảnh từ API
-  const fallbackImage = `https://images.unsplash.com/photo-${1582719508461 + apiRoom.id}?w=800`;
+  // Ảnh mặc định đẹp cho phòng không có ảnh
+  const defaultRoomImages = [
+    "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop"
+  ];
+  
+  // Chọn ảnh mặc định dựa trên ID của phòng để đa dạng
+  const fallbackImage = defaultRoomImages[apiRoom.id % defaultRoomImages.length];
   const mainImage = images.length > 0 ? images[0] : fallbackImage;
 
   return {

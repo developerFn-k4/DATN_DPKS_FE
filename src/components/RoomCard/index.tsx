@@ -8,6 +8,15 @@ interface RoomCardProps {
   room: RoomItem;
 }
 
+// Ảnh mặc định đẹp cho phòng
+const DEFAULT_ROOM_IMAGES = [
+  "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop",
+  "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&fit=crop",
+  "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop",
+  "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&fit=crop",
+  "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop"
+];
+
 export function RoomCard({ room }: RoomCardProps) {
   const navigate = useNavigate();
 
@@ -17,6 +26,9 @@ export function RoomCard({ room }: RoomCardProps) {
 
   // Sử dụng images từ API, hoặc fallback sang image đơn
   const displayImages = room.images && room.images.length > 0 ? room.images : [room.image];
+  
+  // Ảnh fallback dựa trên ID phòng
+  const fallbackImage = DEFAULT_ROOM_IMAGES[room.id % DEFAULT_ROOM_IMAGES.length];
 
   return (
     <Card
@@ -38,7 +50,7 @@ export function RoomCard({ room }: RoomCardProps) {
                     className="h-56 w-full object-cover room-card-image"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = `https://images.unsplash.com/photo-${1582719508461 + room.id}?w=800`;
+                      target.src = fallbackImage;
                     }}
                   />
                 </div>
@@ -51,7 +63,7 @@ export function RoomCard({ room }: RoomCardProps) {
               className="h-56 w-full object-cover transition-transform duration-300 hover:scale-110"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = `https://images.unsplash.com/photo-${1582719508461 + room.id}?w=800`;
+                target.src = fallbackImage;
               }}
             />
           )}
