@@ -58,15 +58,18 @@ const RoomTable: React.FC<Props> = ({ data, onDelete, onEdit }) => {
               {/* Thêm cột hiển thị danh sách ảnh */}
               <td className="px-4 py-3 text-sm">
                 <div className="flex -space-x-2 overflow-hidden">
-                  {/* Ép kiểu any hoặc update interface Room nếu chưa có trường images */}
-                  {(room as any).images && (room as any).images.length > 0 ? (
-                    (room as any).images.map((img: any) => (
+                  {room.images && room.images.length > 0 ? (
+                    room.images.map((img) => (
                       <img
                         key={img.id}
-                        src={`https://vietstay.ngrok.dev/storage/${img.image_url}`}
+                        src={img.image_url}
                         alt="room"
                         className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover shadow-sm hover:scale-110 transition-transform cursor-pointer"
                         title="Xem ảnh"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=400";
+                        }}
                       />
                     ))
                   ) : (
