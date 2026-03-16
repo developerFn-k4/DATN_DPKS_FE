@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Select, Spin, message } from "antd";
 import { HomeHeader } from "../../../../components/Header/HomeHeader";
 import { HomeFooter } from "../../../../components/Footer/HomeFooter";
+import { HomeBanner } from "../../../../components/HomeLayout/HomeBanner";
 import type { ApiRoom, ApiRoomsResponse, RoomItem } from "../../../../types/types";
 import { API_BASE_URL, ENDPOINTS } from "../../../../services/endpoints/common";
 import { RoomCard } from "../../../../components/RoomCard";
@@ -85,6 +86,7 @@ export default function RoomsListPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-slate-50">
       <HomeHeader />
+      <HomeBanner />
 
       <main className="px-4 py-12 mx-auto max-w-7xl">
         {/* Header Section */}
