@@ -8,7 +8,6 @@ import {
 } from "@ant-design/icons";
 import { HomeHeader } from "../../../../components/Header/HomeHeader";
 import { HomeFooter } from "../../../../components/Footer/HomeFooter";
-import { HomeBanner } from "../../../../components/HomeLayout/HomeBanner";
 import "./style.less";
 
 export default function CheckoutPage() {
@@ -62,9 +61,6 @@ export default function CheckoutPage() {
     <div className="checkout-page">
       {/* Header */}
       <HomeHeader />
-      
-      {/* Banner */}
-      <HomeBanner />
 
       {/* Progress Steps */}
       <div className="bg-white border-b">
