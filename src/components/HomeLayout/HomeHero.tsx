@@ -35,13 +35,14 @@ type Props = {
     value: SearchState;
     onChange: (patch: Partial<SearchState>) => void;
     onSearch?: () => void;
+    loading?: boolean;
 };
 
 const gradientBackground = {
     backgroundImage: "radial-gradient(800px 300px at 20% 20%, rgba(16,185,129,0.25), transparent 60%), radial-gradient(700px 280px at 80% 30%, rgba(163,230,53,0.22), transparent 60%), radial-gradient(900px 340px at 50% 80%, rgba(34,197,94,0.12), transparent 60%)"
 };
 
-export function HomeHero({ cities, value, onChange, onSearch }: Props) {
+export function HomeHero({ cities, value, onChange, onSearch, loading }: Props) {
     const { scrollY } = useScroll();
     const bgY = useTransform(scrollY, [0, 400], [0, 80]);
     const fgY = useTransform(scrollY, [0, 400], [0, -20]);
@@ -149,8 +150,10 @@ export function HomeHero({ cities, value, onChange, onSearch }: Props) {
                                     size="large"
                                     className="!bg-emerald-600 hover:!bg-emerald-700"
                                     onClick={onSearch}
+                                    loading={loading}
+                                    icon={!loading && <SearchOutlined />}
                                 >
-                                    Tìm kiếm
+                                    {loading ? "Đang tìm kiếm..." : "Tìm kiếm"}
                                 </Button>
 
                                 <div className="text-xs text-slate-500">Mẹo: chọn khoảng ngày để thấy giá tốt theo mùa.</div>
