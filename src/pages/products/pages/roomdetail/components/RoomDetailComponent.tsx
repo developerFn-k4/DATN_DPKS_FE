@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { DatePicker, Select, Rate, Avatar, Button, Divider, Input, message } from "antd";
 import type { RoomDetailResponse } from "../services/roomDetail";
 import { UserOutlined, CalendarOutlined, SendOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
-import { Link } from "react-router-dom";
+import dayjs, { Dayjs } from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 const { TextArea } = Input;
 
@@ -13,12 +13,17 @@ interface Props {
 
 const RoomDetailView: React.FC<Props> = ({ data }) => {
   const { room, rating_summary, reviews } = data;
+  const navigate = useNavigate();
   const storageUrl = "https://vietstay.ngrok.dev/storage/";
   const images = room.images ?? [];
 
   const [userRating, setUserRating] = useState(5);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  // Booking form state
+  const [dateRange, setDateRange] = useState<[Dayjs, Dayjs] | null>(null);
+  const [guests, setGuests] = useState(2);
 
   const fallbackMain = "https://placehold.co/800x600/e2e8f0/64748b?text=VietStay+Room";
   const fallbackSub = "https://placehold.co/400x300/e2e8f0/64748b?text=No+Image";
@@ -42,6 +47,29 @@ const RoomDetailView: React.FC<Props> = ({ data }) => {
       setUserRating(5);
       setSubmitting(false);
     }, 1500);
+  };
+
+  const handleBooking = () => {
+    if (!dateRange || !dateRange[0] || !dateRange[1]) {
+      message.warning("Vui lòng chọn ngày nhận và trả phòng!");
+      return;
+    }
+
+    const checkIn = dayjs(dateRange[0]).format("YYYY-MM-DD");
+    const checkOut = dayjs(dateRange[1]).format("YYYY-MM-DD");
+
+    // Navigate to booking page with state
+    navigate("/booking", {
+      state: {
+        room_id: room.id,
+        room_number: room.room_number,
+        room_name: room.room_type?.name || "Phòng",
+        check_in: checkIn,
+        check_out: checkOut,
+        guests: guests,
+        price: room.price,
+      },
+    });
   };
 
   return (
@@ -178,16 +206,24 @@ const RoomDetailView: React.FC<Props> = ({ data }) => {
                     className="w-full h-12 rounded-xl border-slate-100 bg-slate-50"
                     placeholder={['Nhận phòng', 'Trả phòng']}
                     format="DD/MM/YYYY"
+                    value={dateRange}
+                    onChange={setDateRange}
+                    disabledDate={(current) => {
+                      return current && current < dayjs().startOf('day');
+                    }}
                   />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-[10px] uppercase font-bold text-slate-400 px-1">Số lượng khách</label>
                   <Select
                     className="w-full h-12 custom-select"
-                    defaultValue="2-1"
+                    value={guests}
+                    onChange={setGuests}
                     options={[
-                      { value: '2-1', label: '2 Người lớn, 1 Trẻ em' },
-                      { value: '2-0', label: '2 Người lớn' },
+                      { value: 1, label: '1 Người' },
+                      { value: 2, label: '2 Người' },
+                      { value: 3, label: '3 Người' },
+                      { value: 4, label: '4 Người' },
                     ]}
                   />
                 </div>
@@ -195,20 +231,25 @@ const RoomDetailView: React.FC<Props> = ({ data }) => {
 
               <div className="p-4 bg-emerald-50 rounded-2xl mb-6">
                 <div className="flex justify-between text-base">
-                  <span className="font-bold text-slate-800">Tổng cộng</span>
+                  <span className="font-bold text-slate-800">Giá phòng/đêm</span>
                   <span className="font-bold text-emerald-600">{Number(room.price).toLocaleString()} VND</span>
                 </div>
+                {dateRange && dateRange[0] && dateRange[1] && (
+                  <div className="flex justify-between text-sm mt-2 text-slate-600">
+                    <span>{dayjs(dateRange[1]).diff(dayjs(dateRange[0]), 'day')} đêm</span>
+                    <span>{(Number(room.price) * dayjs(dateRange[1]).diff(dayjs(dateRange[0]), 'day')).toLocaleString()} VND</span>
+                  </div>
+                )}
               </div>
 
-              <Link to="/booking" className="w-full">
-                <Button
-                  type="primary"
-                  size="large"
-                  className="w-full h-14 !bg-emerald-600 hover:!bg-emerald-700 !rounded-xl !border-none font-bold uppercase"
-                >
-                  Xác nhận đặt phòng
-                </Button>
-              </Link>
+              <Button
+                type="primary"
+                size="large"
+                className="w-full h-14 !bg-emerald-600 hover:!bg-emerald-700 !rounded-xl !border-none font-bold uppercase"
+                onClick={handleBooking}
+              >
+                Xác nhận đặt phòng
+              </Button>
             </div>
           </div>
         </div>
