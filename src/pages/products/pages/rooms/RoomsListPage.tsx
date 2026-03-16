@@ -4,14 +4,14 @@ import { HomeHeader } from "../../../../components/Header/HomeHeader";
 import { HomeFooter } from "../../../../components/Footer/HomeFooter";
 import { HomeBanner } from "../../../../components/HomeLayout/HomeBanner";
 import type { ApiRoom, ApiRoomsResponse, RoomItem } from "../../../../types/types";
-import { API_BASE_URL, ENDPOINTS } from "../../../../services/endpoints/common";
+import { API_BASE_URL, API_STORAGE_URL, ENDPOINTS } from "../../../../services/endpoints/common";
 import { RoomCard } from "../../../../components/RoomCard";
 
 const { Option } = Select;
 
 // Helper function to convert API data to RoomItem format
 const convertApiRoomToRoomItem = (apiRoom: ApiRoom): RoomItem => {
-  const price = parseFloat(apiRoom.room_type.base_price);
+  const price = parseFloat(apiRoom.price || apiRoom.room_type.base_price);
   
   // Determine label and color based on price range
   let label = "";
@@ -30,6 +30,15 @@ const convertApiRoomToRoomItem = (apiRoom: ApiRoom): RoomItem => {
     labelColor = "bg-purple-600";
   }
 
+  // Convert images từ API
+  const images = apiRoom.images && apiRoom.images.length > 0
+    ? apiRoom.images.map(img => `${API_STORAGE_URL}/${img.image_url}`)
+    : [];
+
+  // Fallback image nếu không có ảnh từ API
+  const fallbackImage = `https://images.unsplash.com/photo-${1582719508461 + apiRoom.id}?w=800`;
+  const mainImage = images.length > 0 ? images[0] : fallbackImage;
+
   return {
     id: apiRoom.id,
     name: `${apiRoom.room_type.name} - Phòng ${apiRoom.room_number}`,
@@ -41,7 +50,8 @@ const convertApiRoomToRoomItem = (apiRoom: ApiRoom): RoomItem => {
       apiRoom.status === "available" ? "Có sẵn" : "Đã đặt",
     ],
     price: price,
-    image: `https://images.unsplash.com/photo-${1582719508461 + apiRoom.id}?w=800`,
+    image: mainImage,
+    images: images.length > 0 ? images : [fallbackImage],
     label,
     labelColor,
   };

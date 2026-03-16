@@ -1,7 +1,8 @@
-import { Card } from "antd";
+import { Card, Carousel } from "antd";
 import { EnvironmentOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import type { RoomItem } from "../../types/types";
+import "./style.less";
 
 interface RoomCardProps {
   room: RoomItem;
@@ -14,21 +15,56 @@ export function RoomCard({ room }: RoomCardProps) {
     navigate(`/room/detail/${room.id}`);
   };
 
+  // Sử dụng images từ API, hoặc fallback sang image đơn
+  const displayImages = room.images && room.images.length > 0 ? room.images : [room.image];
+
   return (
     <Card
       hoverable
       cover={
-        <div className="relative overflow-hidden">
-          <img
-            alt={room.name}
-            src={room.image}
-            className="h-56 w-full object-cover transition-transform duration-300 hover:scale-110"
-          />
+        <div className="relative overflow-hidden room-card-carousel">
+          {displayImages.length > 1 ? (
+            <Carousel 
+              autoplay 
+              autoplaySpeed={3000} 
+              effect="fade"
+              dots={{ className: "custom-dots" }}
+            >
+              {displayImages.map((img, idx) => (
+                <div key={idx}>
+                  <img
+                    alt={`${room.name} - ${idx + 1}`}
+                    src={img}
+                    className="h-56 w-full object-cover room-card-image"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = `https://images.unsplash.com/photo-${1582719508461 + room.id}?w=800`;
+                    }}
+                  />
+                </div>
+              ))}
+            </Carousel>
+          ) : (
+            <img
+              alt={room.name}
+              src={displayImages[0]}
+              className="h-56 w-full object-cover transition-transform duration-300 hover:scale-110"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = `https://images.unsplash.com/photo-${1582719508461 + room.id}?w=800`;
+              }}
+            />
+          )}
           {room.label && (
             <div
-              className={`absolute right-3 top-3 rounded-lg px-3 py-1 text-xs font-medium text-white ${room.labelColor}`}
+              className={`absolute right-3 top-3 rounded-lg px-3 py-1 text-xs font-medium text-white ${room.labelColor} z-10`}
             >
               {room.label}
+            </div>
+          )}
+          {displayImages.length > 1 && (
+            <div className="absolute left-3 top-3 rounded-lg px-2 py-1 text-xs font-medium text-white bg-black/50 z-10">
+              {displayImages.length} ảnh
             </div>
           )}
         </div>

@@ -1,3 +1,11 @@
+export interface RoomImage {
+    id: number;
+    room_id: number;
+    image_url: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface RoomType {
     id: number;
     hotel_id: number;
@@ -19,10 +27,12 @@ export interface Room {
     floor: number;
     status: string;
     note: string | null;
+    price: string;
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
     room_type: RoomType;
+    images: RoomImage[];
 }
 
 export interface RoomResponse {
