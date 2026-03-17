@@ -32,7 +32,6 @@ const RoomTable: React.FC<Props> = ({ data, onDelete, onEdit }) => {
           <tr>
             <th className="px-4 py-3 text-left text-sm font-semibold">ID</th>
             <th className="px-4 py-3 text-left text-sm font-semibold">Số Phòng</th>
-            {/* Thêm Header Hình ảnh */}
             <th className="px-4 py-3 text-left text-sm font-semibold">Hình ảnh</th>
             <th className="px-4 py-3 text-left text-sm font-semibold">Loại Phòng</th>
             <th className="px-4 py-3 text-left text-sm font-semibold">Tầng</th>
@@ -55,10 +54,8 @@ const RoomTable: React.FC<Props> = ({ data, onDelete, onEdit }) => {
                 {room.room_number}
               </td>
 
-              {/* Thêm cột hiển thị danh sách ảnh */}
               <td className="px-4 py-3 text-sm">
                 <div className="flex -space-x-2 overflow-hidden">
-                  {/* Ép kiểu any hoặc update interface Room nếu chưa có trường images */}
                   {(room as any).images && (room as any).images.length > 0 ? (
                     (room as any).images.map((img: any) => (
                       <img
