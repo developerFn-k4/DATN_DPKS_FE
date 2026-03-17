@@ -11,7 +11,7 @@ import logo from '../../../assets/logo.png';
 
 const Sidebar: React.FC = () => {
   const menuItems = [
-    { icon: <FiGrid />, label: 'Dashboard', path: ''},
+    { icon: <FiGrid />, label: 'Dashboard', path: '/admin/dashboard'},
     { icon: <FiHome />, label: 'Quản lý phòng', path: '/admin/qlroom' },
     { icon: <FiLayers />, label: 'Quản lý loại phòng', path: '' }, 
     { icon: <FiActivity />, label: 'Quản lý trạng thái phòng', path: '' }, 

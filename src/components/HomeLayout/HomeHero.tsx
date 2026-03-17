@@ -133,16 +133,7 @@ export function HomeHero({ cities, value, onChange, onSearch }: Props) {
                                     />
                                 </div>
 
-                                <div>
-                                    <div className="mb-1 text-xs text-slate-500">Từ khoá</div>
-                                    <Input
-                                        size="large"
-                                        value={value.keyword}
-                                        onChange={(e) => onChange({ keyword: e.target.value })}
-                                        prefix={<SearchOutlined />}
-                                        placeholder="Ví dụ: gần biển, view đẹp..."
-                                    />
-                                </div>
+                                
 
                                 <Button
                                     type="primary"
