@@ -25,20 +25,16 @@ const QuanLyRoomPage: React.FC = () => {
     setSelectedRoom(null);
   };
 
-  // Giữ nguyên logic giao diện, "data" bây giờ sẽ là FormData nhận từ RoomModal
   const handleSave = async (data: any) => {
     try {
       if (selectedRoom) {
-        // Gửi FormData qua updateRoom
         await updateRoom(selectedRoom.id, data);
       } else {
-        // Gửi FormData qua createRoom
         await createRoom(data);
       }
 
       handleCloseModal();
     } catch (error: any) {
-      // Log lỗi chi tiết từ server nếu có
       console.error("Lỗi API:", error.response?.data || error.message);
     }
   };
@@ -73,7 +69,6 @@ const QuanLyRoomPage: React.FC = () => {
       </div>
 
       <RoomModal
-        // Key giúp reset hoàn toàn state của modal mỗi khi đóng/mở
         key={isModalOpen ? (selectedRoom ? `edit-${selectedRoom.id}` : 'add-new') : 'closed'}
         isOpen={isModalOpen}
         onClose={handleCloseModal}

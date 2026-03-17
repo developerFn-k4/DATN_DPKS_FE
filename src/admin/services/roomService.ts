@@ -26,10 +26,10 @@ export interface Room {
   room_number: string;
   room_type_id: number;
   floor: number;
-  status: "available" | "booked" | "maintenance";
+  status: "available" | "occupied" | "maintenance" | "unavailable"; 
   note: string | null;
   price: string | number;
-  images?: RoomImage[]; // Thêm trường này để hiển thị ảnh
+  images?: RoomImage[]; 
   room_type?: {
     id: number;
     name: string;
@@ -39,12 +39,10 @@ export interface Room {
 export const roomService = {
   getAll: async () => {
     const res = await api.get("/admin/rooms");
-    // Lưu ý: Dựa trên response trước đó của bạn, cần trả về res.data.data
     return res.data.data || res.data;
   },
 
   create: async (formData: FormData) => {
-    // Gửi FormData thay vì Object
     const res = await api.post("/admin/rooms", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
@@ -52,7 +50,6 @@ export const roomService = {
   },
 
   update: async (id: number, formData: FormData) => {
-    // Laravel/PHP thường yêu cầu _method PUT khi gửi FormData qua POST
     formData.append("_method", "PUT");
     const res = await api.post(`/admin/rooms/${id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
