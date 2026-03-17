@@ -16,7 +16,7 @@ import {
   PhoneOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useLogin, useRegister } from "../../../hooks/auth/useRegister";
 
 const api = axios.create({
   baseURL: "https://vietstay.ngrok.dev/api",
@@ -129,6 +129,7 @@ export default function AuthPage() {
               </div>
             </div>
 
+            {/* RIGHT SIDE */}
             <div className="flex items-center justify-center">
               <div className="w-full max-w-md p-6 border shadow-lg rounded-3xl border-white/60 bg-white/55 backdrop-blur-xl sm:p-8">
                 <div className="mb-4">
