@@ -7,7 +7,14 @@ interface Props {
   onSave: (data: any) => void;
 }
 
-const ROOM_STATUSES = ["available", "booked", "maintenance"];
+const ROOM_STATUSES = [
+  "available",
+  "occupied",
+  "maintenance",
+  "unavailable",
+  "booked",
+  "reserved"
+];
 
 const RoomModal: React.FC<Props> = ({ isOpen, onClose, initialData, onSave }) => {
   const [roomNumber, setRoomNumber] = useState("");
@@ -16,7 +23,6 @@ const RoomModal: React.FC<Props> = ({ isOpen, onClose, initialData, onSave }) =>
   const [roomTypeId, setRoomTypeId] = useState("");
   const [status, setStatus] = useState("available");
   const [note, setNote] = useState("");
-  // Thêm state để lưu file ảnh
   const [images, setImages] = useState<File[]>([]);
 
   const clearForm = () => {
@@ -26,7 +32,7 @@ const RoomModal: React.FC<Props> = ({ isOpen, onClose, initialData, onSave }) =>
     setRoomTypeId("");
     setStatus("available");
     setNote("");
-    setImages([]); // Clear ảnh khi đóng/reset
+    setImages([]); 
   };
 
   useEffect(() => {
@@ -59,7 +65,6 @@ const RoomModal: React.FC<Props> = ({ isOpen, onClose, initialData, onSave }) =>
       return; 
     }
 
-    // Khởi tạo FormData để gửi được file
     const formData = new FormData();
     formData.append("room_number", roomNumber.trim());
     formData.append("room_type_id", roomTypeId);
@@ -68,12 +73,10 @@ const RoomModal: React.FC<Props> = ({ isOpen, onClose, initialData, onSave }) =>
     formData.append("status", status);
     formData.append("note", note ? note.trim() : "");
 
-    // Thêm mảng ảnh vào FormData
     images.forEach((file) => {
       formData.append("images[]", file);
     });
 
-    // Truyền formData vào hàm onSave thay vì object thường
     onSave(formData);
 
     clearForm(); 
@@ -84,7 +87,6 @@ const RoomModal: React.FC<Props> = ({ isOpen, onClose, initialData, onSave }) =>
       <div className="fixed inset-0 bg-black/50 z-40" onClick={handleCancel} />
 
       <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-        {/* Thêm max-h và overflow để không bị tràn màn hình khi thêm input ảnh */}
         <div className="bg-white p-6 rounded-2xl w-full max-w-md shadow-xl border border-gray-100 max-h-[95vh] overflow-y-auto">
           <h2 className="text-xl font-bold mb-4 text-gray-800">
             {initialData ? " Cập nhật phòng" : " Thêm phòng mới"}
@@ -146,7 +148,12 @@ const RoomModal: React.FC<Props> = ({ isOpen, onClose, initialData, onSave }) =>
               >
                 {ROOM_STATUSES.map((s) => (
                   <option key={s} value={s}>
-                    {s === 'available' ? 'Sẵn sàng' : s === 'booked' ? 'Đã đặt' : 'Bảo trì'}
+                    {s === 'available' ? 'Sẵn sàng' :
+                      s === 'occupied' ? 'Đang sử dụng' :
+                        s === 'maintenance' ? 'Bảo trì' :
+                          s === 'booked' ? 'Đã đặt' :
+                            s === 'reserved' ? 'Giữ chỗ' :
+                              'Không khả dụng'}
                   </option>
                 ))}
               </select>
@@ -163,7 +170,6 @@ const RoomModal: React.FC<Props> = ({ isOpen, onClose, initialData, onSave }) =>
               />
             </div>
 
-            {/* PHẦN THÊM MỚI: Chọn ảnh */}
             <div>
               <label className="text-xs font-bold text-gray-400 uppercase ml-1">Hình ảnh phòng</label>
               <input
