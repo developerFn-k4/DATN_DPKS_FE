@@ -19,6 +19,10 @@ const renderStatus = (status: Room["status"]) => {
 
     case "unavailable":
       return <span className={`${base} bg-gray-200 text-gray-600`}>Không khả dụng</span>;
+    case "booked":
+      return <span className={`${base} bg-purple-100 text-purple-800`}>Đã đặt</span>;
+    case "reserved":
+      return <span className={`${base} bg-red-300 text-red-600`}>Giữ chỗ</span>;
 
     default:
       return <span className={`${base} bg-green-100 text-green-800`}>Sẵn sàng</span>;

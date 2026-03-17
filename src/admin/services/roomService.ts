@@ -26,7 +26,7 @@ export interface Room {
   room_number: string;
   room_type_id: number;
   floor: number;
-  status: "available" | "occupied" | "maintenance" | "unavailable"; 
+  status: "available" | "occupied" | "maintenance" | "unavailable" | "booked" | "reserved"; 
   note: string | null;
   price: string | number;
   images?: RoomImage[]; 

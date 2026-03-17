@@ -11,7 +11,9 @@ const ROOM_STATUSES = [
   "available",
   "occupied",
   "maintenance",
-  "unavailable"
+  "unavailable",
+  "booked",
+  "reserved"
 ];
 
 const RoomModal: React.FC<Props> = ({ isOpen, onClose, initialData, onSave }) => {
@@ -149,7 +151,9 @@ const RoomModal: React.FC<Props> = ({ isOpen, onClose, initialData, onSave }) =>
                     {s === 'available' ? 'Sẵn sàng' :
                       s === 'occupied' ? 'Đang sử dụng' :
                         s === 'maintenance' ? 'Bảo trì' :
-                          'Không khả dụng'}
+                          s === 'booked' ? 'Đã đặt' :
+                            s === 'reserved' ? 'Giữ chỗ' :
+                              'Không khả dụng'}
                   </option>
                 ))}
               </select>
