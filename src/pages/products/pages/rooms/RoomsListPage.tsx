@@ -2,15 +2,16 @@ import { useState, useEffect } from "react";
 import { Select, Spin, message } from "antd";
 import { HomeHeader } from "../../../../components/Header/HomeHeader";
 import { HomeFooter } from "../../../../components/Footer/HomeFooter";
+import { HomeBanner } from "../../../../components/HomeLayout/HomeBanner";
 import type { ApiRoom, ApiRoomsResponse, RoomItem } from "../../../../types/types";
-import { API_BASE_URL, ENDPOINTS } from "../../../../services/endpoints/common";
+import { API_BASE_URL, API_STORAGE_URL, ENDPOINTS } from "../../../../services/endpoints/common";
 import { RoomCard } from "../../../../components/RoomCard";
 
 const { Option } = Select;
 
 // Helper function to convert API data to RoomItem format
 const convertApiRoomToRoomItem = (apiRoom: ApiRoom): RoomItem => {
-  const price = parseFloat(apiRoom.room_type.base_price);
+  const price = parseFloat(apiRoom.price || apiRoom.room_type.base_price);
   
   // Determine label and color based on price range
   let label = "";
@@ -29,6 +30,24 @@ const convertApiRoomToRoomItem = (apiRoom: ApiRoom): RoomItem => {
     labelColor = "bg-purple-600";
   }
 
+  // Convert images từ API
+  const images = apiRoom.images && apiRoom.images.length > 0
+    ? apiRoom.images.map(img => `${API_STORAGE_URL}/${img.image_url}`)
+    : [];
+
+  // Ảnh mặc định đẹp cho phòng không có ảnh
+  const defaultRoomImages = [
+    "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop"
+  ];
+  
+  // Chọn ảnh mặc định dựa trên ID của phòng để đa dạng
+  const fallbackImage = defaultRoomImages[apiRoom.id % defaultRoomImages.length];
+  const mainImage = images.length > 0 ? images[0] : fallbackImage;
+
   return {
     id: apiRoom.id,
     name: `${apiRoom.room_type.name} - Phòng ${apiRoom.room_number}`,
@@ -40,7 +59,8 @@ const convertApiRoomToRoomItem = (apiRoom: ApiRoom): RoomItem => {
       apiRoom.status === "available" ? "Có sẵn" : "Đã đặt",
     ],
     price: price,
-    image: `https://images.unsplash.com/photo-${1582719508461 + apiRoom.id}?w=800`,
+    image: mainImage,
+    images: images.length > 0 ? images : [fallbackImage],
     label,
     labelColor,
   };
@@ -85,6 +105,7 @@ export default function RoomsListPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-slate-50">
       <HomeHeader />
+      <HomeBanner />
 
       <main className="px-4 py-12 mx-auto max-w-7xl">
         {/* Header Section */}

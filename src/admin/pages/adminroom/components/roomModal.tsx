@@ -7,7 +7,14 @@ interface Props {
   onSave: (data: any) => void;
 }
 
-const ROOM_STATUSES = ["available", "booked", "maintenance"];
+const ROOM_STATUSES = [
+  "available",
+  "occupied",
+  "maintenance",
+  "unavailable",
+  "booked",
+  "reserved"
+];
 
 const RoomModal: React.FC<Props> = ({ isOpen, onClose, initialData, onSave }) => {
   const [roomNumber, setRoomNumber] = useState("");
@@ -141,7 +148,12 @@ const RoomModal: React.FC<Props> = ({ isOpen, onClose, initialData, onSave }) =>
               >
                 {ROOM_STATUSES.map((s) => (
                   <option key={s} value={s}>
-                    {s === 'available' ? 'Sẵn sàng' : s === 'booked' ? 'Đã đặt' : 'Bảo trì'}
+                    {s === 'available' ? 'Sẵn sàng' :
+                      s === 'occupied' ? 'Đang sử dụng' :
+                        s === 'maintenance' ? 'Bảo trì' :
+                          s === 'booked' ? 'Đã đặt' :
+                            s === 'reserved' ? 'Giữ chỗ' :
+                              'Không khả dụng'}
                   </option>
                 ))}
               </select>

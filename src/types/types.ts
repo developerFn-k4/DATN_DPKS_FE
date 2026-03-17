@@ -18,6 +18,7 @@ export type RoomItem = {
     features: string[];
     price: number;
     image: string;
+    images?: string[];
     label?: string;
     labelColor?: string;
 };
@@ -30,6 +31,14 @@ export type SearchState = {
 };
 
 // API Types
+export type ApiRoomImage = {
+    id: number;
+    room_id: number;
+    image_url: string;
+    created_at: string;
+    updated_at: string;
+};
+
 export type ApiRoomType = {
     id: number;
     hotel_id: number;
@@ -51,10 +60,12 @@ export type ApiRoom = {
     floor: number;
     status: string;
     note: string | null;
+    price: string;
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
     room_type: ApiRoomType;
+    images: ApiRoomImage[];
 };
 
 export type ApiRoomsResponse = {
