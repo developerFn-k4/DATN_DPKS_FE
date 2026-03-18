@@ -128,7 +128,8 @@ export function RoomCard({ room }: RoomCardProps) {
               ) : (
                 <button 
                   onClick={handleViewDetails}
-                  className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+                  style={{ backgroundColor: '#22c55e' }}
+                  className="rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors hover:brightness-110"
                 >
                   Xem chi tiết
                 </button>
