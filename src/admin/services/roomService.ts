@@ -1,21 +1,5 @@
-import axios from "axios";
-
 const BASE_URL = "https://vietstay.ngrok.dev/api";
 
-const api = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    "ngrok-skip-browser-warning": "true",
-  },
-});
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
 export interface RoomImage {
   id: number;
   image_url: string;
@@ -29,36 +13,63 @@ export interface Room {
   status: "available" | "occupied" | "maintenance" | "unavailable" | "booked" | "reserved"; 
   note: string | null;
   price: string | number;
-  images?: RoomImage[]; 
+  images?: RoomImage[];
   room_type?: {
     id: number;
     name: string;
   };
 }
 
+const request = async (url: string, options: RequestInit = {}) => {
+  const token = localStorage.getItem("token");
+
+  const headers: Record<string, string> = {
+    "ngrok-skip-browser-warning": "true",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options.headers as Record<string, string> || {}),
+  };
+
+  const res = await fetch(BASE_URL + url, {
+    ...options,
+    headers,
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Request failed");
+  }
+
+  return data;
+};
+
 export const roomService = {
   getAll: async () => {
-    const res = await api.get("/admin/rooms");
-    return res.data.data || res.data;
+    const data = await request("/admin/rooms", {
+      method: "GET",
+    });
+    return data.data || data;
   },
 
   create: async (formData: FormData) => {
-    const res = await api.post("/admin/rooms", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+    return request("/admin/rooms", {
+      method: "POST",
+      body: formData,
     });
-    return res.data;
   },
 
   update: async (id: number, formData: FormData) => {
     formData.append("_method", "PUT");
-    const res = await api.post(`/admin/rooms/${id}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+
+    return request(`/admin/rooms/${id}`, {
+      method: "POST",
+      body: formData,
     });
-    return res.data;
   },
 
   delete: async (id: number) => {
-    const res = await api.delete(`/admin/rooms/${id}`);
-    return res.data;
+    return request(`/admin/rooms/${id}`, {
+      method: "DELETE",
+    });
   },
 };
