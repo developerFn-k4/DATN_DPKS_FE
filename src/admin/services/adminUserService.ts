@@ -1,37 +1,46 @@
 const BASE_URL = "https://vietstay.ngrok.dev/api/admin";
 
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  status: boolean;
-}
+const getAuthHeaders = () => ({
+  "Content-Type": "application/json",
+  "Authorization": `Bearer ${localStorage.getItem("token")}`,
+  "ngrok-skip-browser-warning": "69420", 
+});
 
-export const getUsers = async (): Promise<User[]> => {
+export const getUsers = async () => {
+  const res = await fetch(`${BASE_URL}/users`, { headers: getAuthHeaders() });
+  return res.json();
+};
+
+export const createUser = async (data: any) => {
   const res = await fetch(`${BASE_URL}/users`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
-  return res.json();
-};
-
-export const getUserById = async (id: number): Promise<User> => {
-  const res = await fetch(`${BASE_URL}/users/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
-  return res.json();
-};
-
-export const toggleUserStatus = async (id: number): Promise<User> => {
-  const res = await fetch(`${BASE_URL}/users/${id}/toggle-status`, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
+    headers: getAuthHeaders(),
+    body: JSON.stringify(data),
+  });
+  return res.json();
+};
+
+export const updateUser = async (id: number, data: any) => {
+  const res = await fetch(`${BASE_URL}/users/${id}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(data),
+  });
+  return res.json();
+};
+
+export const deleteUser = async (id: number) => {
+  const res = await fetch(`${BASE_URL}/users/${id}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  return res.json();
+};
+
+export const toggleUserStatus = async (id: number) => {
+  const res = await fetch(`${BASE_URL}/users/${id}/toggle-status`, {
+    method: "PATCH",
+    headers: getAuthHeaders(),
   });
   return res.json();
 };
