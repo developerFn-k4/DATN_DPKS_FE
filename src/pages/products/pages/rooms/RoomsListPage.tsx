@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Select, Spin, message } from "antd";
 import { HomeHeader } from "../../../../components/Header/HomeHeader";
 import { HomeFooter } from "../../../../components/Footer/HomeFooter";
-import { HomeBanner } from "../../../../components/HomeLayout/HomeBanner";
+import { RoomsBanner } from "../../../../components/HomeLayout/RoomsBanner";
 import type { ApiRoom, ApiRoomsResponse, RoomItem } from "../../../../types/types";
 import { API_BASE_URL, API_STORAGE_URL, ENDPOINTS } from "../../../../services/endpoints/common";
 import { RoomCard } from "../../../../components/RoomCard";
@@ -13,21 +13,27 @@ const { Option } = Select;
 const convertApiRoomToRoomItem = (apiRoom: ApiRoom): RoomItem => {
   const price = parseFloat(apiRoom.price || apiRoom.room_type.base_price);
   
-  // Determine label and color based on price range
-  let label = "";
+  // Sử dụng tên loại phòng từ API
+  const label = apiRoom.room_type.name;
+  
+  // Determine color based on room type name
   let labelColor = "";
-  if (price >= 3000000) {
-    label = "Luxury";
+  const roomTypeName = apiRoom.room_type.name.toLowerCase();
+  
+  if (roomTypeName.includes("luxury") || roomTypeName.includes("sang trọng")) {
     labelColor = "bg-amber-600";
-  } else if (price >= 2000000) {
-    label = "VIP";
+  } else if (roomTypeName.includes("vip")) {
     labelColor = "bg-rose-600";
-  } else if (price >= 1500000) {
-    label = "Suite";
+  } else if (roomTypeName.includes("suite")) {
     labelColor = "bg-emerald-600";
-  } else if (price >= 1000000) {
-    label = "Premium";
+  } else if (roomTypeName.includes("premium") || roomTypeName.includes("cao cấp")) {
     labelColor = "bg-purple-600";
+  } else if (roomTypeName.includes("deluxe")) {
+    labelColor = "bg-blue-600";
+  } else if (roomTypeName.includes("standard") || roomTypeName.includes("tiêu chuẩn")) {
+    labelColor = "bg-slate-600";
+  } else {
+    labelColor = "bg-emerald-600"; // Default color
   }
 
   // Convert images từ API
@@ -105,18 +111,18 @@ export default function RoomsListPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-slate-50">
       <HomeHeader />
-      <HomeBanner />
+      <RoomsBanner />
 
       <main className="px-4 py-12 mx-auto max-w-7xl">
         {/* Header Section */}
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <h1 className="text-4xl font-bold text-slate-800">
             Danh sách phòng
           </h1>
           <p className="mt-2 text-slate-600">
             Khám phá các phòng nghỉ tuyệt vời cho chuyến du lịch của bạn
           </p>
-        </div>
+        </div> */}
 
         {/* Filter Section */}
         <div className="flex items-center gap-4 mb-8">
