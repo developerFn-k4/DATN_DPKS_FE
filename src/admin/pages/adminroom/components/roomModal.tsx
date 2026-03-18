@@ -15,7 +15,7 @@ const ROOM_STATUSES = [
   "booked",
   "reserved"
 ];
-
+// có thể thêm trạng thái "Đã đặt" hoặc "Giữ chỗ" nếu cần thiết
 const RoomModal: React.FC<Props> = ({ isOpen, onClose, initialData, onSave }) => {
   const [roomNumber, setRoomNumber] = useState("");
   const [floor, setFloor] = useState("");
