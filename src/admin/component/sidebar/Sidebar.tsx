@@ -17,7 +17,7 @@ const Sidebar: React.FC = () => {
     { icon: <FiActivity />, label: 'Quản lý trạng thái phòng', path: '' }, 
     { icon: <FiCalendar />, label: 'Quản lý đặt phòng', path: '' },
     { icon: <FiFileText />, label: 'Quản lý Đơn đặt phòng', path: '' }, 
-    { icon: <FiUsers />, label: 'Quản lý Khách hàng', path: '' },
+    { icon: <FiUsers />, label: 'Quản lý Khách hàng', path: '/admin/qluser' },
     { icon: <FiCreditCard />, label: 'Quản lý Thanh toán', path: '' },
     { icon: <FiBarChart2 />, label: 'Thống kê', path: '' },
     { icon: <FiSettings />, label: 'Cài đặt', path: '' },

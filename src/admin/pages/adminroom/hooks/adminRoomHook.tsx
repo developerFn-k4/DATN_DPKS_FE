@@ -9,16 +9,15 @@ export const useRoom = () => {
   const fetchRooms = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await roomService.getAll();
-      const actualData = res?.data || res;
-      
-      if (Array.isArray(actualData)) {
-        setRooms(actualData);
+      const data = await roomService.getAll();
+
+      if (Array.isArray(data)) {
+        setRooms(data);
       } else {
         setRooms([]);
       }
-    } catch (error) {
-      toast.error("Không thể kết nối đến máy chủ");
+    } catch (error: any) {
+      toast.error(error.message || "Không thể tải dữ liệu");
     } finally {
       setLoading(false);
     }
@@ -29,42 +28,42 @@ export const useRoom = () => {
   }, [fetchRooms]);
 
   const createRoom = async (formData: FormData) => {
-    const tId = toast.loading("Đang khởi tạo phòng...");
+    const toastId = toast.loading("Đang tạo phòng...");
+
     try {
       await roomService.create(formData);
-      await fetchRooms(); 
-      toast.success("Thêm phòng thành công!", { id: tId });
+      await fetchRooms();
+      toast.success("Thêm phòng thành công!", { id: toastId });
     } catch (error: any) {
-      const msg = error.response?.data?.message || "Lỗi trùng số phòng hoặc dữ liệu trống!";
-      toast.error(msg, { id: tId });
+      toast.error(error.message || "Thêm phòng thất bại!", { id: toastId });
       throw error;
     }
   };
 
   const updateRoom = async (id: number, formData: FormData) => {
-    const tId = toast.loading("Đang lưu thay đổi...");
+    const toastId = toast.loading("Đang cập nhật...");
+
     try {
       await roomService.update(id, formData);
       await fetchRooms();
-      toast.success("Cập nhật thành công!", { id: tId });
+      toast.success("Cập nhật thành công!", { id: toastId });
     } catch (error: any) {
-      const msg = error.response?.data?.message || "Cập nhật thất bại!";
-      toast.error(msg, { id: tId });
+      toast.error(error.message || "Cập nhật thất bại!", { id: toastId });
       throw error;
     }
   };
 
   const deleteRoom = async (id: number) => {
-    const isConfirm = window.confirm("Bạn có chắc chắn muốn xóa phòng này không?");
-    if (!isConfirm) return;
+    if (!window.confirm("Bạn có chắc muốn xóa phòng này?")) return;
 
-    const tId = toast.loading("Đang xóa...");
+    const toastId = toast.loading("Đang xóa...");
+
     try {
       await roomService.delete(id);
       setRooms((prev) => prev.filter((r) => r.id !== id));
-      toast.success("Đã xóa xong", { id: tId });
-    } catch (error) {
-      toast.error("Lỗi khi xóa dữ liệu!", { id: tId });
+      toast.success("Xóa thành công!", { id: toastId });
+    } catch (error: any) {
+      toast.error(error.message || "Xóa thất bại!", { id: toastId });
     }
   };
 
