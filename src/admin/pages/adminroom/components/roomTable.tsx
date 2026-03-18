@@ -70,7 +70,7 @@ const RoomTable: React.FC<Props> = ({ data, onDelete, onEdit }) => {
                       <img
                         key={img.id}
                         src={`https://vietstay.ngrok.dev/storage/${img.image_url}`}
-                        alt="room"
+alt="room"
                         className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover shadow-sm hover:scale-110 transition-transform cursor-pointer"
                         title="Xem ảnh"
                       />
