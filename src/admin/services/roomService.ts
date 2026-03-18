@@ -10,7 +10,7 @@ export interface Room {
   room_number: string;
   room_type_id: number;
   floor: number;
-  status: "available" | "occupied" | "maintenance" | "unavailable" | "booked" | "reserved"; 
+  status: "available" | "occupied" | "maintenance" | "unavailable" | "booked" | "reserved";
   note: string | null;
   price: string | number;
   images?: RoomImage[];
@@ -23,20 +23,27 @@ export interface Room {
 const request = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.getItem("token");
 
+  const isFormData = options.body instanceof FormData;
+
   const headers: Record<string, string> = {
     "ngrok-skip-browser-warning": "true",
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...(options.headers as Record<string, string> || {}),
+    ...(options.headers as Record<string, string>),
   };
+
+  if (!isFormData) {
+    headers["Content-Type"] = "application/json";
+  }
 
   const res = await fetch(BASE_URL + url, {
     ...options,
     headers,
   });
 
-  const data = await res.json();
+  const data = await res.json().catch(() => null);
 
   if (!res.ok) {
+    console.error("API ERROR:", data);
     throw new Error(data?.message || "Request failed");
   }
 
@@ -45,10 +52,11 @@ const request = async (url: string, options: RequestInit = {}) => {
 
 export const roomService = {
   getAll: async () => {
-    const data = await request("/admin/rooms", {
+    const res = await request("/admin/rooms", {
       method: "GET",
     });
-    return data.data || data;
+
+    return res?.data ?? res ?? [];
   },
 
   create: async (formData: FormData) => {
