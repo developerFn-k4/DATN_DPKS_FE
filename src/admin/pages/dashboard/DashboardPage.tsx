@@ -1,5 +1,5 @@
-import React from "react";
-import { Card, Row, Col, Statistic, Progress } from "antd";
+import React, { useState, useEffect } from "react";
+import { Card, Row, Col, Statistic, Progress, Spin, message } from "antd";
 import { 
   FiHome, 
   FiUsers, 
@@ -9,18 +9,56 @@ import {
   FiStar
 } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { fetchDashboardData } from "../../services/dashboardService";
+import type { DashboardData } from "../../services/dashboardService";
 
 const DashboardPage: React.FC = () => {
+  const [loading, setLoading] = useState(true);
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
+  const loadDashboardData = async () => {
+    try {
+      setLoading(true);
+      const data = await fetchDashboardData();
+      setDashboardData(data);
+    } catch (error) {
+      console.error("Error loading dashboard data:", error);
+      message.error("Không thể tải dữ liệu dashboard");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
-  // Mock data - sẽ thay bằng API sau
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Spin size="large" tip="Đang tải dữ liệu..." />
+      </div>
+    );
+  }
+
+  if (!dashboardData) {
+    return null;
+  }
+
+  // Tính toán dữ liệu từ API
+  const todayBookings = dashboardData.bookings.daily[0]?.total || 0;
+  const monthlyRevenue = parseFloat(dashboardData.revenue.monthly[0]?.total || "0");
+
+  // Stats data từ API
   const stats = [
     {
       title: "Tổng phòng",
-      value: 150,
+      value: dashboardData.stats.total_rooms,
       icon: <FiHome className="text-3xl" />,
       color: "emerald",
       trend: "+12%",
@@ -29,7 +67,7 @@ const DashboardPage: React.FC = () => {
     },
     {
       title: "Đặt phòng hôm nay",
-      value: 28,
+      value: todayBookings,
       icon: <FiCalendar className="text-3xl" />,
       color: "blue",
       trend: "+8%",
@@ -38,7 +76,7 @@ const DashboardPage: React.FC = () => {
     },
     {
       title: "Khách hàng",
-      value: 1250,
+      value: dashboardData.stats.total_users,
       icon: <FiUsers className="text-3xl" />,
       color: "purple",
       trend: "+23%",
@@ -47,7 +85,7 @@ const DashboardPage: React.FC = () => {
     },
     {
       title: "Doanh thu tháng",
-      value: 456000000,
+      value: monthlyRevenue,
       prefix: "₫",
       icon: <FiCreditCard className="text-3xl" />,
       color: "orange",
