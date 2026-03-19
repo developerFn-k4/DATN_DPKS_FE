@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  getUsers,
-  deleteUser,
-  toggleUserStatus,
-  createUser,
-  updateUser,
-} from "../../../services/adminUserService";
+import { getUsers, toggleUserStatus } from "../../../services/adminUserService";
 import { toast } from "react-toastify";
 
 export const useAdminUsers = () => {
@@ -24,69 +18,21 @@ export const useAdminUsers = () => {
     }
   };
 
-  const handleCreate = async (data: any): Promise<boolean> => {
-  try {
-    const res = await createUser(data);
-    if (res) {
-      await fetchUsers();
-      toast.success("Tạo người dùng thành công!");
-      return true;
+  const handleToggleStatus = async (id: number) => {
+    try {
+      const res = await toggleUserStatus(id);
+      if (res) {
+        await fetchUsers();
+        toast.success("Đổi trạng thái thành công!");
+      }
+    } catch (error) {
+      toast.error("Đổi trạng thái thất bại!");
     }
-    toast.error("Không thể tạo người dùng!");
-    return false;
-  } catch (error) {
-    toast.error("Đã có lỗi xảy ra khi tạo người dùng!");
-    return false;
-  }
-};
+  };
 
-const handleUpdate = async (id: number, data: any): Promise<boolean> => {
-  try {
-    const res = await updateUser(id, data);
-    if (res) {
-      await fetchUsers();
-      toast.success("Cập nhật người dùng thành công!");
-      return true;
-    }
-    toast.error("Không thể cập nhật người dùng!");
-    return false;
-  } catch (error) {
-    toast.error("Đã có lỗi xảy ra khi cập nhật!");
-    return false;
-  }
-};
-
-const handleDelete = async (id: number) => {
-  if (!window.confirm("Bạn có chắc chắn muốn xóa?")) return;
-  try {
-    await deleteUser(id);
-    await fetchUsers();
-    toast.success("Xóa người dùng thành công!");
-  } catch (error) {
-    toast.error("Xóa thất bại!");
-  }
-};
-
-const handleToggleStatus = async (id: number) => {
-  try {
-    await toggleUserStatus(id);
-    await fetchUsers();
-    toast.success("Đổi trạng thái thành công!");
-  } catch (error) {
-    toast.error("Đổi trạng thái thất bại!");
-  }
-};
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  return {
-    users,
-    loading,
-    handleDelete,
-    handleToggleStatus,
-    fetchUsers,
-    handleCreate,
-    handleUpdate,
-  };
+  return { users, loading, handleToggleStatus, fetchUsers };
 };
