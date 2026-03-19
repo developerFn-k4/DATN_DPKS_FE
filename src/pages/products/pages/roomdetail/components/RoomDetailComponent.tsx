@@ -24,7 +24,6 @@ const RoomDetailView: React.FC<Props> = ({ roomId }) => {
   const [localReviews, setLocalReviews] = useState<Review[]>([]);
 
   const [dates, setDates] = useState<[Dayjs | null, Dayjs | null] | null>(null);
-  const [guestCount, setGuestCount] = useState<number>(1);
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editComment, setEditComment] = useState<string>("");
@@ -38,10 +37,10 @@ const RoomDetailView: React.FC<Props> = ({ roomId }) => {
     return 1;
   }, [dates]);
 
-  const totalPrice = useMemo(() => {
-    const basePrice = room?.price || 0;
-    return basePrice * nightCount * guestCount;
-  }, [room?.price, nightCount, guestCount]);
+ const totalPrice = useMemo(() => {
+  const basePrice = room?.price || 0;
+  return basePrice * nightCount;
+}, [room?.price, nightCount]);
 
  useEffect(() => {
   if (reviews) {
@@ -150,7 +149,7 @@ const handleSubmitComment = async () => {
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 bg-white min-h-screen">
-      <div className="relative mb-8 h-[400px] md:h-[550px] w-full overflow-hidden rounded-2xl shadow-sm border border-gray-100">
+      <div className="relative mb-10 h-[500px] md:h-[650px] w-full overflow-hidden rounded-2xl shadow-sm border border-gray-100">
         <div className="grid grid-cols-3 gap-2 h-full">
           <div className="col-span-2 h-full">
             <img
@@ -304,18 +303,7 @@ const handleSubmitComment = async () => {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Số lượng khách</label>
-                  <Input
-                    type="number"
-                    value={guestCount}
-                    min={1}
-                    max={room.room_type.capacity}
-                    onChange={(e) => setGuestCount(Number(e.target.value))}
-                    className="h-12 rounded-lg"
-                  />
-                  <p className="text-[10px] text-gray-400 mt-1">* Tối đa {room.room_type.capacity} người</p>
-                </div>
+              
 
           <Link to="/booking" className="block w-full"> 
                   <Button
