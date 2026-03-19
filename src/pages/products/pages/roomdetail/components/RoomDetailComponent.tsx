@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
 import { useRoomDetail } from "../hooks/RoomHook";
 import type { Review } from "../../../services/roomDetail";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const { TextArea } = Input;
 
@@ -28,7 +28,28 @@ const RoomDetailView: React.FC<Props> = ({ roomId }) => {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editComment, setEditComment] = useState<string>("");
   const [editRating, setEditRating] = useState<number>(5);
+  const navigate = useNavigate();
 
+  const handleGoToBooking = () => {
+    if (!room) return;
+
+    if (!dates || !dates[0] || !dates[1]) {
+      message.warning("Vui lòng chọn ngày nhận và trả phòng!");
+      return;
+    }
+
+  navigate("/booking", {
+    state: {
+      room_id: room.id,
+      room_number: room.room_number,
+      room_name: room.room_type.name,
+      check_in: dates[0].format("YYYY-MM-DD"),
+      check_out: dates[1].format("YYYY-MM-DD"),
+      guests: 1, 
+      price: room.price
+    }
+  });
+};
   const nightCount = useMemo(() => {
     if (dates && dates[0] && dates[1]) {
       const diff = dates[1].diff(dates[0], "day");
@@ -272,7 +293,7 @@ const handleSubmitComment = async () => {
                       </Space>
                     </div>
                   ) : (
-                    <p className="ml-15 text-gray-600 mt-3 leading-relaxed">{review.comment}</p>
+                    <p className="ml-12 text-gray-600 mt-3 leading-relaxed">{review.comment}</p>
                   )}
                 </div>
               ))
@@ -305,16 +326,15 @@ const handleSubmitComment = async () => {
 
               
 
-          <Link to="/booking" className="block w-full"> 
-                  <Button
-                    type="primary"
-                    size="large"
-                    block
-                    className="h-14 text-lg font-bold !bg-emerald-600 hover:!bg-emerald-700 border-none rounded-xl mt-4 flex items-center justify-center"
-                  >
-                    Đặt phòng ({nightCount} đêm)
-                  </Button>
-                </Link>
+                <Button
+                  type="primary"
+                  size="large"
+                  block
+                  onClick={handleGoToBooking}
+                  className="h-14 text-lg font-bold !bg-emerald-600 hover:!bg-emerald-700 border-none rounded-xl mt-4 flex items-center justify-center"
+                >
+                  Đặt phòng ({nightCount} đêm)
+                </Button>
                 <p className="text-center text-gray-400 text-sm mt-4">Bạn vẫn chưa bị trừ tiền</p>
               </div>
 
