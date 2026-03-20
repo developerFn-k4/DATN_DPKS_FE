@@ -1,85 +1,76 @@
-import { Button, Tag } from "antd";
-import { motion } from "framer-motion";
-import {
-  FireOutlined,
-  GiftOutlined,
-  ClockCircleOutlined,
-  ArrowRightOutlined,
-} from "@ant-design/icons";
+import React from 'react';
+import { 
+  EnvironmentOutlined, 
+  SafetyCertificateOutlined, 
+  ThunderboltOutlined, 
+  CustomerServiceOutlined 
+} from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
-const container = {
-  hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0, transition: { staggerChildren: 0.08, duration: 0.55, ease: "easeOut" } },
-};
-const item = {
-  hidden: { opacity: 0, y: 10 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
-};
+const HomeFeatures: React.FC = () => {
+  const features = [
+    {
+      icon: <EnvironmentOutlined className="text-3xl text-blue-600" />,
+      title: "Vị Trí Đắc Địa",
+      desc: "Nằm ngay trung tâm thủ đô Hà Nội, thuận tiện di chuyển đến các điểm tham quan nổi tiếng."
+    },
+    {
+      icon: <SafetyCertificateOutlined className="text-3xl text-emerald-600" />,
+      title: "Tiêu Chuẩn 5 Sao",
+      desc: "Dịch vụ đẳng cấp quốc tế với đội ngũ nhân viên chuyên nghiệp, tận tâm phục vụ 24/7."
+    },
+    {
+      icon: <ThunderboltOutlined className="text-3xl text-amber-500" />,
+      title: "Tiện Nghi Hiện Đại",
+      desc: "Hệ thống phòng nghỉ thông minh, Wifi tốc độ cao và hồ bơi vô cực ngắm nhìn toàn cảnh thành phố."
+    }
+  ];
 
-const deals = [
-  { title: "Weekend Escape", desc: "Giảm 15% cho cuối tuần", badge: "Hot", icon: <FireOutlined /> },
-  { title: "Family Pack", desc: "Combo phòng + buffet sáng", badge: "New", icon: <GiftOutlined /> },
-  { title: "Early Bird", desc: "Đặt sớm tiết kiệm hơn", badge: "Save", icon: <ClockCircleOutlined /> },
-];
-
-export function HomeDeals() {
   return (
-    <section id="deals" className="mx-auto max-w-6xl px-4 py-10">
-      <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
-        <motion.div variants={item} className="flex items-end justify-between gap-4">
-          <div>
-            <h2 className="text-xl font-semibold md:text-2xl">Ưu đãi mùa xuân</h2>
-            <p className="mt-1 text-sm text-slate-600">Nhẹ nhàng, tươi mới – ưu đãi vừa đủ “đã”.</p>
+    <div className="w-full px-6 md:px-12 py-20 bg-slate-50" id="features">
+      <div className="text-center mb-16">
+        <h2 className="text-4xl font-black text-slate-800 mb-4 uppercase tracking-tight">
+          Tại sao nên chọn VietStay Hà Nội?
+        </h2>
+        <p className="text-slate-500 max-w-2xl mx-auto text-lg">
+          Chúng tôi mang đến trải nghiệm lưu trú hoàn hảo với sự kết hợp giữa nét truyền thống Hà Thành và tiện nghi hiện đại.
+        </p>
+      </div>
+
+      <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8">
+        {features.map((item, index) => (
+          <div 
+            key={index} 
+            className="bg-white p-10 rounded-[3rem] shadow-xl shadow-slate-200/50 border border-white hover:-translate-y-2 transition-all duration-300 group"
+          >
+            <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-50 transition-colors">
+              {item.icon}
+            </div>
+            <h4 className="text-xl font-bold text-slate-800 mb-4">{item.title}</h4>
+            <p className="text-slate-500 leading-relaxed">
+              {item.desc}
+            </p>
           </div>
-          <Button className="hidden md:inline-flex">Xem tất cả</Button>
-        </motion.div>
+        ))}
+      </div>
 
-        <motion.div variants={item} className="mt-5 grid gap-4 md:grid-cols-3">
-          {deals.map((d) => (
-            <motion.div
-              key={d.title}
-              whileHover={{ y: -6, scale: 1.01 }}
-              transition={{ type: "spring", stiffness: 260, damping: 18 }}
-              className="relative overflow-hidden rounded-2xl bg-white p-5 ring-1 ring-slate-200/70"
-            >
-              <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-emerald-200/40 blur-3xl" />
-              <div className="pointer-events-none absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-lime-200/25 blur-3xl" />
-
-              <div className="relative flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100">
-                    {d.icon}
-                  </span>
-                  <div className="text-sm font-semibold">{d.title}</div>
-                </div>
-
-                <div className="relative">
-                  <Tag color="green">{d.badge}</Tag>
-                  <motion.span
-                    className="absolute -right-2 -top-2 h-2 w-2 rounded-full bg-emerald-400"
-                    animate={{ opacity: [0.2, 1, 0.2], scale: [0.9, 1.2, 0.9] }}
-                    transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                </div>
-              </div>
-
-              <div className="relative mt-2 text-sm text-slate-600">{d.desc}</div>
-
-              <div className="relative mt-4">
-                <Button type="link" className="p-0 text-emerald-700">
-                  Xem chi tiết <ArrowRightOutlined />
-                </Button>
-              </div>
-
-              <motion.div
-                className="pointer-events-none absolute -left-24 top-0 h-full w-20 rotate-12 bg-gradient-to-b from-transparent via-white/20 to-transparent"
-                animate={{ x: ["-10%", "170%"] }}
-                transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
-      </motion.div>
-    </section>
+      {/* Phần banner phụ giới thiệu về Hà Nội (Nếu cần) */}
+      <div className="mt-16 w-full bg-blue-600 rounded-[3rem] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8 text-white">
+        <div className="max-w-xl">
+          <h3 className="text-3xl font-bold mb-4">Bạn đã sẵn sàng khám phá Thủ Đô?</h3>
+          <p className="text-blue-100 opacity-90">
+            VietStay luôn có những ưu đãi đặc biệt dành cho khách hàng đặt phòng trực tuyến. Hãy để chúng tôi làm phần còn lại cho chuyến đi của bạn.
+          </p>
+        </div>
+        <Link to="/rooms">
+          <button className="bg-white text-blue-600 px-10 py-4 rounded-2xl font-bold hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-xl uppercase tracking-widest text-sm shrink-0">
+          Xem danh sách loại phòng
+        </button>
+        </Link>
+      
+      </div>
+    </div>
   );
-}
+};
+
+export default HomeFeatures;
