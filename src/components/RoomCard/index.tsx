@@ -20,8 +20,13 @@ const DEFAULT_ROOM_IMAGES = [
 export function RoomCard({ room }: RoomCardProps) {
   const navigate = useNavigate();
 
+  // Kiểm tra trạng thái phòng từ features
+  const isBooked = room.features.includes("Đã đặt");
+
   const handleViewDetails = () => {
-    navigate(`/room/detail/${room.id}`);
+    if (!isBooked) {
+      navigate(`/room/detail/${room.id}`);
+    }
   };
 
   // Sử dụng images từ API, hoặc fallback sang image đơn
@@ -113,12 +118,22 @@ export function RoomCard({ room }: RoomCardProps) {
                 </span>
                 <span className="text-sm text-slate-500">/đêm</span>
               </div>
-              <button 
-                onClick={handleViewDetails}
-                className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
-              >
-                Xem chi tiết
-              </button>
+              {isBooked ? (
+                <button 
+                  disabled
+                  className="rounded-lg bg-gray-400 px-4 py-2 text-sm font-medium text-white cursor-not-allowed opacity-75"
+                >
+                  Hết phòng
+                </button>
+              ) : (
+                <button 
+                  onClick={handleViewDetails}
+                  style={{ backgroundColor: '#22c55e' }}
+                  className="rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors hover:brightness-110"
+                >
+                  Xem chi tiết
+                </button>
+              )}
             </div>
           </div>
         )}

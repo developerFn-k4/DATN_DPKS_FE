@@ -1,5 +1,8 @@
 import React from "react";
 import type { Room } from "../../../services/roomService";
+import Tooltip from "antd/es/tooltip";
+import DeleteOutlined from "@ant-design/icons/lib/icons/DeleteOutlined";
+import EditOutlined from "@ant-design/icons/lib/icons/EditOutlined";
 
 interface Props {
   data: Room[];
@@ -13,8 +16,17 @@ const renderStatus = (status: Room["status"]) => {
   switch (status) {
     case "maintenance":
       return <span className={`${base} bg-yellow-100 text-yellow-800`}>Bảo trì</span>;
+
+    case "occupied":
+      return <span className={`${base} bg-blue-100 text-blue-800`}>Đang sử dụng</span>;
+
+    case "unavailable":
+      return <span className={`${base} bg-gray-200 text-gray-600`}>Không khả dụng</span>;
     case "booked":
-      return <span className={`${base} bg-red-100 text-red-800`}>Đã đặt</span>;
+      return <span className={`${base} bg-purple-100 text-purple-800`}>Đã đặt</span>;
+    case "reserved":
+      return <span className={`${base} bg-red-300 text-red-600`}>Giữ chỗ</span>;
+
     default:
       return <span className={`${base} bg-green-100 text-green-800`}>Sẵn sàng</span>;
   }
@@ -32,7 +44,6 @@ const RoomTable: React.FC<Props> = ({ data, onDelete, onEdit }) => {
           <tr>
             <th className="px-4 py-3 text-left text-sm font-semibold">ID</th>
             <th className="px-4 py-3 text-left text-sm font-semibold">Số Phòng</th>
-            {/* Thêm Header Hình ảnh */}
             <th className="px-4 py-3 text-left text-sm font-semibold">Hình ảnh</th>
             <th className="px-4 py-3 text-left text-sm font-semibold">Loại Phòng</th>
             <th className="px-4 py-3 text-left text-sm font-semibold">Tầng</th>
@@ -55,16 +66,14 @@ const RoomTable: React.FC<Props> = ({ data, onDelete, onEdit }) => {
                 {room.room_number}
               </td>
 
-              {/* Thêm cột hiển thị danh sách ảnh */}
               <td className="px-4 py-3 text-sm">
                 <div className="flex -space-x-2 overflow-hidden">
-                  {/* Ép kiểu any hoặc update interface Room nếu chưa có trường images */}
                   {(room as any).images && (room as any).images.length > 0 ? (
                     (room as any).images.map((img: any) => (
                       <img
                         key={img.id}
                         src={`https://vietstay.ngrok.dev/storage/${img.image_url}`}
-                        alt="room"
+alt="room"
                         className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover shadow-sm hover:scale-110 transition-transform cursor-pointer"
                         title="Xem ảnh"
                       />
@@ -95,21 +104,25 @@ const RoomTable: React.FC<Props> = ({ data, onDelete, onEdit }) => {
                 {renderStatus(room.status)}
               </td>
 
-              <td className="px-4 py-3 text-sm">
+            <td className="px-4 py-3 text-sm">
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => onEdit(room)}
-                    className="px-3 py-1 rounded-xl !bg-yellow-500 text-white text-sm hover:bg-yellow-600 transition"
-                  >
-                    Sửa
-                  </button>
+                  <Tooltip title="Chỉnh sửa">
+                    <button
+                      onClick={() => onEdit(room)}
+                      className="p-2 rounded-xl !bg-yellow-500 text-white hover:bg-yellow-600 transition flex items-center justify-center"
+                    >
+                      <EditOutlined />
+                    </button>
+                  </Tooltip>
 
-                  <button
-                    onClick={() => onDelete(room.id)}
-                    className="px-3 py-1 rounded-xl !bg-red-500 text-white text-sm hover:bg-red-600 transition"
-                  >
-                    Xóa
-                  </button>
+                  <Tooltip title="Xóa">
+                    <button
+                      onClick={() => onDelete(room.id)}
+                      className="p-2 rounded-xl !bg-red-500 text-white hover:bg-red-600 transition flex items-center justify-center"
+                    >
+                      <DeleteOutlined />
+                    </button>
+                  </Tooltip>
                 </div>
               </td>
             </tr>
