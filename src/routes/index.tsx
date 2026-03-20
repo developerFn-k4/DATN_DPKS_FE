@@ -9,6 +9,7 @@ import RoomsListPage from '../pages/products/pages/rooms/RoomsListPage';
 import AdminUserPage from '../admin/pages/adminuser/pages/AdminUserPage';
 import QuanLyRoomPage from '../admin/pages/adminroom/pages/quanLyRoomPage';
 import DashboardPage from '../admin/pages/dashboard/DashboardPage';
+import PaymentReturnPage from '../pages/products/pages/paymentcomfirm/pages/PaymentReturnPage';
 
 const Routers = () => {
   return (
@@ -28,6 +29,7 @@ const Routers = () => {
       <Route path='/booking' element={<BookingPage />} />
       <Route path='/checkout' element={<CheckoutPage />} />
       <Route path='/rooms' element={<RoomsListPage />} />
+      <Route path='/payment-return' element={<PaymentReturnPage />} />
     </Routes>
   );
 };
