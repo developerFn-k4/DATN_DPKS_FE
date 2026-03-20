@@ -8,12 +8,14 @@ import CheckoutPage from '../pages/products/pages/checkout/CheckoutPage';
 import RoomsListPage from '../pages/products/pages/rooms/RoomsListPage';
 import AdminUserPage from '../admin/pages/adminuser/pages/AdminUserPage';
 import QuanLyRoomPage from '../admin/pages/adminroom/pages/quanLyRoomPage';
+import DashboardPage from '../admin/pages/dashboard/DashboardPage';
 
 const Routers = () => {
   return (
     <Routes>
       {/* Route cho Admin */}
       <Route path='/admin' element={<AdminDashboard />}>
+        <Route index element={<DashboardPage />} />
         <Route path='qlroom' element={<QuanLyRoomPage />} />
         <Route path='qluser' element={<AdminUserPage />} />
         {/* Bạn có thể thêm các route con khác như ql-loai-phong ở đây */}
