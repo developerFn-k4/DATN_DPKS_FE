@@ -35,6 +35,7 @@ type Props = {
     value: SearchState;
     onChange: (patch: Partial<SearchState>) => void;
     onSearch?: () => void;
+    loading?: boolean;
 };
 
 const gradientBackground = {
