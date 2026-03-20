@@ -53,7 +53,7 @@ export function DashboardBarChart({ rows, viewType }: Props) {
 
   if (!chartData.length) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="p-6 bg-white border shadow-sm rounded-2xl border-slate-200">
         <h3 className="text-lg font-semibold text-slate-800">Biểu đồ thống kê</h3>
         <div className="flex h-[360px] items-center justify-center text-slate-500">
           Không có dữ liệu để hiển thị biểu đồ
@@ -63,7 +63,7 @@ export function DashboardBarChart({ rows, viewType }: Props) {
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="p-4 bg-white border shadow-sm rounded-2xl border-slate-200">
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-slate-800">Biểu đồ thống kê</h3>
         <p className="text-sm text-slate-500">

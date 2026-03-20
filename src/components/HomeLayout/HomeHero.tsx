@@ -55,29 +55,29 @@ export function HomeHero({ cities, value, onChange, onSearch }: Props) {
                 />
             </motion.div>
 
-            <div className="mx-auto max-w-6xl px-4 pt-10 pb-10 md:pt-14">
+            <div className="max-w-6xl px-4 pt-10 pb-10 mx-auto md:pt-14">
                 <motion.div variants={container} initial="hidden" animate="show" className="grid gap-8 md:grid-cols-2 md:items-center">
                     <motion.div variants={item}>
-                        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/70 px-3 py-1 text-xs text-emerald-700">
-                            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                        <div className="inline-flex items-center gap-2 px-3 py-1 text-xs border rounded-full border-emerald-200 bg-white/70 text-emerald-700">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500" />
                             Mùa xuân: ưu đãi lên đến 25%
                         </div>
 
                         <h1 className="mt-4 text-3xl font-semibold leading-tight md:text-5xl">
                             Đặt phòng nhanh, trải nghiệm{" "}
-                            <span className="bg-gradient-to-r from-emerald-600 to-lime-600 bg-clip-text text-transparent">
+                            <span className="text-transparent bg-gradient-to-r from-emerald-600 to-lime-600 bg-clip-text">
                                 tươi mới
                             </span>{" "}
                             mỗi chuyến đi.
                         </h1>
 
-                        <p className="mt-4 max-w-xl text-base text-slate-600">
+                        <p className="max-w-xl mt-4 text-base text-slate-600">
                             Tìm khách sạn phù hợp với lịch trình của bạn — giao diện gọn, hiện đại, hiệu ứng nhẹ nhàng.
                         </p>
 
-                        <motion.div style={{ y: fgY }} className="mt-6 flex flex-wrap gap-2">
+                        <motion.div style={{ y: fgY }} className="flex flex-wrap gap-2 mt-6">
                             {["Hoàn huỷ linh hoạt", "Thanh toán an toàn", "Hỗ trợ 24/7"].map((t) => (
-                                <span key={t} className="rounded-full bg-white/70 px-3 py-1 text-xs text-slate-700 ring-1 ring-slate-200">
+                                <span key={t} className="px-3 py-1 text-xs rounded-full bg-white/70 text-slate-700 ring-1 ring-slate-200">
                                     {t}
                                 </span>
                             ))}
@@ -96,7 +96,7 @@ export function HomeHero({ cities, value, onChange, onSearch }: Props) {
                                 </div>
                             </div>
 
-                            <div className="mt-4 grid gap-3">
+                            <div className="grid gap-3 mt-4">
                                 <div className="grid gap-2 md:grid-cols-2">
                                     <div>
                                         <div className="mb-1 text-xs text-slate-500">Điểm đến</div>
@@ -152,9 +152,9 @@ export function HomeHero({ cities, value, onChange, onSearch }: Props) {
                             initial={{ opacity: 0, y: 12 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.35, duration: 0.5 }}
-                            className="pointer-events-none absolute -top-6 right-4 hidden md:block"
+                            className="absolute hidden pointer-events-none -top-6 right-4 md:block"
                         >
-                            <div className="rounded-2xl bg-white/80 px-4 py-3 ring-1 ring-white/60 backdrop-blur-xl">
+                            <div className="px-4 py-3 rounded-2xl bg-white/80 ring-1 ring-white/60 backdrop-blur-xl">
                                 <div className="text-xs text-slate-500">Đánh giá TB</div>
                                 <div className="flex items-center gap-2">
                                     <Rate disabled allowHalf defaultValue={4.5} />
