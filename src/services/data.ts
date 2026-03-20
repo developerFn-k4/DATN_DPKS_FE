@@ -3,9 +3,7 @@ import type { CityOption, HotelItem, RoomItem } from "../types/types";
 
 
 export const cities: CityOption[] = [
-    { label: "Đà Nẵng", value: "danang" },
-    { label: "Đà Lạt", value: "dalat" },
-    { label: "Phú Quốc", value: "phuquoc" },
+    { label: "Hà Nội", value: "hanoi" },
 ];
 
 export const sampleHotels: HotelItem[] = [

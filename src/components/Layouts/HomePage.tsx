@@ -13,7 +13,7 @@ import { cities, sampleHotels } from "../../services/data";
 
 export default function HomePage() {
     const [search, setSearch] = useState<SearchState>({
-        city: "danang",
+        city: "hanoi",
         keyword: "",
         guests: 2,
         range: null,

@@ -19,7 +19,6 @@ export function HomeFooter() {
                     <div>
                         <div className="flex items-center gap-2">
                             <img src={logoHome} className="h-10 w-10 object-contain" />
-                            <span className="text-lg font-semibold">VietStay</span>
                         </div>
 
                         <p className="mt-3 text-sm text-slate-600">

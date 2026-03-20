@@ -7,7 +7,9 @@ const instance = axios.create({
 instance.interceptors.request.use((config) => {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
-  const token = user?.accessToken;
+  const token = user?.token;
+  console.log("token: ", token);
+  
 
   if (token) {
     config.headers = config.headers ?? {};
