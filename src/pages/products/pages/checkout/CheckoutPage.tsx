@@ -1,16 +1,22 @@
 import { useState } from "react";
-import { Input, Checkbox, Button, Card, Steps, Divider, Radio } from "antd";
+import { Input, Checkbox, Button, Card, Steps, Divider, Radio, message } from "antd";
 import { 
   CreditCardOutlined, 
   SafetyOutlined,
   CheckCircleFilled,
-  InfoCircleOutlined
+  InfoCircleOutlined,
+  BankOutlined
 } from "@ant-design/icons";
+import { useSearchParams } from "react-router-dom";
 import { HomeHeader } from "../../../../components/Header/HomeHeader";
 import { HomeFooter } from "../../../../components/Footer/HomeFooter";
+import { createVNPayPayment } from "../../../../services/payment/vnpayService";
 import "./style.less";
 
 export default function CheckoutPage() {
+  const [searchParams] = useSearchParams();
+  const bookingId = searchParams.get("bookingId") || "32"; // Default to 32 for testing
+  
   const [currentStep] = useState(1);
   const [cardholderName, setCardholderName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
@@ -18,6 +24,7 @@ export default function CheckoutPage() {
   const [cvv, setCvv] = useState("");
   const [agreeMarketing, setAgreeMarketing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("pay-at-hotel");
+  const [loading, setLoading] = useState(false);
 
   // Dữ liệu mẫu cho đặt phòng
   const bookingData = {
@@ -39,16 +46,39 @@ export default function CheckoutPage() {
     total: 2978726
   };
 
-  const handleCompleteBooking = () => {
-    console.log("Completing booking...", {
-      cardholderName,
-      cardNumber,
-      expiryDate,
-      cvv,
-      agreeMarketing,
-      paymentMethod
-    });
-    // Xử lý logic hoàn tất đặt phòng
+  const handleCompleteBooking = async () => {
+    // Validate payment method
+    if (paymentMethod === "vnpay") {
+      try {
+        setLoading(true);
+        const response = await createVNPayPayment(parseInt(bookingId));
+        
+        if (response.payment_url) {
+          // Open VNPay payment URL in new tab
+          window.open(response.payment_url, '_blank');
+          message.success("Đang chuyển đến trang thanh toán VNPay...");
+        } else {
+          message.error(response.message || "Không thể tạo thanh toán VNPay");
+        }
+      } catch (error) {
+        console.error("Error creating VNPay payment:", error);
+        message.error("Có lỗi xảy ra khi tạo thanh toán VNPay");
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      // Handle other payment methods
+      console.log("Completing booking...", {
+        cardholderName,
+        cardNumber,
+        expiryDate,
+        cvv,
+        agreeMarketing,
+        paymentMethod
+      });
+      // Xử lý logic hoàn tất đặt phòng
+      message.success("Đặt phòng thành công!");
+    }
   };
 
   const steps = [
@@ -157,6 +187,46 @@ export default function CheckoutPage() {
                   className="w-full"
                 >
                   <div className="space-y-3">
+                    {/* VNPay Payment */}
+                    <Radio value="vnpay" className="w-full">
+                      <div className="flex items-center gap-2">
+                        <BankOutlined className="text-lg text-blue-600" />
+                        <span className="font-medium">Thanh toán qua VNPay</span>
+                        <span className="px-2 py-0.5 text-xs font-semibold text-blue-600 bg-blue-50 rounded">
+                          Khuyến nghị
+                        </span>
+                      </div>
+                    </Radio>
+
+                    {paymentMethod === "vnpay" && (
+                      <div className="p-4 ml-6 border rounded-lg border-blue-200 bg-blue-50">
+                        <div className="flex items-start gap-3">
+                          <BankOutlined className="mt-1 text-2xl text-blue-600" />
+                          <div>
+                            <p className="mb-2 font-semibold text-slate-800">
+                              Thanh toán an toàn qua VNPay
+                            </p>
+                            <ul className="space-y-1 text-sm text-slate-600">
+                              <li>• Hỗ trợ thẻ ATM nội địa, thẻ Visa/Mastercard</li>
+                              <li>• Thanh toán qua ví điện tử VNPay</li>
+                              <li>• Bảo mật 100% với công nghệ mã hóa</li>
+                              <li>• Xử lý thanh toán nhanh chóng</li>
+                            </ul>
+                            <div className="flex gap-2 mt-3">
+                              <img 
+                                src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-VNPAY-QR.png" 
+                                alt="VNPay"
+                                className="h-8"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <Divider className="my-3" />
+
+                    {/* Credit/Debit Card Payment */}
                     <Radio value="pay-at-hotel" className="w-full">
                       <div className="flex items-center gap-2">
                         <CreditCardOutlined className="text-lg" />
@@ -273,10 +343,14 @@ export default function CheckoutPage() {
                 size="large"
                 block
                 onClick={handleCompleteBooking}
+                loading={loading}
+                disabled={loading}
                 className="checkout-submit-btn"
                 icon={<SafetyOutlined />}
               >
-                Hoàn tất đặt phòng
+                {paymentMethod === "vnpay" 
+                  ? "Thanh toán qua VNPay" 
+                  : "Hoàn tất đặt phòng"}
               </Button>
 
               <p className="mt-4 text-sm text-center text-slate-600">
