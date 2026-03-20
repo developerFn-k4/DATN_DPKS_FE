@@ -1,19 +1,11 @@
-
 import { Avatar, Button, Dropdown } from "antd";
 import type { MenuProps } from "antd";
-import {
-  UserOutlined,
-  LogoutOutlined,
-  ProfileOutlined,
-  BookOutlined
-} from "@ant-design/icons";
+import { UserOutlined, LogoutOutlined, ProfileOutlined, BookOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/logo.png";
-// import ProfileModal from "./ProfileModal";
+import logoHome from "../../assets/logo.png";
+
 export function HomeHeader() {
-
   const navigate = useNavigate();
-
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
   const logout = () => {
@@ -24,99 +16,49 @@ export function HomeHeader() {
   };
 
   const items: MenuProps["items"] = [
-    {
-      key: "1",
-      icon: <ProfileOutlined />,
-      label: <Link to="#">Thông tin cá nhân</Link>,
-    },
-    {
-      key: "2",
-      icon: <BookOutlined />,
-      label: <Link to="#">Đơn đặt phòng</Link>,
-    },
-    {
-      type: "divider",
-    },
-    {
-      key: "3",
-      icon: <LogoutOutlined />,
-      label: <span onClick={logout}>Đăng xuất</span>,
-    },
+    { key: "1", icon: <ProfileOutlined />, label: <Link to="#">Thông tin cá nhân</Link> },
+    { key: "2", icon: <BookOutlined />, label: <Link to="#">Đơn đặt phòng</Link> },
+    { type: "divider" },
+    { key: "3", icon: <LogoutOutlined />, label: <span onClick={logout}>Đăng xuất</span> },
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b">
-      <div className="flex items-center justify-between max-w-6xl px-4 py-3 mx-auto">
-
-        <Link to="/" className="flex items-center gap-3">
-          
-          <div className="flex flex-col items-center">
-    <img 
-      src={logo} 
-      alt="VietStay Logo" 
-      className="object-contain h-auto w-35"
-      style={{ filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.1))" }}
-    />
-    <div className="text-xs text-emerald-700 mt-[-25px]">Hotel booking</div>
-  </div>
+    <header className="relative top-0 left-0 z-50 w-full transition-all duration-300 bg-transparent">
+      <div className="flex items-center justify-between w-full px-6 md:px-12 py-5 mx-auto">
+        <Link to="/" className="flex items-center gap-2 group shrink-0">
+          <div className="flex items-center gap-2">
+            <img src={logoHome} className="h-auto w-40 object-contain" />
+          </div>
         </Link>
-        <nav className="items-center hidden gap-5 text-sm text-slate-600 md:flex">
-          <Link to="/" className="hover:text-slate-900">
-            Trang chủ
-          </Link>
-          <Link to="/rooms" className="hover:text-slate-900">
-            Danh sách phòng
-          </Link>
-          <a className="hover:text-slate-900" href="#deals">
-            Ưu đãi
-          </a>
-          <a className="hover:text-slate-900" href="#popular">
-            Phổ biến
-          </a>
-          <a className="hover:text-slate-900" href="#footer">
-            Liên hệ
-          </a>
+
+        <nav className="items-center hidden gap-10 text-[15px] font-medium text-white/90 md:flex">
+          <Link to="/" className="hover:text-yellow-400 transition-colors">Trang Chủ</Link>
+          <Link to="/rooms" className="hover:text-yellow-400 transition-colors">Loại Phòng</Link>
+          <Link className="hover:text-yellow-400 transition-colors" to="/deals">Ưu Đãi</Link>
+          <Link className="hover:text-yellow-400 transition-colors" to="/popular">Phổ Biến</Link>
+          <Link className="hover:text-yellow-400 transition-colors" to="/lienhe">Liên Hệ</Link>
         </nav>
 
-        <div className="flex items-center gap-3">
-
+        <div className="flex items-center gap-4 shrink-0">
           {user ? (
             <Dropdown menu={{ items }} placement="bottomRight">
-
-              <div className="flex items-center gap-2 cursor-pointer">
-
-                <span className="text-sm">
-                  Chào, {user.name || "User"}
-                </span>
-
-                <Avatar
-                  icon={<UserOutlined />}
-                  style={{ backgroundColor: "#10b981" }}
-                />
-
+              <div className="flex items-center gap-2 cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-md py-1.5 px-4 rounded-full transition-all border border-white/20">
+                <span className="text-sm text-white font-medium">Chào, {user.name || "User"}</span>
+                <Avatar size="small" icon={<UserOutlined />} style={{ backgroundColor: "#ef4444" }} />
               </div>
-
             </Dropdown>
           ) : (
-            <>
+            <div className="flex items-center gap-3">
               <Link to="/auth">
-                <Button className="hidden border-none shadow-none md:inline-flex hover:text-emerald-600">Đăng nhập</Button>
+                <Button type="text" className="text-white hover:!text-yellow-400 font-semibold border-none shadow-none">Đăng nhập</Button>
               </Link>
-
               <Link to="/auth">
-                <Button type="primary" className="!bg-emerald-600 hover:!bg-emerald-700">Đăng ký</Button>
+                <Button className="!bg-emerald-600 !text-white !border-emerald-600 hover:!bg-emerald-700 hover:!text-white backdrop-blur-md rounded-lg font-bold px-6">Đăng ký</Button>
               </Link>
-            </>
+            </div>
           )}
-
         </div>
       </div>
-
-      {/* <ProfileModal
-        open={openProfile}
-        onClose={() => setOpenProfile(false)}
-        profile={profile}
-      /> */}
     </header>
   );
 }
