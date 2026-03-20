@@ -4,7 +4,7 @@ import {
   FiCreditCard, FiBarChart2, FiSettings, 
   FiFileText,
   FiLayers,
-  FiActivity
+  FiStar,
 } from 'react-icons/fi';
 import { NavLink } from "react-router-dom";
 import logo from '../../../assets/logo.png';
@@ -14,9 +14,9 @@ const Sidebar: React.FC = () => {
     { icon: <FiGrid />, label: 'Dashboard', path: '/admin'},
     { icon: <FiHome />, label: 'Quản lý phòng', path: '/admin/qlroom' },
     { icon: <FiLayers />, label: 'Quản lý loại phòng', path: '' }, 
-    { icon: <FiActivity />, label: 'Quản lý trạng thái phòng', path: '' }, 
     { icon: <FiCalendar />, label: 'Quản lý đặt phòng', path: '' },
-    { icon: <FiFileText />, label: 'Quản lý Đơn đặt phòng', path: '' }, 
+    { icon: <FiFileText />, label: 'Quản lý Đơn đặt phòng', path: '' },
+    { icon: <FiStar />, label: 'Quản lý đánh giá', path: '/admin/reviews' },  
     { icon: <FiUsers />, label: 'Quản lý Người dùng', path: '/admin/qluser' },
     { icon: <FiCreditCard />, label: 'Quản lý Thanh toán', path: '' },
     { icon: <FiBarChart2 />, label: 'Thống kê', path: '' },
