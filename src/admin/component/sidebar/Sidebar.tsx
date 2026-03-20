@@ -17,7 +17,7 @@ const Sidebar: React.FC = () => {
     { icon: <FiCreditCard />, label: 'Quản lý thanh toán', path: '/admin/payments' },
     { icon: <FiStar />, label: 'Quản lý đánh giá', path: '/admin/reviews' },  
     { icon: <FiUsers />, label: 'Quản lý Người dùng', path: '/admin/qluser' },
-    { icon: <FiBarChart2 />, label: 'Thống kê', path: '' },
+    { icon: <FiBarChart2 />, label: 'Thống kê', path: '/admin/thong-ke' },
     { icon: <FiSettings />, label: 'Cài đặt', path: '' },
   ];
 
