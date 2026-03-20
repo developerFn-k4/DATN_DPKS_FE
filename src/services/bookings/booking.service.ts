@@ -1,4 +1,4 @@
-import { API_BASE_URL, ENDPOINTS } from "../endpoints/common";
+import { API_BASE_URL_NEW, ENDPOINTS } from "../endpoints/common";
 
 export interface BookingParams {
   room_id: number;
@@ -30,7 +30,7 @@ export interface BookingResponse {
 
 export const createBooking = async (params: BookingParams): Promise<BookingResponse> => {
   try {
-    const response = await fetch(`${API_BASE_URL}${ENDPOINTS.BOOKINGS}`, {
+    const response = await fetch(`${API_BASE_URL_NEW}${ENDPOINTS.BOOKINGS}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
