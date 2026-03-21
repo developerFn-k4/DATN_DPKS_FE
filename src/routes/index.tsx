@@ -13,6 +13,7 @@ import ReviewManagementPage from '../admin/pages/review/ReviewManagementPage';
 import PaymentManagementPage from '../admin/pages/payments/PaymentManagementPage';
 import PaymentReturnPage from '../pages/products/pages/paymentcomfirm/pages/PaymentReturnPage';
 import DashboardAdmin from '../admin/pages/adminroom/pages/DashboardAdmin';
+import RoomList from '../pages/products/pages/roomstype/pages/RoomTypeList';
 
 const Routers = () => {
   return (
@@ -36,6 +37,7 @@ const Routers = () => {
       <Route path='/booking' element={<BookingPage />} />
       <Route path='/checkout' element={<CheckoutPage />} />
       <Route path='/rooms' element={<RoomsListPage />} />
+      <Route path='/roomtype' element={<RoomList />} />
       <Route path='/payment-return' element={<PaymentReturnPage />} />
     </Routes>
   );
