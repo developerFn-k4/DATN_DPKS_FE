@@ -12,13 +12,12 @@ import logoHome from "../../assets/logo.png";
 
 export function HomeFooter() {
     return (
-        <footer className="border-t border-slate-200 bg-white">
-            <div className="mx-auto max-w-6xl px-4 py-10">
-
-                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 items-start text-left">
+        <footer className="w-full border-t border-slate-200 bg-white">
+            <div className="w-full px-6 md:px-12 py-16">
+                <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4 items-start text-left">
                     <div>
                         <div className="flex items-center gap-2">
-                            <img src={logoHome} className="h-10 w-10 object-contain" />
+                            <img src={logoHome} className="h-auto w-40 object-contain" />
                         </div>
 
                         <p className="mt-3 text-sm text-slate-600">
@@ -101,12 +100,10 @@ export function HomeFooter() {
                     </div>
                 </div>
 
-                <div className="my-6 border-t border-slate-200" />
-
-                <div className="flex flex-col items-center justify-center gap-2 text-sm text-slate-500 md:flex-row">
+                <div className="my-10 border-t border-slate-100" />
+                <div className="flex flex-col items-center justify-center gap-2 text-sm text-slate-400 md:flex-row">
                     <div>© {new Date().getFullYear()} VietStay. Tất cả quyền được bảo lưu.</div>
                 </div>
-
             </div>
         </footer>
     );
