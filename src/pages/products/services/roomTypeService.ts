@@ -1,4 +1,4 @@
-export interface RoomType {
+export interface RoomTypeL {
   room_type_id: number;
   name: string;
   capacity: number;
@@ -12,7 +12,7 @@ export interface RoomType {
 }
 
 export const roomService = {
-  getRoomTypes: async (): Promise<RoomType[]> => {
+  getRoomTypes: async (): Promise<RoomTypeL[]> => {
     try {
       const response = await fetch('https://vietstay.ngrok.dev/api/rooms/room-types');
       if (!response.ok) throw new Error('Không thể kết nối API');

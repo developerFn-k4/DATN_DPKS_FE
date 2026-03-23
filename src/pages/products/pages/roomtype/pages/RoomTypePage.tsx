@@ -15,7 +15,7 @@ const RoomList: React.FC = () => {
     <>
     <HomeHeader />
     <HomeHero />
-    <div className="max-w-6xl mx-auto px-4 py-8 bg-gray-50 min-h-screen">
+    <div className="w-full bg-gray-50 min-h-screen py-8">
       <header className="mb-8 border-b border-gray-200 pb-4">
         <h1 className="text-2xl font-bold text-gray-800">Chọn loại phòng</h1>
         <p className="text-gray-500 text-sm">Vui lòng chọn phòng phù hợp với nhu cầu của bạn</p>

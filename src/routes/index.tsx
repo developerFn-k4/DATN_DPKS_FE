@@ -5,7 +5,6 @@ import RoomDetailPage from '../pages/products/pages/roomdetail/pages/RoomDetail'
 import AdminDashboard from '../admin/pages/AdminPage';
 import BookingPage from '../pages/products/pages/booking-room/BookingPage';
 import CheckoutPage from '../pages/products/pages/checkout/CheckoutPage';
-import RoomsListPage from '../pages/products/pages/rooms/RoomsListPage';
 import AdminUserPage from '../admin/pages/adminuser/pages/AdminUserPage';
 import QuanLyRoomPage from '../admin/pages/adminroom/pages/quanLyRoomPage';
 import DashboardPage from '../admin/pages/dashboard/DashboardPage';
@@ -13,7 +12,7 @@ import ReviewManagementPage from '../admin/pages/review/ReviewManagementPage';
 import PaymentManagementPage from '../admin/pages/payments/PaymentManagementPage';
 import PaymentReturnPage from '../pages/products/pages/paymentcomfirm/pages/PaymentReturnPage';
 import DashboardAdmin from '../admin/pages/adminroom/pages/DashboardAdmin';
-import RoomList from '../pages/products/pages/roomstype/pages/RoomTypeList';
+import RoomList from '../pages/products/pages/roomtype/pages/RoomTypePage';
 
 const Routers = () => {
   return (
@@ -36,8 +35,7 @@ const Routers = () => {
       <Route path='/room/detail/:id' element={<RoomDetailPage />} />
       <Route path='/booking' element={<BookingPage />} />
       <Route path='/checkout' element={<CheckoutPage />} />
-      <Route path='/rooms' element={<RoomsListPage />} />
-      <Route path='/roomtype' element={<RoomList />} />
+      <Route path='/rooms' element={<RoomList />} />
       <Route path='/payment-return' element={<PaymentReturnPage />} />
     </Routes>
   );

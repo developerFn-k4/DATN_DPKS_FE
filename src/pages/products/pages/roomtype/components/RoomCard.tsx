@@ -1,14 +1,13 @@
 import React from 'react';
-import type { RoomType } from '../../../services/roomTypeService';
+import type { RoomTypeL } from '../../../services/roomTypeService';
 
-export const RoomCard: React.FC<{ room: RoomType }> = ({ room }) => {
+export const RoomCard: React.FC<{ room: RoomTypeL }> = ({ room }) => {
   const formatPrice = (price: string) => {
     return new Intl.NumberFormat('vi-VN').format(parseFloat(price));
   };
 
   return (
     <div className="flex flex-col md:flex-row bg-white border border-gray-200 rounded-sm shadow-sm overflow-hidden mb-5">
-      {/* Hình ảnh */}
       <div className="relative w-full md:w-80 h-48 md:h-auto">
         <img 
           src="https://via.placeholder.com/400x250?text=Room+Image" 
@@ -20,7 +19,6 @@ export const RoomCard: React.FC<{ room: RoomType }> = ({ room }) => {
         </button>
       </div>
 
-      {/* Nội dung chính */}
       <div className="flex-1 p-4 flex flex-col justify-between">
         <div>
           <h3 className="text-lg font-bold text-slate-800 leading-tight">{room.name}</h3>
@@ -44,7 +42,6 @@ export const RoomCard: React.FC<{ room: RoomType }> = ({ room }) => {
         </div>
       </div>
 
-      {/* Giá & Booking */}
       <div className="w-full md:w-52 border-t md:border-t-0 md:border-l border-gray-100 p-5 flex flex-col justify-center items-end bg-gray-50/50">
         <span className="text-gray-400 text-[11px]">Chỉ từ</span>
         <div className="text-[#d4a373] text-2xl font-bold leading-none my-1">
@@ -53,7 +50,7 @@ export const RoomCard: React.FC<{ room: RoomType }> = ({ room }) => {
         <div className="text-[#d4a373] text-xs font-bold uppercase mb-1">{room.currency}</div>
         <span className="text-gray-400 text-[10px] mb-4 italic text-right">phòng/đêm</span>
         
-        <button className="w-full bg-[#003580] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-sm transition-all uppercase text-sm">
+        <button className="w-full !bg-[#029618] hover:bg-emerald-900 text-white font-bold py-2 px-4 rounded-sm transition-all uppercase text-sm">
           ĐẶT NGAY
         </button>
       </div>
