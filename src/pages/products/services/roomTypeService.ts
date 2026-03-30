@@ -7,8 +7,9 @@ export interface RoomTypeL {
   amenities: string[];
   base_price: string;
   currency: string;
-  available_rooms: number;
-  image_url?: string;
+  available_rooms: number; // Số phòng trống
+  total_rooms: number;     // Tổng số phòng
+  images: string[];        // Mảng các đường dẫn ảnh
 }
 
 export const roomService = {
@@ -18,12 +19,7 @@ export const roomService = {
       if (!response.ok) throw new Error('Không thể kết nối API');
       
       const result = await response.json();
-      
-      if (result && result.room_types) {
-        return result.room_types;
-      }
-      
-      return [];
+      return result.room_types || [];
     } catch (error) {
       console.error("Service Error:", error);
       return [];
