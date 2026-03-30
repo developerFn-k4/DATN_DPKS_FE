@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import RoomTypeModal from "../components/RoomTypeModal";
 import { Toaster } from "react-hot-toast";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, PictureOutlined, PlusOutlined } from "@ant-design/icons";
 import { useRoomType } from "../hooks/RoomType";
 
 const QuanLyRoomTypePage = () => {
@@ -10,107 +10,129 @@ const QuanLyRoomTypePage = () => {
   const [selected, setSelected] = useState<any>(null);
 
   const handleSave = async (data: FormData) => {
-    if (selected) await updateRoomType(selected.room_type_id, data);
-    else await createRoomType(data);
-    setModalOpen(false);
-  };
+  const targetId = selected?.room_type_id || selected?.id;
+  
+  try {
+    if (selected && targetId) {
+      // Đợi hàm update chạy xong
+      const success = await updateRoomType(targetId, data);
+      if (success) {
+        setModalOpen(false); // Đóng modal khi "thành công" (kể cả lỗi 500 giả)
+      }
+    } else {
+      await createRoomType(data);
+      setModalOpen(false);
+    }
+  } catch (err) {
+    console.error("Lỗi thực sự:", err);
+  }
+};
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      <Toaster />
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Quản Lý Loại Phòng</h1>
-        <button onClick={() => { setSelected(null); setModalOpen(true); }} className="!bg-green-500 text-white px-4 py-2 rounded-xl shadow-md">+ Thêm loại phòng</button>
+    <div className="p-8 bg-[#f8fafc] min-h-screen font-sans">
+      <Toaster position="top-right" />
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-2xl font-black text-slate-800">Quản Lý Loại Phòng</h1>
+          <p className="text-sm text-gray-400">Danh sách các hạng phòng đang kinh doanh</p>
+        </div>
+        <button 
+          onClick={() => { setSelected(null); setModalOpen(true); }} 
+          className="!bg-indigo-600 text-white px-6 py-3 rounded-2xl shadow-xl shadow-indigo-200 hover:scale-105 transition-all font-bold flex items-center gap-2"
+        >
+          <PlusOutlined /> Thêm loại phòng mới
+        </button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
-        <table className="w-full text-left">
-          <thead className="bg-gray-50 border-b">
-            <tr>
-              <th className="p-4">ID</th>
-              <th className="p-4">Tên loại</th>
-              <th className="p-4">Ảnh</th>
-              <th className="p-4">Giá (VND)</th>
-              <th className="p-4">Sức chứa</th>
-              <th className="p-4">Diện tích</th>
-              <th className="p-4">Trạng thái</th>
-              <th className="p-4">Thao tác</th>
+      <div className="bg-white rounded-3xl shadow-sm overflow-hidden border border-gray-100">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-slate-50/50 border-b border-gray-100">
+              <th className="p-5 text-[11px] font-black text-gray-400 uppercase tracking-widest">ID</th>
+              <th className="p-5 text-[11px] font-black text-gray-400 uppercase tracking-widest">Thông tin loại phòng</th>
+              <th className="p-5 text-[11px] font-black text-gray-400 uppercase tracking-widest">Thư viện ảnh</th>
+              <th className="p-5 text-[11px] font-black text-gray-400 uppercase tracking-widest">Giá cơ bản</th>
+              <th className="p-5 text-[11px] font-black text-gray-400 uppercase tracking-widest">Quy cách</th>
+              <th className="p-5 text-[11px] font-black text-gray-400 uppercase tracking-widest">Trạng thái</th>
+              <th className="p-5 text-[11px] font-black text-gray-400 uppercase tracking-widest text-center">Thao tác</th>
             </tr>
           </thead>
-                  <tbody>
-                      {roomTypes.map(rt => (
-                          <tr key={rt.room_type_id} className="border-b hover:bg-gray-50 transition-colors">
-                              <td className="p-4 text-sm text-gray-500">{rt.room_type_id || (rt as any).id}</td>
-                              <td className="p-4">
-                                  <div className="font-bold text-slate-700">{rt.name}</div>
-                                  <div className="text-[10px] text-gray-400 uppercase tracking-wider">{rt.bed_type}</div>
-                              </td>
+          <tbody className="divide-y divide-gray-50">
+            {roomTypes.map(rt => {
+              const displayId = rt.room_type_id || (rt as any).id;
+              return (
+                <tr key={displayId} className="hover:bg-blue-50/30 transition-colors group">
+                  <td className="p-5 text-sm font-bold text-slate-400">#{displayId}</td>
+                  <td className="p-5">
+                    <div className="font-black text-slate-700 text-base">{rt.name}</div>
+                    <div className="flex gap-2 mt-1">
+                      <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-bold uppercase">{rt.bed_type}</span>
+                    </div>
+                  </td>
+                  <td className="p-5">
+                    <div className="flex -space-x-4">
+                      {rt.images && rt.images.length > 0 ? (
+                        rt.images.slice(0, 4).map((img) => {
+                          // --- ĐOẠN SỬA ---
+                          const finalImageUrl = img.image_url.startsWith("http") 
+                            ? img.image_url 
+                            : `https://vietstay.ngrok.dev/storage/${img.image_url}`;
+                          // ----------------
 
-                              {/* PHẦN HIỂN THỊ ẢNH MỚI BỔ SUNG */}
-                              <td className="p-4">
-                                  <div className="flex -space-x-3 overflow-hidden">
-                                      {rt.images && rt.images.length > 0 ? (
-                                          rt.images.map((img) => (
-                                              <img
-                                                  key={img.id}
-                                                  src={`https://vietstay.ngrok.dev/storage/${img.image_url}`}
-                                                  alt="room-type"
-                                                  className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover shadow-sm hover:scale-110 transition-transform cursor-pointer"
-                                                  onError={(e) => {
-                                                      (e.target as HTMLImageElement).src = "https://placehold.co/100x100?text=Error";
-                                                  }}
-                                              />
-                                          ))
-                                      ) : (
-                                          <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center border border-dashed border-gray-300">
-                                              <span className="text-[9px] text-gray-400">No ảnh</span>
-                                          </div>
-                                      )}
-                                  </div>
-                              </td>
-
-                              <td className="p-4 text-orange-600 font-bold">
-                                  {Number(rt.base_price).toLocaleString()}đ
-                              </td>
-                              <td className="p-4 text-sm text-gray-600">
-                                  👤 {rt.capacity} người
-                              </td>
-                              <td className="p-4 text-sm text-gray-600">
-                                  📏 {rt.area}m²
-                              </td>
-                              <td className="p-4">
-                                  <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${rt.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                                      }`}>
-                                      {rt.status === 'active' ? 'Hoạt động' : 'Tạm ngưng'}
-                                  </span>
-                              </td>
-                              <td className="p-4 flex gap-2">
-                                  <button
-                                      onClick={() => { setSelected(rt); setModalOpen(true); }}
-                                      className="p-2 !bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 transition shadow-sm"
-                                  >
-                                      <EditOutlined />
-                                  </button>
-                                  <button
-                                      onClick={() => deleteRoomType(rt.room_type_id)}
-                                      className="p-2 !bg-red-500 text-white rounded-xl hover:bg-red-600 transition shadow-sm"
-                                  >
-                                      <DeleteOutlined />
-                                  </button>
-                              </td>
-                          </tr>
-                      ))}
-                  </tbody>
+                          return (
+                            <img
+                              key={img.id}
+                              src={finalImageUrl}
+                              alt="thumb"
+                              className="h-12 w-12 rounded-2xl ring-4 ring-white object-cover shadow-lg hover:-translate-y-1 transition-transform cursor-pointer"
+                              onError={(e) => { 
+                                (e.target as HTMLImageElement).src = "https://placehold.co/100x100?text=Error"; 
+                              }}
+                            />
+                          );
+                        })
+                      ) : (
+                        <div className="h-12 w-12 rounded-2xl bg-gray-50 border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-300">
+                          <PictureOutlined />
+                        </div>
+                      )}
+                      {rt.images && rt.images.length > 4 && (
+                        <div className="h-12 w-12 rounded-2xl bg-slate-800 text-white text-[10px] flex items-center justify-center ring-4 ring-white font-bold">
+                          +{rt.images.length - 4}
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                  <td className="p-5 font-black text-orange-500 text-base">
+                    {Number(rt.base_price).toLocaleString()} <span className="text-[10px] text-gray-400">VND</span>
+                  </td>
+                  <td className="p-5">
+                    <div className="text-sm text-slate-600 font-bold">👤 {rt.capacity} người</div>
+                    <div className="text-[11px] text-slate-400 font-medium">📏 {rt.area} m²</div>
+                  </td>
+                  <td className="p-5">
+                    <span className={`px-4 py-1.5 rounded-2xl text-[10px] font-black uppercase tracking-tighter ${
+                      rt.status === 'active' ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'
+                    }`}>
+                      {rt.status === 'active' ? '● Hoạt động' : '○ Tạm ngưng'}
+                    </span>
+                  </td>
+                  <td className="p-5">
+                    <div className="flex gap-2 justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button onClick={() => { setSelected(rt); setModalOpen(true); }} className="p-3 !bg-amber-300 text-amber-600 rounded-2xl hover:!bg-amber-500 hover:text-white transition-all shadow-sm"><EditOutlined /></button>
+                      <button onClick={() => deleteRoomType(displayId)} className="p-3 !bg-rose-300 text-rose-600 rounded-2xl hover:!bg-rose-500 hover:text-white transition-all shadow-sm"><DeleteOutlined /></button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       </div>
 
-      <RoomTypeModal 
-        isOpen={isModalOpen} 
-        onClose={() => setModalOpen(false)} 
-        initialData={selected} 
-        onSave={handleSave} 
-      />
+      <RoomTypeModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} initialData={selected} onSave={handleSave} />
     </div>
   );
 };
+
 export default QuanLyRoomTypePage;
