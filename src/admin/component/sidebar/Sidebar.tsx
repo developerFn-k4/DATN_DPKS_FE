@@ -3,7 +3,7 @@ import {
   FiGrid, FiHome, FiCalendar, FiUsers, 
   FiCreditCard, FiBarChart2, FiSettings, 
   FiFileText,
-  FiStar,
+  FiStar, FiLayers,
 } from 'react-icons/fi';
 import { NavLink } from "react-router-dom";
 import logo from '../../../assets/logo.png';
@@ -11,6 +11,7 @@ import logo from '../../../assets/logo.png';
 const Sidebar: React.FC = () => {
   const menuItems = [
     { icon: <FiGrid />, label: 'Dashboard', path: '/admin'},
+    { icon: <FiLayers />, label: 'Quản lý loại phòng', path: '/admin/roomtype' },
     { icon: <FiHome />, label: 'Quản lý phòng', path: '/admin/qlroom' },
     { icon: <FiCalendar />, label: 'Quản lý đặt phòng', path: '' },
     { icon: <FiFileText />, label: 'Quản lý Đơn đặt phòng', path: '' },
