@@ -12,6 +12,7 @@ import ReviewManagementPage from '../admin/pages/review/ReviewManagementPage';
 import PaymentManagementPage from '../admin/pages/payments/PaymentManagementPage';
 import PaymentReturnPage from '../pages/products/pages/paymentcomfirm/pages/PaymentReturnPage';
 import DashboardAdmin from '../admin/pages/adminroom/pages/DashboardAdmin';
+import QuanLyRoomTypePage from '../admin/pages/adminroomtype/pages/RoomTypePage';
 import RoomList from '../pages/products/pages/roomtype/pages/RoomTypePage';
 
 const Routers = () => {
@@ -24,7 +25,7 @@ const Routers = () => {
         <Route path='reviews' element={<ReviewManagementPage />} />
         <Route path='qluser' element={<AdminUserPage />} />
         <Route path='payments' element={<PaymentManagementPage />} />
-        
+        <Route path='roomtype' element={<QuanLyRoomTypePage />} />
         <Route path='thong-ke' element={<DashboardAdmin/>} />
         {/* Bạn có thể thêm các route con khác như ql-loai-phong ở đây */}
       </Route>
