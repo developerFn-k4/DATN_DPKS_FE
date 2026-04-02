@@ -1,24 +1,20 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import { HomeHeader } from "../../../../../components/Header/HomeHeader";
-import { HomeFooter } from "../../../../../components/Footer/HomeFooter";
-import RoomDetailView from "../components/RoomDetailComponent";
+import { RoomDetailComponent } from "../components/RoomDetailComponent";
+import { useRoomDetail } from "../hooks/RoomHook";
 
-const RoomDetailPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const roomId = Number(id);
+const RoomDetail = () => {
 
-  if (!roomId) return <div>Phòng không hợp lệ</div>;
+  const { room, isLoading } = useRoomDetail();
+
+  if (isLoading) return <div>Loading...</div>;
+
+  if (!room) return <div>Không tìm thấy phòng</div>;
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <HomeHeader />
-      <main className="flex-grow bg-white">
-        <RoomDetailView roomId={roomId} />
-      </main>
-      <HomeFooter />
+    <div className="py-10 bg-gray-50 min-h-screen">
+      <RoomDetailComponent room={room} />
     </div>
   );
 };
 
-export default RoomDetailPage;
+export default RoomDetail;
