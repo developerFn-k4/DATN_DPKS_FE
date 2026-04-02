@@ -1,30 +1,79 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const hotels = [
-  { id: 1, name: 'Grand City Hotel', price: '1.500.000', rating: 4.6, img: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=600' },
-  { id: 2, name: 'Beach Resort Nha Trang', price: '2.700.000', rating: 4.7, img: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80&w=600' },
-  { id: 3, name: 'Mountain View Retreat', price: '1.100.000', rating: 4.7, img: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=600' },
-  { id: 4, name: 'Luxe Paradise Villa', price: '3.800.000', rating: 4.8, img: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=600' },
-];
+const HomePopular = () => {
+  const [rooms, setRooms] = useState<any[]>([]);
+  const navigate = useNavigate();
 
-const HomePopular: React.FC = () => {
+  useEffect(() => {
+    fetch("https://vietstay.ngrok.dev/api/rooms/room-types")
+      .then((res) => res.json())
+      .then((data) => {
+        setRooms(data.room_types.slice(0, 4));
+      });
+  }, []);
+
+  const formatPrice = (p: string) => {
+    return Number(p).toLocaleString("vi-VN");
+  };
+
   return (
-    <section className="w-full px-6 md:px-12 py-20 bg-white" id="popular">
-      <div className="flex justify-between items-end mb-12 w-full">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight">Gợi ý cho bạn</h2>
-        <a href="#" className="text-blue-600 font-bold hover:underline text-lg">Xem tất cả &rsaquo;</a>
+    <section className="w-full px-6 md:px-12 py-20 bg-white">
+      
+      {/* header */}
+      <div className="flex justify-between items-end mb-12">
+        <h2 className="text-3xl font-bold">
+          Gợi ý cho bạn
+        </h2>
+
+        <button
+          onClick={() => navigate("/rooms")}
+          className="text-blue-600 font-bold hover:underline"
+        >
+          Xem tất cả →
+        </button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
-        {hotels.map((hotel) => (
-          <div key={hotel.id} className="group cursor-pointer w-full">
-            <div className="relative overflow-hidden rounded-[2rem] h-80 mb-4 shadow-lg w-full">
-               <img src={hotel.img} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+
+      {/* grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+        {rooms.map((room) => (
+          <div
+            key={room.room_type_id}
+            onClick={() => navigate(`/rooms/${room.room_type_id}`)}
+            className="group cursor-pointer"
+          >
+
+            {/* image */}
+            <div className="relative h-72 overflow-hidden rounded-2xl shadow-lg">
+              <img
+                src={room.images?.[0]}
+                className="w-full h-full object-cover 
+                group-hover:scale-110 transition duration-500"
+              />
+
+              {/* hover overlay */}
+              <div className="absolute inset-0 bg-black/10 
+              opacity-0 group-hover:opacity-100 transition"/>
             </div>
-            <h3 className="font-bold text-xl text-slate-900 mb-1">{hotel.name}</h3>
-            <div className="text-emerald-600 font-bold text-2xl mb-1">{hotel.price} đ <span className="text-gray-400 text-sm font-normal">/ đêm</span></div>
-            <div className="text-sm font-medium text-emerald-600">{hotel.rating} ★ Tuyệt vời</div>
+
+            {/* info */}
+            <h3 className="font-bold text-lg mt-3 
+            group-hover:text-[#029618] transition">
+              {room.name}
+            </h3>
+
+            <div className="text-emerald-600 font-bold text-xl">
+              {formatPrice(room.base_price)} đ
+            </div>
+
+            <div className="text-sm text-gray-500">
+              {room.capacity} người • {room.area}m²
+            </div>
+
           </div>
         ))}
+
       </div>
     </section>
   );
