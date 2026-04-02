@@ -19,7 +19,7 @@ const request = async (url: string, options: RequestInit = {}) => {
   const isFormData = options.body instanceof FormData;
 
   const headers: Record<string, string> = {
-    "ngrok-skip-browser-warning": "true",
+    "ngrok-skip-browser-warning": "true", // Quan trọng khi dùng ngrok
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
@@ -27,14 +27,33 @@ const request = async (url: string, options: RequestInit = {}) => {
     headers["Content-Type"] = "application/json";
   }
 
-  const res = await fetch(BASE_URL + url, {
-    ...options,
-    headers: { ...headers, ...options.headers },
-  });
+  try {
+    const res = await fetch(BASE_URL + url, {
+      ...options,
+      headers: { ...headers, ...options.headers },
+    });
 
-  const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(data?.message || "Lỗi kết nối API");
-  return data;
+    // Thử parse JSON, nếu server lỗi 500/404 trả về HTML thì catch trả về null
+    const data = await res.json().catch(() => {
+      return null;
+    });
+
+    if (!res.ok) {
+      // Log lỗi từ backend trả về (nếu có)
+      console.error("API Error Response:", data);
+      throw new Error(data?.message || `Lỗi server: ${res.status}`);
+    }
+
+    return data;
+  } catch (error: any) {
+    // Đây là nơi bắt lỗi "Failed to fetch" (Ngrok chết, CORS, hoặc mất mạng)
+    console.error("Fetch Execution Error:", error);
+    
+    if (error.message.includes("Failed to fetch")) {
+      throw new Error("Không thể kết nối đến server. Hãy kiểm tra Ngrok hoặc mạng của bạn.");
+    }
+    throw error;
+  }
 };
 
 export const roomTypeService = {
@@ -50,14 +69,15 @@ export const roomTypeService = {
     });
   },
 
-  update: async (id: number, formData: FormData) => {
-    formData.append("_method", "PUT");
+  update: async (id: number | string, formData: FormData) => {
+    // Ép kiểu chuẩn cho Laravel
+    formData.set("_method", "PUT"); 
+
     return request(`/admin/room-types/${id}`, {
-      method: "POST",
+      method: "POST", // Laravel bắt buộc POST + _method PUT khi có File
       body: formData,
     });
   },
-
   delete: async (id: number) => {
     return request(`/admin/room-types/${id}`, { method: "DELETE" });
   },
