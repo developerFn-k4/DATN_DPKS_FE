@@ -33,7 +33,7 @@ const Routers = () => {
       {/* Route cho Client */}
       <Route path='/auth' element={<AuthPage />} />
       <Route path='/' element={<HomePage />} />
-      <Route path='/room/detail/:id' element={<RoomDetailPage />} />
+      <Route path='/room/:id' element={<RoomDetailPage />} />
       <Route path='/booking' element={<BookingPage />} />
       <Route path='/checkout' element={<CheckoutPage />} />
       <Route path='/rooms' element={<RoomList />} />
