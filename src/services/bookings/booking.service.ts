@@ -29,7 +29,7 @@ export interface BookingResponse {
 }
 
 export const createBooking = async (params: BookingParams): Promise<BookingResponse> => {
-  try {
+  try { console.log("params", params)
     const response = await fetch(`${API_BASE_URL_NEW}${ENDPOINTS.BOOKINGS}`, {
       method: 'POST',
       headers: {

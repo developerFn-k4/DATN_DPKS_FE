@@ -1,9 +1,9 @@
-export const API_BASE_URL = 'https://vietstay.ngrok.dev/api';
-export const API_BASE_URL_NEW = 'https://vietstay.ngrok.dev';
-export const API_STORAGE_URL = 'https://vietstay.ngrok.dev/storage';
+export const API_BASE_URL = "https://vietstay.ngrok.dev/api";
+export const API_BASE_URL_NEW = "https://vietstay.ngrok.dev/api";
+export const API_STORAGE_URL = "https://vietstay.ngrok.dev/storage";
 
 export const ENDPOINTS = {
-    ROOMS: '/rooms',
-    AVAILABLE_ROOMS: '/available-rooms',
-    BOOKINGS: '/bookings',
+  ROOMS: "/rooms",
+  AVAILABLE_ROOMS: "/available-rooms",
+  BOOKINGS: "/bookings",
 };

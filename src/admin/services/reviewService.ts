@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../../services/endpoints/common";
+import { API_BASE_URL, API_BASE_URL_NEW } from "../../services/endpoints/common";
 
 export interface Review {
   id: number;
@@ -55,7 +55,7 @@ const getAuthHeaders = () => {
 };
 
 export const fetchReviews = async (page = 1, search = ""): Promise<ReviewsResponse> => {
-  const url = new URL(`${API_BASE_URL}/api/admin/reviews`);
+  const url = new URL(`${API_BASE_URL_NEW}/admin/reviews`);
   url.searchParams.append("page", page.toString());
   if (search) {
     url.searchParams.append("search", search);

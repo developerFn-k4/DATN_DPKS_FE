@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../../services/endpoints/common";
+import { API_BASE_URL_NEW } from "../../services/endpoints/common";
 
 export interface DashboardStats {
   total_rooms: number;
@@ -43,7 +43,7 @@ export interface DashboardData {
 export const fetchDashboardData = async (): Promise<DashboardData> => {
   const token = localStorage.getItem("token");
   
-  const response = await fetch(`${API_BASE_URL}/api/admin/dashboard`, {
+  const response = await fetch(`${API_BASE_URL_NEW}/admin/dashboard`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
