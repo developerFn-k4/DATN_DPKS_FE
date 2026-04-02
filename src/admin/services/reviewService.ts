@@ -1,4 +1,4 @@
-import { API_BASE_URL, API_BASE_URL_NEW } from "../../services/endpoints/common";
+import { API_BASE_URL_NEW } from "../../services/endpoints/common";
 
 export interface Review {
   id: number;
@@ -74,7 +74,7 @@ export const fetchReviews = async (page = 1, search = ""): Promise<ReviewsRespon
 };
 
 export const fetchReviewDetail = async (id: number): Promise<ReviewDetailResponse> => {
-  const response = await fetch(`${API_BASE_URL}/api/admin/reviews/${id}`, {
+  const response = await fetch(`${API_BASE_URL_NEW}/admin/reviews/${id}`, {
     method: "GET",
     headers: getAuthHeaders()
   });
@@ -87,7 +87,7 @@ export const fetchReviewDetail = async (id: number): Promise<ReviewDetailRespons
 };
 
 export const deleteReview = async (id: number): Promise<{ success: boolean }> => {
-  const response = await fetch(`${API_BASE_URL}/api/admin/reviews/${id}`, {
+  const response = await fetch(`${API_BASE_URL_NEW}/admin/reviews/${id}`, {
     method: "DELETE",
     headers: getAuthHeaders()
   });
