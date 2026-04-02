@@ -10,6 +10,9 @@ export interface RoomTypeL {
   available_rooms: number; // Số phòng trống
   total_rooms: number;     // Tổng số phòng
   images: string[];        // Mảng các đường dẫn ảnh
+  max_adults: number;    // Số người lớn tối đa
+  max_children: number;  // Số trẻ em tối đa
+  services: any[];      // Danh sách dịch vụ đi kèm
 }
 
 export const roomService = {
