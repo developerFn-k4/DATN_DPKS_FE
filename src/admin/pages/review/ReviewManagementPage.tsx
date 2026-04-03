@@ -95,8 +95,8 @@ const ReviewManagementPage: React.FC = () => {
     },
     {
       title: "Phòng",
-      dataIndex: "room",
-      key: "room",
+      dataIndex: "room_type",
+      key: "room_type",
       width: 100,
       render: (room: string | null) => (
         <p className="text-sm font-semibold text-slate-800">
@@ -277,7 +277,7 @@ const ReviewManagementPage: React.FC = () => {
             <div className="p-4 rounded-lg bg-slate-50">
               <p className="mb-1 text-sm text-slate-500">Phòng</p>
               <p className="font-semibold text-slate-800">
-                {selectedReviewDetail.room ? `Phòng ${selectedReviewDetail.room}` : "N/A"}
+                {selectedReviewDetail.room_type ? `Phòng ${selectedReviewDetail.room_type}` : "N/A"}
               </p>
             </div>
 
