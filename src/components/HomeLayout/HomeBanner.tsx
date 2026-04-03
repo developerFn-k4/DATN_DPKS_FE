@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 const HomeBanner: React.FC = () => {
   return (
@@ -16,9 +17,12 @@ const HomeBanner: React.FC = () => {
           <p className="text-white/90 text-xl mb-10 max-w-xl font-light">
             Giảm giá tới 30% cho các dịch vụ nghỉ dưỡng cao cấp tại các thành phố biển trong mùa hè này.
           </p>
-          <button className="bg-white text-slate-900 hover:!bg-emerald-600 hover:text-white font-bold py-5 px-14 rounded-2xl transition-all transform hover:scale-105 active:scale-95 shadow-2xl text-lg">
+          <Link to="/deals">
+             <button className="bg-white text-slate-900 hover:!bg-emerald-600 hover:text-white font-bold py-5 px-14 rounded-2xl transition-all transform hover:scale-105 active:scale-95 shadow-2xl text-lg">
             Khám Phá Ưu Đãi
           </button>
+          </Link>
+         
         </div>
       </div>
     </section>

@@ -35,8 +35,8 @@ export function HomeHeader() {
           <Link to="/" className="hover:text-yellow-400 transition-colors">Trang Chủ</Link>
           <Link to="/rooms" className="hover:text-yellow-400 transition-colors">Loại Phòng</Link>
           <Link className="hover:text-yellow-400 transition-colors" to="/deals">Ưu Đãi</Link>
-          <Link className="hover:text-yellow-400 transition-colors" to="/popular">Phổ Biến</Link>
-          <Link className="hover:text-yellow-400 transition-colors" to="/lienhe">Liên Hệ</Link>
+          <Link className="hover:text-yellow-400 transition-colors" to="/about">Thông Tin</Link>
+          <Link className="hover:text-yellow-400 transition-colors" to="/contact">Liên Hệ</Link>
         </nav>
 
         <div className="flex items-center gap-4 shrink-0">
