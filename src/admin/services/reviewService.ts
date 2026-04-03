@@ -2,7 +2,7 @@ import { API_BASE_URL_NEW } from "../../services/endpoints/common";
 
 export interface Review {
   id: number;
-  room: string | null;
+  room_type: string | null;
   customer: string;
   rating: number;
   comment: string;
@@ -11,7 +11,7 @@ export interface Review {
 
 export interface ReviewDetail {
   id: number;
-  room: string | null;
+  room_type: string | null;
   customer: string;
   ratings: {
     cleanliness: number;
