@@ -11,9 +11,6 @@ export interface Room {
   room_type_id: number;
   floor: number;
   status: "available" | "occupied" | "maintenance" | "unavailable" | "booked" | "reserved";
-  note: string | null;
-  price: string | number;
-  images?: RoomImage[];
   room_type?: {
     id: number;
     name: string;
@@ -58,7 +55,11 @@ export const roomService = {
 
     return res?.data ?? res ?? [];
   },
-
+  getRoomTypes: async () => {
+    return await request("/admin/room-types", { // Thay đổi endpoint cho đúng API của bạn
+      method: "GET",
+    });
+  },
   create: async (formData: FormData) => {
     return request("/admin/rooms", {
       method: "POST",
