@@ -40,7 +40,7 @@ const HomePopular = () => {
         {rooms.map((room) => (
           <div
             key={room.room_type_id}
-            onClick={() => navigate(`/rooms/${room.room_type_id}`)}
+            onClick={() => navigate(`/room/${room.room_type_id}`)}
             className="group cursor-pointer"
           >
 
