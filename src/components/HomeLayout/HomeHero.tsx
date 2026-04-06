@@ -31,7 +31,7 @@ const HomeHero: React.FC = () => {
                 style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1920")' }}>
                 <div className="absolute inset-0 bg-black/40"></div>
                 <div className="relative z-10 text-center text-white px-4">
-                    <h1 className="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">Đặt Phòng Khách Sạn VietStay</h1>
+                    <h1 className="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">Đặt Phòng Khách Sạn<p>Nhanh và Hoàn Hảo</p> </h1>
                     <p className="text-lg opacity-90 font-light">Trải nghiệm không gian 5 sao đẳng cấp</p>
                 </div>
             </div>

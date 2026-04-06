@@ -1,31 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { RoomDetailComponent } from "../../pages/products/pages/roomdetail/components/RoomDetailComponent";
+import type { RoomTypeL } from "../../pages/products/services/roomTypeService";
 
 const HomePopular = () => {
-  const [rooms, setRooms] = useState<any[]>([]);
+  const [rooms, setRooms] = useState<RoomTypeL[]>([]);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState<RoomTypeL | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetch("https://vietstay.ngrok.dev/api/rooms/room-types")
       .then((res) => res.json())
       .then((data) => {
-        setRooms(data.room_types.slice(0, 4));
+        setRooms(data.room_types.slice(0, 3)); // chỉ lấy 3 phòng
       });
   }, []);
 
-  const formatPrice = (p: string) => {
-    return Number(p).toLocaleString("vi-VN");
-  };
+  const formatPrice = (p: string) => Number(p).toLocaleString("vi-VN");
 
   return (
     <section className="w-full px-6 md:px-12 py-20 bg-white">
-      
+
       {/* header */}
       <div className="flex justify-between items-end mb-12">
-        <h2 className="text-3xl font-bold">
-          Gợi ý cho bạn
-        </h2>
-
+        <h2 className="text-3xl font-bold">Gợi ý cho bạn</h2>
         <button
           onClick={() => navigate("/rooms")}
           className="text-blue-600 font-bold hover:underline"
@@ -34,47 +33,70 @@ const HomePopular = () => {
         </button>
       </div>
 
-      {/* grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {/* grid 3 phòng, căn giữa */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 justify-items-center">
 
         {rooms.map((room) => (
           <div
             key={room.room_type_id}
-            onClick={() => navigate(`/room/${room.room_type_id}`)}
-            className="group cursor-pointer"
+            onClick={() => {
+              setSelectedRoom(room);
+              setIsDetailOpen(true);
+            }}
+            className="group cursor-pointer w-full max-w-sm bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
           >
-
             {/* image */}
-            <div className="relative h-72 overflow-hidden rounded-2xl shadow-lg">
+            <div className="relative h-64 w-full overflow-hidden">
               <img
-                src={room.images?.[0]}
-                className="w-full h-full object-cover 
-                group-hover:scale-110 transition duration-500"
+                src={room.images?.[4] || room.images?.[0]}
+                alt={room.name}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-
-              {/* hover overlay */}
-              <div className="absolute inset-0 bg-black/10 
-              opacity-0 group-hover:opacity-100 transition"/>
+              <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-30 transition-opacity" />
             </div>
 
             {/* info */}
-            <h3 className="font-bold text-lg mt-3 
-            group-hover:text-[#029618] transition">
-              {room.name}
-            </h3>
+            <div className="p-4 flex flex-col justify-between">
+              <h3 className="text-lg font-bold text-slate-800 group-hover:text-[#029618] truncate">
+                {room.name}
+              </h3>
 
-            <div className="text-emerald-600 font-bold text-xl">
-              {formatPrice(room.base_price)} đ
+              <div className="mt-2 text-gray-500 text-sm">
+                📏 {room.area}m² • 👥 {room.capacity} người
+              </div>
+
+              <div className="mt-3">
+                <div className="text-[#b18a5d] text-xl font-black">
+                  {formatPrice(room.base_price)}
+                </div>
+                <div className="text-[#b18a5d] text-xs font-bold">
+                  {room.currency}
+                </div>
+              </div>
             </div>
-
-            <div className="text-sm text-gray-500">
-              {room.capacity} người • {room.area}m²
-            </div>
-
           </div>
         ))}
 
       </div>
+
+      {/* modal detail */}
+      {isDetailOpen && selectedRoom && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={() => setIsDetailOpen(false)}
+        >
+          <div
+            className="bg-white w-full max-w-6xl max-h-[90vh] overflow-y-auto shadow-2xl rounded-sm"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <RoomDetailComponent
+              room={selectedRoom}
+              onClose={() => setIsDetailOpen(false)}
+            />
+          </div>
+        </div>
+      )}
+
     </section>
   );
 };
