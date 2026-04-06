@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 
 import logoHome from "../../assets/logo.png";
+import { Link } from "react-router";
 
 export function HomeFooter() {
     return (
@@ -43,10 +44,21 @@ export function HomeFooter() {
                         <h3 className="font-semibold text-slate-900">Liên kết nhanh</h3>
 
                         <ul className="mt-3 space-y-2 text-sm text-slate-600">
-                            <li className="hover:text-emerald-600 cursor-pointer">Trang chủ</li>
-                            <li className="hover:text-emerald-600 cursor-pointer">Phòng</li>
-                            <li className="hover:text-emerald-600 cursor-pointer">Khuyến mãi</li>
-                            <li className="hover:text-emerald-600 cursor-pointer">Liên hệ</li>
+                            <Link to="/">
+                                <li className="hover:text-emerald-600 cursor-pointer">Trang Chủ</li>
+                            </Link>
+                            <Link to="/rooms">
+                                <li className="hover:text-emerald-600 cursor-pointer">Loại Phòng</li>
+                            </Link>
+                            <Link to="/deals">
+                                <li className="hover:text-emerald-600 cursor-pointer">Ưu Đãi</li>
+                            </Link>
+                            <Link to="/about">
+                                <li className="hover:text-emerald-600 cursor-pointer">Thông Tin</li>
+                            </Link>
+                            <Link to="/contact">
+                                <li className="hover:text-emerald-600 cursor-pointer">Liên Hệ</li>
+                            </Link>
                         </ul>
                     </div>
 

@@ -110,23 +110,13 @@ export function HomeHeader() {
         {/* Wrapper cuộn trang nếu màn hình nhỏ */}
         <div className="max-h-[85vh] overflow-y-auto bg-gray-50/50 p-6 md:p-10">
 
-          {/* --- PHẦN 1: HEADER AVATAR (Giao diện cũ của bạn) --- */}
-          <div className="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-8 mb-8 relative overflow-hidden">
-            <div className="relative group z-10">
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-emerald-50 shadow-xl bg-gray-50">
-                <img
-                  src={getAvatarUrl(profile?.avatar) || `https://ui-avatars.com/api/?name=${profile?.name}&background=random`}
-                  className="w-full h-full object-cover"
-                  alt="Profile"
-                />
-              </div>
-              <label className="absolute bottom-1 right-1 bg-emerald-600 text-white p-2 rounded-full cursor-pointer hover:bg-emerald-700 shadow-lg border-2 border-white transition-all">
-                <CameraOutlined />
-                <input type="file" className="hidden" onChange={(e) => {
-                  if (e.target.files?.[0]) updateAvatar(e.target.files[0]);
-                }} accept="image/*" />
-              </label>
-            </div>
+        <nav className="items-center hidden gap-10 text-[15px] font-medium text-white/90 md:flex">
+          <Link to="/" className="hover:text-yellow-400 transition-colors">Trang Chủ</Link>
+          <Link to="/rooms" className="hover:text-yellow-400 transition-colors">Loại Phòng</Link>
+          <Link className="hover:text-yellow-400 transition-colors" to="/deals">Ưu Đãi</Link>
+          <Link className="hover:text-yellow-400 transition-colors" to="/about">Thông Tin</Link>
+          <Link className="hover:text-yellow-400 transition-colors" to="/contact">Liên Hệ</Link>
+        </nav>
 
             <div className="flex-1 text-center md:text-left z-10">
               <h1 className="text-2xl font-bold text-gray-900 mb-1">{profile?.name}</h1>
