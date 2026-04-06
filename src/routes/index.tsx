@@ -14,6 +14,7 @@ import PaymentReturnPage from '../pages/products/pages/paymentcomfirm/pages/Paym
 import DashboardAdmin from '../admin/pages/adminroom/pages/DashboardAdmin';
 import QuanLyRoomTypePage from '../admin/pages/adminroomtype/pages/RoomTypePage';
 import RoomList from '../pages/products/pages/roomtype/pages/RoomTypePage';
+import ProfilePage from '../pages/auth/pages/user/pages/UserPages';
 
 const Routers = () => {
   return (
@@ -33,6 +34,7 @@ const Routers = () => {
       {/* Route cho Client */}
       <Route path='/auth' element={<AuthPage />} />
       <Route path='/' element={<HomePage />} />
+      <Route path='/user' element={<ProfilePage />} />
       <Route path='/room/:id' element={<RoomDetailPage />} />
       <Route path='/booking' element={<BookingPage />} />
       <Route path='/checkout' element={<CheckoutPage />} />

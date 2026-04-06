@@ -45,7 +45,6 @@ export function HomeFooter() {
                         <ul className="mt-3 space-y-2 text-sm text-slate-600">
                             <li className="hover:text-emerald-600 cursor-pointer">Trang chủ</li>
                             <li className="hover:text-emerald-600 cursor-pointer">Phòng</li>
-                            <li className="hover:text-emerald-600 cursor-pointer">Đặt phòng</li>
                             <li className="hover:text-emerald-600 cursor-pointer">Khuyến mãi</li>
                             <li className="hover:text-emerald-600 cursor-pointer">Liên hệ</li>
                         </ul>
