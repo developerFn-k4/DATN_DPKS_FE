@@ -48,36 +48,36 @@ export function HomeHeader() {
   return (
     <>
       <header className="relative top-0 left-0 z-50 w-full transition-all duration-300 bg-transparent">
-        <div className="flex items-center justify-between w-full px-6 md:px-12 py-5 mx-auto">
+        <div className="flex items-center justify-between w-full px-6 py-5 mx-auto md:px-12">
           <Link to="/" className="flex items-center gap-2 group shrink-0">
-            <img src={logoHome} className="h-auto w-40 object-contain" alt="Logo" />
+            <img src={logoHome} className="object-contain w-40 h-auto" alt="Logo" />
           </Link>
 
           <nav className="items-center hidden gap-10 text-[15px] font-medium text-white/90 md:flex">
-            <Link to="/" className="hover:text-yellow-400 transition-colors">Trang Chủ</Link>
-            <Link to="/rooms" className="hover:text-yellow-400 transition-colors">Loại Phòng</Link>
-            <Link className="hover:text-yellow-400 transition-colors" to="/deals">Ưu Đãi</Link>
-            <Link className="hover:text-yellow-400 transition-colors" to="/lienhe">Liên Hệ</Link>
+            <Link to="/" className="transition-colors hover:text-yellow-400">Trang Chủ</Link>
+            <Link to="/rooms" className="transition-colors hover:text-yellow-400">Loại Phòng</Link>
+            <Link className="transition-colors hover:text-yellow-400" to="/deals">Ưu Đãi</Link>
+            <Link className="transition-colors hover:text-yellow-400" to="/lienhe">Liên Hệ</Link>
           </nav>
 
           <div className="flex items-center gap-4 shrink-0">
 {profile ? (
               <Dropdown menu={{ items }} placement="bottomRight">
                 {/* Dịch vào Nav bằng cách giảm margin hoặc để trong flex container sát Nav */}
-                <div className="flex items-center gap-3 cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-md py-1 px-1 pr-4 rounded-full transition-all border border-white/20 shadow-lg">
+                <div className="flex items-center gap-3 px-1 py-1 pr-4 transition-all border rounded-full shadow-lg cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-md border-white/20">
 
                   {/* 1. CHO ẢNH TO RA: Dùng size={40} hoặc size="large" */}
                   <Avatar
                     size={42}
                     src={avatarUrl}
                     icon={!profile?.avatar && <UserOutlined />}
-                    className="border-2 border-emerald-400/50 shadow-sm"
+                    className="border-2 shadow-sm border-emerald-400/50"
                   />
 
                   {/* 2. DỊCH VÀO: Chữ và ảnh cách nhau gap-3 là vừa đẹp */}
                   <div className="flex flex-col items-start">
                     <span className="text-[10px] text-white/60 uppercase tracking-widest leading-none mb-1">Thành viên</span>
-                    <span className="text-sm text-white font-bold leading-none">
+                    <span className="text-sm font-bold leading-none text-white">
                       {profile.name || "User"}
                     </span>
                   </div>
@@ -114,15 +114,15 @@ export function HomeHeader() {
 
           {/* --- PHẦN 1: HEADER AVATAR (Giao diện cũ của bạn) --- */}
           <div className="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-8 mb-8 relative overflow-hidden">
-            <div className="relative group z-10">
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-emerald-50 shadow-xl bg-gray-50">
+            <div className="relative z-10 group">
+              <div className="w-32 h-32 overflow-hidden border-4 rounded-full shadow-xl border-emerald-50 bg-gray-50">
                 <img
                   src={getAvatarUrl(profile?.avatar) || `https://ui-avatars.com/api/?name=${profile?.name}&background=random`}
-                  className="w-full h-full object-cover"
+                  className="object-cover w-full h-full"
 alt="Profile"
                 />
               </div>
-              <label className="absolute bottom-1 right-1 bg-emerald-600 text-white p-2 rounded-full cursor-pointer hover:bg-emerald-700 shadow-lg border-2 border-white transition-all">
+              <label className="absolute p-2 text-white transition-all border-2 border-white rounded-full shadow-lg cursor-pointer bottom-1 right-1 bg-emerald-600 hover:bg-emerald-700">
                 <CameraOutlined />
                 <input type="file" className="hidden" onChange={(e) => {
                   if (e.target.files?.[0]) updateAvatar(e.target.files[0]);
@@ -130,19 +130,19 @@ alt="Profile"
               </label>
             </div>
 
-            <div className="flex-1 text-center md:text-left z-10">
-              <h1 className="text-2xl font-bold text-gray-900 mb-1">{profile?.name}</h1>
-              <p className="text-gray-500 font-medium">{profile?.email}</p>
-              <div className="mt-2 inline-block px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold uppercase">
+            <div className="z-10 flex-1 text-center md:text-left">
+              <h1 className="mb-1 text-2xl font-bold text-gray-900">{profile?.name}</h1>
+              <p className="font-medium text-gray-500">{profile?.email}</p>
+              <div className="inline-block px-3 py-1 mt-2 text-xs font-bold uppercase rounded-full bg-emerald-100 text-emerald-700">
                 {profile?.role || 'Thành viên'}
               </div>
             </div>
 
-            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-100/50 rounded-full blur-3xl -z-0 opacity-40"></div>
+            <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-emerald-100/50 blur-3xl -z-0 opacity-40"></div>
           </div>
 
           {/* --- PHẦN 2: GRID CHỨA FORM VÀ THẺ THÀNH VIÊN --- */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             {/* CỘT TRÁI: FORM */}
             <div className="lg:col-span-2">
               {profile && (
@@ -159,15 +159,15 @@ alt="Profile"
             <div className="space-y-6">
               <div className="bg-slate-900 p-7 rounded-[32px] text-white shadow-2xl relative overflow-hidden">
                 <div className="relative z-10 space-y-10">
-                  <div className="flex justify-between items-start">
-                    <span className="text-emerald-400 font-bold tracking-widest text-xs uppercase">VietStay Member</span>
+                  <div className="flex items-start justify-between">
+                    <span className="text-xs font-bold tracking-widest uppercase text-emerald-400">VietStay Member</span>
                     <UserOutlined className="text-2xl opacity-20" />
                   </div>
                   <div>
                     <span className="text-[10px] opacity-40 uppercase tracking-widest block mb-1">Chủ thẻ</span>
                     <p className="text-lg font-semibold tracking-wide uppercase">{profile?.name}</p>
                   </div>
-                  <div className="flex justify-between items-end">
+                  <div className="flex items-end justify-between">
                     <div>
                       <span className="text-[10px] opacity-40 uppercase tracking-widest block mb-1">Số điện thoại</span>
                       <p className="font-mono text-emerald-400">{profile?.phone || '---- --- ---'}</p>
@@ -175,17 +175,18 @@ alt="Profile"
                     <p className="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded">CLASSIC</p>
                   </div>
                 </div>
-<div className="absolute -bottom-10 -right-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl"></div>
+<div className="absolute w-40 h-40 rounded-full -bottom-10 -right-10 bg-emerald-500/10 blur-3xl"></div>
               </div>
 
               <div className="bg-white border border-gray-100 p-6 rounded-[32px] shadow-sm">
-                <h4 className="font-bold text-gray-800 mb-2">Hỗ trợ nhanh</h4>
-                <p className="text-xs text-gray-500 leading-relaxed">
+                <h4 className="mb-2 font-bold text-gray-800">Hỗ trợ nhanh</h4>
+                <p className="text-xs leading-relaxed text-gray-500">
                   Mọi thay đổi về thông tin bảo mật vui lòng xác nhận qua Email đã đăng ký.
                 </p>
               </div>
             </div>
           </div>
+        </div>
       </Modal>
     </>
   );
