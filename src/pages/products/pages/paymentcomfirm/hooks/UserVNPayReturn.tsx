@@ -1,35 +1,28 @@
 import { useEffect, useState } from "react";
-import { verifyVNPayReturn } from "../../../services/paymentService";
 
 export const useVNPayReturn = (searchParams: URLSearchParams) => {
   const [loading, setLoading] = useState(true);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState<boolean>(false);
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    const run = async () => {
-      try {
-        const query: Record<string, string> = {};
-        searchParams.forEach((value, key) => {
-          query[key] = value;
-        });
+    const query: Record<string, string> = {};
+    searchParams.forEach((value, key) => {
+      query[key] = value;
+    });
 
-        const res = await verifyVNPayReturn(query);
-        setData(res);
+    // BE của bạn trả về ?success=true (đây là string)
+    // Hoặc VNPAY trả về vnp_ResponseCode=00
+    const isSuccess = 
+      query.success === "true" || 
+      query.success === "1" || 
+      query.vnp_ResponseCode === "00";
 
-        if (query.vnp_ResponseCode === "00") {
-          setSuccess(true);
-        } else {
-          setSuccess(false);
-        }
-      } catch (e) {
-        setSuccess(false);
-      } finally {
-        setLoading(false);
-      }
-    };
+    console.log("Check Success:", isSuccess, "Query data:", query); // Dòng này để bạn F12 kiểm tra
 
-    run();
+    setSuccess(isSuccess);
+    setData(query);
+    setLoading(false);
   }, [searchParams]);
 
   return { loading, success, data };

@@ -118,6 +118,7 @@ export default function BookingPage() {
         phone: values.phone,
         check_in: checkIn,
         check_out: checkOut,
+        amount: totalPrice,
         rooms: [
           {
             room_type_id: roomId,
