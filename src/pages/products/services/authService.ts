@@ -1,10 +1,7 @@
 import axios from 'axios';
 
-// Đưa baseURL về gốc /api để các service khác dùng chung được
-const API_URL = 'https://vietstay.ngrok.dev/api'; 
-
 const apiClient = axios.create({
-  baseURL: 'https://vietstay.ngrok.dev/api', // Bỏ chữ /auth ở đây
+  baseURL: 'https://vietstay.ngrok.dev/api',
   headers: {
     "ngrok-skip-browser-warning": "true",
   },
@@ -31,18 +28,23 @@ export const authService = {
     return response.data;
   },
 
-updateAvatar: async (file: File) => {
-  const formData = new FormData();
-  // Đảm bảo tên 'avatar' khớp với tên biến Backend đang đợi ($request->file('avatar'))
-  formData.append('avatar', file); 
+  updateAvatar: async (file: File) => {
+    const formData = new FormData();
+    // Đảm bảo tên 'avatar' khớp với tên biến Backend đang đợi ($request->file('avatar'))
+    formData.append('avatar', file); 
 
-  const response = await apiClient.post('/auth/profile/avatar', formData, {
-    headers: { 
-      'Content-Type': 'multipart/form-data' 
-    },
-  });
-  return response.data;
-},
+    const response = await apiClient.post('/auth/profile/avatar', formData, {
+      headers: { 
+        'Content-Type': 'multipart/form-data' 
+      },
+    });
+    return response.data;
+  },
+
+  changePassword: async (data: { current_password: string; new_password: string; new_password_confirmation: string }) => {
+    const response = await apiClient.put('/auth/change-password', data);
+    return response.data;
+  },
 };
 
 export default apiClient;
