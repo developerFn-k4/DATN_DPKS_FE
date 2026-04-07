@@ -176,7 +176,6 @@ export function HomeHeader() {
               </div>
             </div>
           </div>
-        </div>
       </Modal>
     </>
   );
