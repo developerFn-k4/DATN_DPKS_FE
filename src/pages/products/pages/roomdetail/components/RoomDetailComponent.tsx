@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserOutlined, SendOutlined } from "@ant-design/icons";
 import { Avatar, Progress, Rate, Input } from "antd";
 import type { RoomTypeL } from "../../../services/roomTypeService";
+import { API_BASE_URL } from "../../../../../services/endpoints/common";
 
 const { TextArea } = Input;
+
+interface Review {
+  id: number;
+  customer: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
 
 interface Props {
   room: RoomTypeL & { 
@@ -52,6 +61,35 @@ export const RoomDetailComponent: React.FC<Props> = ({ room, onClose }) => {
   const [roomCount, setRoomCount] = useState(availableRooms > 0 ? 1 : 0);
   const [rooms, setRooms] = useState([{ adults: 1, children: 0, infant: 0 }]);
   const [selectedServices, setSelectedServices] = useState<number[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loadingReviews, setLoadingReviews] = useState(false);
+
+  // Fetch reviews
+  useEffect(() => {
+    const fetchReviews = async () => {
+      setLoadingReviews(true);
+      try {
+        const response = await fetch(`${API_BASE_URL}/reviews?room_type=${room.room_type_id}`);
+        const data = await response.json();
+        console.log('Fetched reviews:', data);
+        if (data.success) {
+          setReviews(data.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch reviews', error);
+      } finally {
+        setLoadingReviews(false);
+      }
+    };
+    fetchReviews();
+  }, [room.room_type_id]);
+
+  // Tính toán rating từ reviews
+  const totalReviews = reviews.length;
+  const totalStars = reviews.reduce((sum, r) => sum + r.rating, 0);
+  const averageRating = totalReviews > 0 ? totalStars / totalReviews : 0;
+  const ratingCounts = [5, 4, 3, 2, 1].map(star => reviews.filter(r => r.rating === star).length);
+  const ratingPercents = ratingCounts.map(count => totalReviews > 0 ? (count / totalReviews) * 100 : 0);
 
   // --- LOGIC TÍNH TOÁN ---
   const calculateNights = () => {
@@ -186,18 +224,41 @@ export const RoomDetailComponent: React.FC<Props> = ({ room, onClose }) => {
                 <h4 className="font-bold text-xl mb-6 text-gray-800">Xếp hạng và đánh giá</h4>
                 <div className="flex flex-col md:flex-row gap-10 items-center mb-8">
                     <div className="text-center">
-                        <div className="text-6xl font-black text-gray-800">{room.average_rate || 5}</div>
-                        <Rate disabled defaultValue={room.average_rate || 5} allowHalf className="text-xs text-yellow-500 my-2" />
-                        <div className="text-xs text-gray-400">{room.total_reviews || 0} nhận xét</div>
+                        <div className="text-6xl font-black text-gray-800">{averageRating.toFixed(1)}</div>
+                        <Rate disabled defaultValue={averageRating} allowHalf className="text-xs text-yellow-500 my-2" />
+                        <div className="text-xs text-gray-400">{totalReviews} nhận xét</div>
+                        <div className="text-xs text-gray-400">Tổng sao: {totalStars}</div>
                     </div>
                     <div className="flex-1 space-y-1.5 w-full">
-                        {[5, 4, 3, 2, 1].map((star) => (
+                        {[5, 4, 3, 2, 1].map((star, index) => (
                             <div key={star} className="flex items-center gap-4 text-xs font-bold text-gray-500">
                                 <span className="w-2">{star}</span>
-                                <Progress percent={star === 5 ? 80 : 10} showInfo={false} strokeColor="#059669" trailColor="#f3f4f6" size="small" />
+                                <Progress percent={ratingPercents[index]} showInfo={false} strokeColor="#059669" trailColor="#f3f4f6" size="small" />
                             </div>
                         ))}
                     </div>
+                </div>
+                {/* Hiển thị danh sách reviews */}
+                <div className="space-y-4 mb-6">
+                  {loadingReviews ? (
+                    <div className="text-center text-gray-500">Đang tải đánh giá...</div>
+                  ) : reviews.length > 0 ? (
+                    reviews.map((review) => (
+                      <div key={review.id} className="bg-white p-4 rounded-lg border border-gray-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <Avatar icon={<UserOutlined />} className="bg-gray-200 text-gray-600" />
+                          <div>
+                            <div className="font-semibold text-gray-800">{review.customer}</div>
+                            <Rate disabled defaultValue={review.rating} className="text-xs" />
+                          </div>
+                          <div className="ml-auto text-xs text-gray-400">{new Date(review.date).toLocaleDateString('vi-VN')}</div>
+                        </div>
+                        <p className="text-gray-600 text-sm">{review.comment}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center text-gray-500">Chưa có đánh giá nào.</div>
+                  )}
                 </div>
                 <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
                     <div className="flex items-center gap-3 mb-4">
