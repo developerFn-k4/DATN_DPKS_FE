@@ -6,15 +6,11 @@ export type RegisterRequest = {
 };
 
 export type RegisterResponse = {
+  success?: boolean;
   message?: string;
-  user?: {
-    id?: number;
-    name?: string;
-    email?: string;
-    [k: string]: any;
-  };
-  accessToken?: string;
+  user?: User;
   token?: string;
+  accessToken?: string;
   tokenType?: string;
   [k: string]: any;
 };
@@ -27,18 +23,30 @@ export type LoginRequest = {
 export type LoginResponse = {
   success: boolean;
   message?: string;
-  accessToken?: string;
-  token?: string;
-  user?: {
-    id: string;
+  token: string;
+  user: {
+    id: number;
     name: string;
     email: string;
+    phone: string | null;
+    address: string | null;
+    date_of_birth: string | null;
+    avatar: string | null;
+    role: string;
+    status: string;
   };
 };
 
 export type User = {
+  id?: number;
   name?: string;
   email?: string;
+  phone?: string | null;
+  address?: string | null;
+  date_of_birth?: string | null;
+  avatar?: string | null;
+  role?: string;
+  status?: string;
 };
 
 export type AuthData = {

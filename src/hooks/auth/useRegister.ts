@@ -1,7 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { getMeApi, loginApi, registerApi } from "../../services/auth/auth";
-import type { AuthData, LoginRequest, MeResponse, RegisterRequest, User } from "../../types/auth/auth";
+import type {
+  AuthData,
+  LoginRequest,
+  MeResponse,
+  RegisterRequest,
+  User,
+} from "../../types/auth/auth";
 
 export function useRegister() {
   const [loading, setLoading] = useState(false);
@@ -13,24 +19,16 @@ export function useRegister() {
 
     try {
       const res = await registerApi(payload);
-      const token =
-        res.accessToken ??
-        res.token ??
-        (res as any)?.payload?.accessToken ??
-        (res as any)?.payload?.token;
+      const token = res.token;
 
-      const user =
-        res.user ??
-        (res as any)?.payload?.user;
-
+      // Lưu token vào localStorage
       if (token) {
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            ...(user ? { user } : {}),
-            accessToken: token,
-          })
-        );
+        localStorage.setItem("token", token);
+      }
+
+      // Lưu user info vào localStorage (nếu có)
+      if (res.user) {
+        localStorage.setItem("user", JSON.stringify(res.user));
       }
 
       return res;
@@ -77,24 +75,16 @@ export function useLogin() {
         return null;
       }
 
-      const token =
-        res.accessToken ??
-        res.token ??
-        (res as any)?.payload?.accessToken ??
-        (res as any)?.payload?.token;
+      const token = res.token;
 
-      const user =
-        res.user ??
-        (res as any)?.payload?.user;
-
+      // Lưu token vào localStorage
       if (token) {
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            ...(user ? { user } : {}),
-            accessToken: token,
-          })
-        );
+        localStorage.setItem("token", token);
+      }
+
+      // Lưu user info vào localStorage (nếu có)
+      if (res.user) {
+        localStorage.setItem("user", JSON.stringify(res.user));
       }
 
       return res;
@@ -117,16 +107,20 @@ export function useLogin() {
 }
 
 export function useAuth() {
-  const [auth, setAuth] = useState<AuthData | null>(null);
+  const [auth, setAuth] = useState<{ token: string; user: User | null } | null>(null);
 
   useEffect(() => {
-    const data = localStorage.getItem("user");
-    if (data) {
-      setAuth(JSON.parse(data));
+    const token = localStorage.getItem("token");
+    const userStr = localStorage.getItem("user");
+    const user = userStr ? JSON.parse(userStr) : null;
+
+    if (token) {
+      setAuth({ token, user });
     }
   }, []);
 
   const logout = useCallback(() => {
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
     setAuth(null);
     window.location.href = "/";
@@ -134,8 +128,8 @@ export function useAuth() {
 
   return {
     user: auth?.user,
-    token: auth?.accessToken,
-    isLogin: !!auth?.accessToken,
+    token: auth?.token,
+    isLogin: !!auth?.token,
     logout,
   };
 }
