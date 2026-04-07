@@ -40,6 +40,7 @@ const Routers = () => {
       <Route path='/checkout' element={<CheckoutPage />} />
       <Route path='/rooms' element={<RoomList />} />
       <Route path='/payment-return' element={<PaymentReturnPage />} />
+      <Route path='/bookinguser' element={<BookingPage />} />
     </Routes>
   );
 };
