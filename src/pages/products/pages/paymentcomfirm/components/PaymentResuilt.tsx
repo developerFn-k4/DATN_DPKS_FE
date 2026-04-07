@@ -1,30 +1,28 @@
-import React from "react";
-import { Result, Button } from "antd";
+import React from 'react';
+import { Result, Button } from 'antd';
 
-interface Props {
+// Bước quan trọng nhất: Định nghĩa danh sách các props mà Component này chấp nhận
+interface PaymentResultProps {
   success: boolean;
   onHome: () => void;
   onBooking: () => void;
 }
 
-const PaymentResult: React.FC<Props> = ({ success, onHome, onBooking }) => {
+const PaymentResult: React.FC<PaymentResultProps> = ({ success, onHome, onBooking }) => {
   return (
     <Result
       status={success ? "success" : "error"}
-      title={
-        success ? "Thanh toán thành công 🎉" : "Thanh toán thất bại ❌"
-      }
-      subTitle={
-        success
-          ? "Cảm ơn bạn đã thanh toán"
-          : "Vui lòng thử lại"
+      title={success ? "Thanh Toán Thành Công!" : "Thanh Toán Thất Bại"}
+      subTitle={success 
+        ? "Hệ thống đã xác nhận thanh toán của bạn. Thông tin chi tiết đã được lưu trữ." 
+        : "Giao dịch không thành công. Vui lòng kiểm tra lại số dư hoặc thẻ ngân hàng."
       }
       extra={[
-        <Button type="primary" onClick={onHome} key="home">
-          Trang chủ
+        <Button type="primary" key="home" onClick={onHome} shape="round">
+          Về trang chủ
         </Button>,
-        <Button onClick={onBooking} key="booking">
-          Đơn của tôi
+        <Button key="booking" onClick={onBooking} shape="round">
+          Đơn hàng của tôi
         </Button>,
       ]}
     />
