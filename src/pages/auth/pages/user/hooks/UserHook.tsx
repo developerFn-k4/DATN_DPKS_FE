@@ -48,11 +48,17 @@ export const useProfile = () => {
     return res;
   };
 
+  const changePassword = async (data: { current_password: string; new_password: string; new_password_confirmation: string }) => {
+    const res = await authService.changePassword(data);
+    return res;
+  };
+
   return { 
     profile, 
     loading, 
     updateProfile, 
     updateAvatar, // Trả ra ngoài để dùng
+    changePassword,
     refresh: fetchProfile 
   };
 };

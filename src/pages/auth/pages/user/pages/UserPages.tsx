@@ -5,7 +5,7 @@ import { useProfile } from '../hooks/UserHook';
 import { ProfileForm } from '../components/UserComponnet';
 
 const ProfilePage = () => {
-  const { profile, loading, updateProfile, updateAvatar } = useProfile();
+  const { profile, loading, updateProfile, updateAvatar, changePassword } = useProfile();
   
   // State quản lý chọn ảnh
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -94,7 +94,7 @@ const ProfilePage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* CỘT TRÁI: FORM CẬP NHẬT THÔNG TIN (CÓ NÚT LƯU) */}
         <div className="lg:col-span-2 space-y-8">
-          <ProfileForm initialData={profile} onSave={updateProfile} onUpdateAvatar={updateAvatar} />
+          <ProfileForm initialData={profile} onSave={updateProfile} onUpdateAvatar={updateAvatar} onChangePassword={changePassword} />
         </div>
 
         {/* CỘT PHẢI: THẺ THÀNH VIÊN VÀ CHI TIẾT */}

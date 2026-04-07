@@ -10,7 +10,7 @@ import { useState } from "react";
 export function HomeHeader() {
   const navigate = useNavigate();
   // Đồng nhất tên biến là 'profile' để tránh lỗi "đỏ"
-  const { profile, updateProfile, updateAvatar } = useProfile();
+  const { profile, updateProfile, updateAvatar, changePassword } = useProfile();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const avatarUrl = profile?.avatar 
       ? (profile.avatar.startsWith('http') 
@@ -103,9 +103,11 @@ export function HomeHeader() {
         footer={null}
         width={1100} // Tăng độ rộng để chứa cả 2 cột
         centered
-        destroyOnClose
-        bodyStyle={{ padding: 0, overflow: 'hidden', borderRadius: '32px' }}
-        maskStyle={{ backdropFilter: 'blur(8px)', backgroundColor: 'rgba(0,0,0,0.4)' }}
+        destroyOnHidden
+        styles={{
+          body: { padding: 0, overflow: 'hidden', borderRadius: '32px' },
+          mask: { backdropFilter: 'blur(8px)', backgroundColor: 'rgba(0,0,0,0.4)' }
+        }}
       >
         {/* Wrapper cuộn trang nếu màn hình nhỏ */}
         <div className="max-h-[85vh] overflow-y-auto bg-gray-50/50 p-6 md:p-10">
@@ -148,6 +150,7 @@ alt="Profile"
                   initialData={profile}
                   onSave={updateProfile}
                   onUpdateAvatar={updateAvatar}
+                  onChangePassword={changePassword}
                 />
               )}
             </div>
@@ -183,7 +186,6 @@ alt="Profile"
               </div>
             </div>
           </div>
-        </div>
       </Modal>
     </>
   );
