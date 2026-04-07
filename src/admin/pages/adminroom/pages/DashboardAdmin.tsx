@@ -60,13 +60,12 @@ const DashboardAdmin = () => {
             <div className="mx-auto max-w-7xl space-y-6">
                 <div>
                     <h6 className="text-3xl font-bold tracking-tight text-slate-950">
-                        Admin Dashboard
+                        Thống Kê
                     </h6>
                     <p className="mt-1 text-sm text-slate-500">
                         Theo dõi tổng quan hệ thống, booking và doanh thu
                     </p>
                 </div>
-
                 <DashboardOverviewCards admin={data?.admin} stats={data?.stats} />
 
                 <DashboardFilterBar
