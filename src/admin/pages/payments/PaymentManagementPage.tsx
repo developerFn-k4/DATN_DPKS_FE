@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Table, Card, Button, Tag, Modal, Input, Select, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { 
@@ -26,6 +27,7 @@ interface Payment {
 }
 
 const PaymentManagementPage: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -248,7 +250,7 @@ const PaymentManagementPage: React.FC = () => {
         <Button
           type="link"
           icon={<FiEye />}
-          onClick={() => showPaymentDetail(record)}
+          onClick={() => navigate(`/admin/payments/${record.booking_id}`)}
           size="small"
         >
           Xem

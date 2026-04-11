@@ -114,7 +114,7 @@ existingImages.forEach(img => formData.append("keep_images[]", img.id.toString()
               {existingImages.map((img) => (
                 <div key={img.id} className="relative w-20 h-20 group">
                   <img 
-                    src={img.image_url.startsWith('http') ? img.image_url : `https://vietstay.ngrok.dev/storage/${img.image_url}`} 
+                    src={img.image_url.startsWith('http') ? img.image_url : `${(import.meta.env.VITE_API_URL as string).replace('/api', '/storage')}/${img.image_url}`} 
                     className="w-full h-full object-cover rounded-lg border border-gray-200" 
                     alt="old" 
                   />

@@ -1,8 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import type { Room } from "../../../services/roomService";
 import Tooltip from "antd/es/tooltip";
 import DeleteOutlined from "@ant-design/icons/lib/icons/DeleteOutlined";
 import EditOutlined from "@ant-design/icons/lib/icons/EditOutlined";
+import EyeOutlined from "@ant-design/icons/lib/icons/EyeOutlined";
 
 interface Props {
   data: Room[];
@@ -23,6 +25,7 @@ const renderStatus = (status: Room["status"]) => {
 };
 
 const RoomTable: React.FC<Props> = ({ data, onDelete, onEdit }) => {
+  const navigate = useNavigate();
   return (
     <div className="overflow-x-auto w-full">
       <table className="min-w-full bg-white rounded-2xl shadow-md border border-gray-100">
@@ -46,6 +49,9 @@ const RoomTable: React.FC<Props> = ({ data, onDelete, onEdit }) => {
               <td className="px-6 py-4 text-sm">{renderStatus(room.status)}</td>
               <td className="px-6 py-4 text-sm">
                 <div className="flex justify-center gap-3">
+                  <Tooltip title="Xem chi tiết">
+                    <button onClick={() => navigate(`/admin/rooms/${room.id}`)} className="p-2 rounded-lg !bg-blue-500 text-white hover:bg-blue-600 transition shadow-sm"><EyeOutlined /></button>
+                  </Tooltip>
                   <Tooltip title="Chỉnh sửa">
                     <button onClick={() => onEdit(room)} className="p-2 rounded-lg !bg-yellow-500 text-white hover:bg-yellow-600 transition shadow-sm"><EditOutlined /></button>
                   </Tooltip>

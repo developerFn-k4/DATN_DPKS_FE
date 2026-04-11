@@ -1,4 +1,4 @@
-const BASE_URL = "https://vietstay.ngrok.dev/api/admin";
+const BASE_URL = `${import.meta.env.VITE_API_URL}/admin`;
 
 const getAuthHeaders = () => ({
   "Content-Type": "application/json",

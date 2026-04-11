@@ -12,8 +12,21 @@ import ReviewManagementPage from '../admin/pages/review/ReviewManagementPage';
 import PaymentManagementPage from '../admin/pages/payments/PaymentManagementPage';
 import PaymentReturnPage from '../pages/products/pages/paymentcomfirm/pages/PaymentReturnPage';
 import DashboardAdmin from '../admin/pages/adminroom/pages/DashboardAdmin';
+import Statistics from '../pages/admin/Statistics';
+import BookingManagement from '../pages/admin/BookingManagement';
+import OrderManagement from '../pages/admin/OrderManagement';
+import RoomList from '../pages/admin/RoomList';
+import ServiceList from '../pages/admin/ServiceList';
 import QuanLyRoomTypePage from '../admin/pages/adminroomtype/pages/RoomTypePage';
-import RoomList from '../pages/products/pages/roomtype/pages/RoomTypePage';
+import RoomTypeDetail from '../admin/pages/adminroomtype/pages/RoomTypeDetail';
+import RoomTypeForm from '../admin/pages/adminroomtype/pages/RoomTypeForm';
+// ---- Trang chi tiết admin (5 module) ----
+import BookingDetail from '../pages/admin/BookingDetail';
+import PaymentDetail from '../pages/admin/PaymentDetail';
+import AdminRoomDetailPage from '../pages/admin/RoomDetail';
+import ServiceDetail from '../pages/admin/ServiceDetail';
+import AdminRoomTypeDetail from '../pages/admin/RoomTypeDetail';
+import RoomTypePage from '../pages/products/pages/roomtype/pages/RoomTypePage';
 import ProfilePage from '../pages/auth/pages/user/pages/UserPages';
 
 const Routers = () => {
@@ -27,7 +40,25 @@ const Routers = () => {
         <Route path='qluser' element={<AdminUserPage />} />
         <Route path='payments' element={<PaymentManagementPage />} />
         <Route path='roomtype' element={<QuanLyRoomTypePage />} />
-        <Route path='thong-ke' element={<DashboardAdmin/>} />
+        {/* /new phải đứng TRƯỚC /:id để không bị parse thành id="new" */}
+        <Route path='roomtype/new' element={<RoomTypeForm />} />
+        <Route path='roomtype/:id' element={<RoomTypeDetail />} />
+        <Route path='roomtype/:id/edit' element={<RoomTypeForm />} />
+        {/* Chi tiết booking */}
+        <Route path='bookings/:id' element={<BookingDetail />} />
+        {/* Chi tiết payment (lấy theo bookingId) */}
+        <Route path='payments/:bookingId' element={<PaymentDetail />} />
+        {/* Chi tiết phòng */}
+        <Route path='rooms/:id' element={<AdminRoomDetailPage />} />
+        {/* Chi tiết dịch vụ */}
+        <Route path='services/:id' element={<ServiceDetail />} />
+        {/* Chi tiết loại phòng (view-only từ adminApi) */}
+        <Route path='room-types/:id' element={<AdminRoomTypeDetail />} />
+        <Route path='bookings' element={<BookingManagement />} />
+        <Route path='orders' element={<OrderManagement />} />
+        <Route path='tai-san' element={<RoomList />} />
+        <Route path='dich-vu' element={<ServiceList />} />
+        <Route path='thong-ke' element={<Statistics />} />
         {/* Bạn có thể thêm các route con khác như ql-loai-phong ở đây */}
       </Route>
 
@@ -38,7 +69,7 @@ const Routers = () => {
       <Route path='/room/:id' element={<RoomDetailPage />} />
       <Route path='/booking' element={<BookingPage />} />
       <Route path='/checkout' element={<CheckoutPage />} />
-      <Route path='/rooms' element={<RoomList />} />
+      <Route path='/rooms' element={<RoomTypePage />} />
       <Route path='/payment-return' element={<PaymentReturnPage />} />
       <Route path='/bookinguser' element={<BookingPage />} />
     </Routes>

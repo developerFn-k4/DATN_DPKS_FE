@@ -10,7 +10,7 @@ const HomePopular = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://vietstay.ngrok.dev/api/rooms/room-types")
+    fetch(`${import.meta.env.VITE_API_URL}/rooms/room-types`)
       .then((res) => res.json())
       .then((data) => {
         setRooms(data.room_types.slice(0, 3)); // chỉ lấy 3 phòng

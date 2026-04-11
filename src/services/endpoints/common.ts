@@ -1,6 +1,6 @@
-export const API_BASE_URL = "https://vietstay.ngrok.dev/api";
-export const API_BASE_URL_NEW = "https://vietstay.ngrok.dev/api";
-export const API_STORAGE_URL = "https://vietstay.ngrok.dev/storage";
+export const API_BASE_URL = import.meta.env.VITE_API_URL as string;
+export const API_BASE_URL_NEW = import.meta.env.VITE_API_URL as string;
+export const API_STORAGE_URL = (import.meta.env.VITE_API_URL as string).replace("/api", "/storage");
 
 export const ENDPOINTS = {
   ROOMS: "/rooms",

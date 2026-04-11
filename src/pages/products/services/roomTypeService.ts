@@ -72,7 +72,7 @@ function mapToRoomTypeL(r: SearchRoomTypeRaw): RoomTypeL {
 export const roomService = {
   getRoomTypes: async (): Promise<RoomTypeL[]> => {
     try {
-      const response = await fetch('https://vietstay.ngrok.dev/api/rooms/room-types');
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/rooms/room-types`);
       if (!response.ok) throw new Error('Không thể kết nối API');
       const result = await response.json();
       return result.room_types || [];
@@ -86,7 +86,7 @@ export const roomService = {
 export async function searchRoomTypes(
   params: SearchRoomRequest
 ): Promise<{ rooms: RoomTypeL[]; searchInfo: SearchInfo }> {
-  const response = await fetch('https://vietstay.ngrok.dev/api/rooms/room-types/search', {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/rooms/room-types/search`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(params),

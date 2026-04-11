@@ -1,5 +1,5 @@
 export const verifyVNPayReturn = async (query: Record<string, string>) => {
-  const url = new URL("https://vietstay.ngrok.dev/api/payment/vnpay-return");
+  const url = new URL(`${import.meta.env.VITE_API_URL}/payment/vnpay-return`);
 
   Object.keys(query).forEach((key) => {
     url.searchParams.append(key, query[key]);

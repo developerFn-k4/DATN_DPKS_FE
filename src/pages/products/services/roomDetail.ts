@@ -75,7 +75,7 @@ export interface RoomDetailResponse {
 }
 
 
-const API_URL = "https://vietstay.ngrok.dev/api";
+const API_URL = import.meta.env.VITE_API_URL as string;
 const getAuthHeaders = (): HeadersInit => {
   const token = localStorage.getItem("token"); 
   
