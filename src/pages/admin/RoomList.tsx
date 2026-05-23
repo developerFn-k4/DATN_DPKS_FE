@@ -110,7 +110,7 @@ const RoomList = () => {
       {/* ===== Header ===== */}
       <div className="mb-6 flex items-start justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Quản Lý Tài Sản (Phòng)</h1>
+          <h1 className="text-2xl font-bold text-slate-800">Quản Lý Trạng Thái (Phòng)</h1>
           <p className="text-sm text-gray-400 mt-1">Danh sách toàn bộ phòng trong hệ thống</p>
         </div>
         <button
