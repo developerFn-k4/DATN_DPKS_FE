@@ -160,7 +160,7 @@ export default function CheckoutPage() {
               type="button"
               onClick={handleCompleteBooking}
               disabled={loading}
-              className="w-full py-4 rounded-xl font-bold bg-green-600 text-white hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-base transition-colors"
+              className="w-full py-4 rounded-xl font-bold !bg-green-600 text-white hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-base transition-colors"
             >
               {loading ? (
                 <><Spin size="small" /> Đang xử lý...</>

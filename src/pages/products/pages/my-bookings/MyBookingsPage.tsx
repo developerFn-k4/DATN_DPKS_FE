@@ -54,7 +54,7 @@ const MyBookingsPage: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate("/auth")}
-            className="px-8 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-colors"
+            className="px-8 py-3 !bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-colors"
           >
             Đăng nhập
           </button>
@@ -86,7 +86,8 @@ const MyBookingsPage: React.FC = () => {
           </div>
         )}
 
-        {isError && (
+        {isError && 
+        (
           <div className="py-10 text-center text-red-500">
             {(error as any)?.response?.data?.message || (error as any)?.message || "Không thể tải dữ liệu."}
           </div>
@@ -100,7 +101,7 @@ const MyBookingsPage: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate("/")}
-              className="mt-4 px-6 py-2 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-colors"
+              className="mt-4 px-6 py-2 !bg-green-600 text-white font-bold rounded-xl !hover:bg-green-700 transition-colors"
             >
               <HomeOutlined /> Về trang chủ
             </button>

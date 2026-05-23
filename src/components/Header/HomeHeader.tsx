@@ -77,7 +77,7 @@ export function HomeHeader() {
                   {/* 2. DỊCH VÀO: Chữ và ảnh cách nhau gap-3 là vừa đẹp */}
                   <div className="flex flex-col items-start">
                     <span className="text-[10px] text-white/60 uppercase tracking-widest leading-none mb-1">Thành viên</span>
-                    <span className="text-sm font-bold leading-none text-white">
+                    <span className="text-sm font-bold leading-none text-black">
                       {profile.name || "User"}
                     </span>
                   </div>
@@ -113,16 +113,16 @@ export function HomeHeader() {
         <div className="max-h-[85vh] overflow-y-auto bg-gray-50/50 p-6 md:p-10">
 
           {/* --- PHẦN 1: HEADER AVATAR (Giao diện cũ của bạn) --- */}
-          <div className="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-8 mb-8 relative overflow-hidden">
+          <div className="!bg-gray-600 text-black p-8 rounded-[32px] shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-8 mb-8 relative overflow-hidden">
             <div className="relative z-10 group">
-              <div className="w-32 h-32 overflow-hidden border-4 rounded-full shadow-xl border-emerald-50 bg-gray-50">
+              <div className="w-32 h-32 overflow-hidden border-4 rounded-full shadow-xl border-emerald-50 !bg-gray-300">
                 <img
                   src={getAvatarUrl(profile?.avatar) || `https://ui-avatars.com/api/?name=${profile?.name}&background=random`}
                   className="object-cover w-full h-full"
 alt="Profile"
                 />
               </div>
-              <label className="absolute p-2 text-white transition-all border-2 border-white rounded-full shadow-lg cursor-pointer bottom-1 right-1 bg-emerald-600 hover:bg-emerald-700">
+              <label className="absolute p-2 text-black transition-all border-2 border-white rounded-full shadow-lg cursor-pointer bottom-1 right-1 bg-emerald-600 hover:bg-emerald-700">
                 <CameraOutlined />
                 <input type="file" className="hidden" onChange={(e) => {
                   if (e.target.files?.[0]) updateAvatar(e.target.files[0]);
