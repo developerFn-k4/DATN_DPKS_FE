@@ -209,7 +209,7 @@ const ServiceFormModal = ({ isOpen, editService, onClose, onSuccess }: Props) =>
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="flex-1 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+            className="flex-1 px-4 py-2.5 !bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {submitting && (
               <span className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-white border-t-transparent" />

@@ -28,6 +28,7 @@ import ServiceDetail from '../pages/admin/ServiceDetail';
 import AdminRoomTypeDetail from '../pages/admin/RoomTypeDetail';
 import RoomTypePage from '../pages/products/pages/roomtype/pages/RoomTypePage';
 import ProfilePage from '../pages/auth/pages/user/pages/UserPages';
+import MyBookingsPage from '../pages/products/pages/my-bookings/MyBookingsPage';
 
 const Routers = () => {
   return (
@@ -71,6 +72,7 @@ const Routers = () => {
       <Route path='/checkout' element={<CheckoutPage />} />
       <Route path='/rooms' element={<RoomTypePage />} />
       <Route path='/payment-return' element={<PaymentReturnPage />} />
+      <Route path='/my-bookings' element={<MyBookingsPage />} />
       <Route path='/bookinguser' element={<BookingPage />} />
     </Routes>
   );
