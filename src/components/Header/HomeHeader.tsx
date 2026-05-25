@@ -31,7 +31,7 @@ export function HomeHeader() {
       // Thay đổi từ Link sang thẻ span để kích hoạt Modal tại chỗ
       label: <span onClick={() => setIsProfileOpen(true)} className="cursor-pointer">Thông tin cá nhân</span> 
     },
-    { key: "2", icon: <BookOutlined />, label: <Link to="/bookinguser">Đơn đặt phòng</Link> },
+    { key: "2", icon: <BookOutlined />, label: <Link to="/my-bookings">Lịch sử đơn đặt phòng</Link> },
     { type: "divider" },
     { key: "3", icon: <LogoutOutlined />, label: <span onClick={logout} className="cursor-pointer">Đăng xuất</span> },
   ];
