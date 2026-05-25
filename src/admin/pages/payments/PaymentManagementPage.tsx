@@ -52,7 +52,6 @@ const PaymentManagementPage: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [filterMethod, setFilterMethod] = useState<string>("all");
   const [loading, setLoading] = useState(false);
-
   const [payments, setPayments] = useState<Payment[]>([]);
 
   useEffect(() => {
@@ -72,7 +71,6 @@ const PaymentManagementPage: React.FC = () => {
 
     fetchPayments();
   }, []);
-
   const showPaymentDetail = (payment: Payment) => {
     setSelectedPayment(payment);
     setIsModalVisible(true);
