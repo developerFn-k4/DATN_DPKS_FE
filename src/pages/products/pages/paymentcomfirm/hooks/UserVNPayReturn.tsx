@@ -13,7 +13,18 @@ export const usePaymentReturn = (searchParams: URLSearchParams): PaymentReturnSt
   const [success, setSuccess] = useState(false);
   const [data, setData] = useState<PaymentStatusResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-
+  const buildFallbackData = () => ({
+      success: true,
+      status: searchParams.get("status") || "paid",
+      method: searchParams.get("method") || "vnpay",
+      order_id: searchParams.get("order_id") || searchParams.get("vnp_TxnRef") || undefined,
+      booking_id: (() => {
+        const rawBookingId = searchParams.get("booking_id");
+        if (!rawBookingId) return undefined;
+        const parsed = parseInt(rawBookingId, 10);
+        return Number.isNaN(parsed) ? undefined : parsed;
+      })(),
+    }); 
   useEffect(() => {
     const run = async () => {
       setLoading(true);
@@ -42,7 +53,7 @@ export const usePaymentReturn = (searchParams: URLSearchParams): PaymentReturnSt
         const responseCode = searchParams.get("vnp_ResponseCode");
         const isOk = responseCode === "00";
         setSuccess(isOk);
-        setData(null);
+        setData(isOk ? buildFallbackData() : null);
         setLoading(false);
         return;
       }
@@ -52,9 +63,16 @@ export const usePaymentReturn = (searchParams: URLSearchParams): PaymentReturnSt
         setSuccess(result.status === "paid" || result.success === true);
         setData(result);
       } catch (err: any) {
-        setError(err?.response?.data?.message || err.message || "Không thể xác nhận trạng thái thanh toán.");
-        setSuccess(false);
-        setData(null);
+         const fallback = queryStatus ? buildFallbackData() : null;
+        if (fallback) {
+          setSuccess(fallback.status === "success" || fallback.status === "paid");
+          setData(fallback as PaymentStatusResponse);
+          setError(null);
+        } else {
+          setError(err?.response?.data?.message || err.message || "Không thể xác nhận trạng thái thanh toán.");
+          setSuccess(false);
+          setData(null);
+        }
       } finally {
         setLoading(false);
       }
