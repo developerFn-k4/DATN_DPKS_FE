@@ -269,7 +269,7 @@ const BookingManagement = () => {
                     <button
                       onClick={() => handleQuickAction(booking, quickAction.next)}
                       disabled={isUpdating}
-                      className={`px-3 py-2 rounded-xl text-xs font-bold transition-colors disabled:opacity-50 flex items-center gap-1.5 ${quickAction.cls}`}
+                      className={`!bg-green-400 text-white px-3 py-2 rounded-xl text-xs font-bold transition-colors disabled:opacity-50 flex items-center gap-1.5 ${quickAction.cls}`}
                     >
                       {isUpdating && (
                         <span className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent" />
@@ -288,7 +288,7 @@ const BookingManagement = () => {
                   <button
                     onClick={() => handleDelete(booking)}
                     disabled={isDeleting}
-                    className="px-3 py-2 bg-red-50 text-red-500 rounded-xl text-xs font-bold hover:bg-red-500 hover:text-white transition-colors disabled:opacity-50"
+                    className="px-3 py-2 bg-red-50 text-red-500 rounded-xl text-xs font-bold hover:!bg-red-500 hover:text-white transition-colors disabled:opacity-50"
                   >
                     {isDeleting ? '...' : '🗑'}
                   </button>
