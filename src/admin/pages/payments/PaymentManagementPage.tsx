@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table, Card, Button, Tag, Modal, Input, Select, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { 
   FiCreditCard, 
   FiEye, 
-  FiCheck, 
+  FiCheck,
   FiSearch,
   FiFilter,
   FiDollarSign,
   FiCalendar
 } from "react-icons/fi";
 import dayjs from "dayjs";
+import { bookingApi, type Booking } from "../../../services/adminApi";
 
 interface Payment {
   id: number;
@@ -22,9 +23,26 @@ interface Payment {
   amount: number;
   payment_method: string;
   payment_date: string;
-  status: "pending" | "completed" | "failed" | "refunded";
+  status: "pending" | "success" | "failed" | "refunded";
   transaction_id?: string;
 }
+
+const toPaymentRows = (bookings: Booking[]): Payment[] => {
+  return bookings
+    .filter((booking) => !!booking.payment)
+    .map((booking) => ({
+      id: booking.payment.id,
+      booking_id: booking.id,
+      room_number: booking.booking_rooms?.[0]?.room?.room_number ?? "-",
+      customer_name: booking.name,
+      customer_email: booking.email,
+      amount: Number(booking.payment.amount ?? booking.total_price ?? 0),
+      payment_method: booking.payment.method,
+      payment_date: booking.payment.created_at ?? booking.created_at,
+      status: booking.payment.status,
+      transaction_id: booking.payment.order_id,
+    }));
+};
 
 const PaymentManagementPage: React.FC = () => {
   const navigate = useNavigate();
@@ -33,76 +51,27 @@ const PaymentManagementPage: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [filterMethod, setFilterMethod] = useState<string>("all");
+  const [loading, setLoading] = useState(false);
 
-  // Mock data - sẽ thay bằng API
-  const [payments, setPayments] = useState<Payment[]>([
-    {
-      id: 1,
-      booking_id: 101,
-      room_number: "205",
-      customer_name: "Nguyễn Văn A",
-      customer_email: "vana@gmail.com",
-      amount: 2500000,
-      payment_method: "credit_card",
-      payment_date: "2026-03-15T10:30:00",
-      status: "completed",
-      transaction_id: "TXN001234567"
-    },
-    {
-      id: 2,
-      booking_id: 102,
-      room_number: "310",
-      customer_name: "Trần Thị B",
-      customer_email: "thib@gmail.com",
-      amount: 3200000,
-      payment_method: "bank_transfer",
-      payment_date: "2026-03-15T14:20:00",
-      status: "pending",
-    },
-    {
-      id: 3,
-      booking_id: 103,
-      room_number: "101",
-      customer_name: "Lê Văn C",
-      customer_email: "levanc@gmail.com",
-      amount: 1800000,
-      payment_method: "cash",
-      payment_date: "2026-03-14T09:15:00",
-      status: "completed",
-      transaction_id: "TXN001234568"
-    },
-    {
-      id: 4,
-      booking_id: 104,
-      room_number: "408",
-      customer_name: "Phạm Thị D",
-      customer_email: "phamthid@gmail.com",
-      amount: 4500000,
-      payment_method: "e_wallet",
-      payment_date: "2026-03-14T16:45:00",
-      status: "failed",
-    },
-    {
-      id: 5,
-      booking_id: 105,
-      room_number: "202",
-      customer_name: "Hoàng Văn E",
-      customer_email: "hoangvane@gmail.com",
-      amount: 2800000,
-      payment_method: "credit_card",
-      payment_date: "2026-03-13T11:20:00",
-      status: "refunded",
-      transaction_id: "TXN001234569"
-    }
-  ]);
+  const [payments, setPayments] = useState<Payment[]>([]);
 
-  const handleConfirmPayment = (id: number) => {
-    setPayments(payments.map(payment => 
-      payment.id === id ? { ...payment, status: "completed", transaction_id: `TXN${Date.now()}` } : payment
-    ));
-    message.success("Đã xác nhận thanh toán");
-    setIsModalVisible(false);
-  };
+  useEffect(() => {
+    const fetchPayments = async () => {
+      try {
+        setLoading(true);
+        const res = await bookingApi.getAll({ page: 1, per_page: 500 });
+        const payload = res.data.data;
+        const bookings = Array.isArray(payload) ? payload : payload.data;
+        setPayments(toPaymentRows(bookings));
+      } catch (error: any) {
+        message.error(error?.message || "Không thể tải danh sách thanh toán.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPayments();
+  }, []);
 
   const showPaymentDetail = (payment: Payment) => {
     setSelectedPayment(payment);
@@ -111,7 +80,7 @@ const PaymentManagementPage: React.FC = () => {
 
   const getStatusTag = (status: string) => {
     switch (status) {
-      case "completed":
+      case "success":
         return <Tag color="success">Hoàn thành</Tag>;
       case "pending":
         return <Tag color="warning">Chờ xử lý</Tag>;
@@ -126,14 +95,12 @@ const PaymentManagementPage: React.FC = () => {
 
   const getMethodText = (method: string) => {
     switch (method) {
-      case "credit_card":
-        return "Thẻ tín dụng";
-      case "bank_transfer":
-        return "Chuyển khoản";
+      case "vnpay":
+        return "VNPay";
+      case "momo":
+        return "MoMo";
       case "cash":
         return "Tiền mặt";
-      case "e_wallet":
-        return "Ví điện tử";
       default:
         return method;
     }
@@ -208,10 +175,9 @@ const PaymentManagementPage: React.FC = () => {
         <Tag color="blue" className="text-xs">{getMethodText(method)}</Tag>
       ),
       filters: [
-        { text: "Thẻ tín dụng", value: "credit_card" },
-        { text: "Chuyển khoản", value: "bank_transfer" },
+        { text: "VNPay", value: "vnpay" },
+        { text: "MoMo", value: "momo" },
         { text: "Tiền mặt", value: "cash" },
-        { text: "Ví điện tử", value: "e_wallet" },
       ],
       onFilter: (value, record) => record.payment_method === value,
     },
@@ -234,7 +200,7 @@ const PaymentManagementPage: React.FC = () => {
       width: 95,
       render: (status: string) => getStatusTag(status),
       filters: [
-        { text: "Hoàn thành", value: "completed" },
+        { text: "Hoàn thành", value: "success" },
         { text: "Chờ xử lý", value: "pending" },
         { text: "Thất bại", value: "failed" },
         { text: "Đã hoàn tiền", value: "refunded" },
@@ -261,7 +227,7 @@ const PaymentManagementPage: React.FC = () => {
 
   const totalAmount = payments.reduce((sum, p) => sum + p.amount, 0);
   const completedAmount = payments
-    .filter(p => p.status === "completed")
+    .filter(p => p.status === "success")
     .reduce((sum, p) => sum + p.amount, 0);
   const pendingAmount = payments
     .filter(p => p.status === "pending")
@@ -347,7 +313,7 @@ const PaymentManagementPage: React.FC = () => {
           >
             <Select.Option value="all">Tất cả</Select.Option>
             <Select.Option value="pending">Chờ xử lý</Select.Option>
-            <Select.Option value="completed">Hoàn thành</Select.Option>
+            <Select.Option value="success">Hoàn thành</Select.Option>
             <Select.Option value="failed">Thất bại</Select.Option>
             <Select.Option value="refunded">Đã hoàn tiền</Select.Option>
           </Select>
@@ -359,10 +325,9 @@ const PaymentManagementPage: React.FC = () => {
             size="large"
           >
             <Select.Option value="all">Tất cả phương thức</Select.Option>
-            <Select.Option value="credit_card">Thẻ tín dụng</Select.Option>
-            <Select.Option value="bank_transfer">Chuyển khoản</Select.Option>
+            <Select.Option value="vnpay">VNPay</Select.Option>
+            <Select.Option value="momo">MoMo</Select.Option>
             <Select.Option value="cash">Tiền mặt</Select.Option>
-            <Select.Option value="e_wallet">Ví điện tử</Select.Option>
           </Select>
         </div>
       </Card>
@@ -372,7 +337,8 @@ const PaymentManagementPage: React.FC = () => {
         <Table
           columns={columns}
           dataSource={filteredPayments}
-          rowKey="id"
+          rowKey={(record) => `${record.id}-${record.booking_id}`}
+          loading={loading}
           size="middle"
           pagination={{
             pageSize: 10,
@@ -451,15 +417,8 @@ const PaymentManagementPage: React.FC = () => {
             </div>
 
             {selectedPayment.status === "pending" && (
-              <div className="pt-4">
-                <Button
-                  type="primary"
-                  icon={<FiCheck />}
-                  onClick={() => handleConfirmPayment(selectedPayment.id)}
-                  className="w-full h-10 bg-green-600 hover:bg-green-700"
-                >
-                  Xác nhận thanh toán
-                </Button>
+              <div className="pt-4 text-sm text-amber-600">
+                Giao dịch đang chờ xử lý từ cổng thanh toán.
               </div>
             )}
           </div>
