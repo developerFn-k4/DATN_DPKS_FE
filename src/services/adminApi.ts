@@ -34,6 +34,7 @@ export interface Payment {
   amount: number;
   method: string;
   status: PaymentStatus;
+  created_at?: string;
 }
 
 export interface BookingRoom {

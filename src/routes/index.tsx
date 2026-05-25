@@ -73,7 +73,7 @@ const Routers = () => {
       <Route path='/rooms' element={<RoomTypePage />} />
       <Route path='/payment-return' element={<PaymentReturnPage />} />
       <Route path='/my-bookings' element={<MyBookingsPage />} />
-      <Route path='/bookinguser' element={<BookingPage />} />
+      <Route path='/bookinguser' element={<MyBookingsPage />} />
     </Routes>
   );
 };
