@@ -72,6 +72,19 @@ export const RoomCard: React.FC<{ room: RoomTypeL }> = ({ room }) => {
             <div className={`w-2 h-2 rounded-full ${room.available_rooms > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
             <span className="text-xs font-bold">{room.available_rooms > 0 ? `Còn ${room.available_rooms} phòng` : 'Hết phòng'}</span>
           </div>
+          {/* Rating summary */}
+          {(room.average_rating != null || room.rating_summary?.overall != null) && (
+            <div className="mt-3 flex items-center gap-2">
+              <span className="px-2 py-0.5 bg-yellow-400 text-white text-xs font-black rounded">
+                ★ {(room.average_rating ?? room.rating_summary?.overall ?? 0).toFixed(1)}
+              </span>
+              {(room.total_reviews ?? room.rating_summary?.total_reviews) != null && (
+                <span className="text-xs text-gray-400">
+                  {room.total_reviews ?? room.rating_summary?.total_reviews} đánh giá
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Nút Chi Tiết mở Modal thông tin (GIỮ NGUYÊN GIAO DIỆN CŨ) */}
@@ -79,7 +92,8 @@ export const RoomCard: React.FC<{ room: RoomTypeL }> = ({ room }) => {
         <div className="w-full md:w-52 p-6 flex flex-col justify-center items-end bg-slate-50 border-l self-stretch md:self-stretch md:self-auto">
           <div className="text-[#b18a5d] text-2xl font-black">{formatPrice(room.base_price)}</div>
           <div className="text-[#b18a5d] text-xs font-bold mb-5">{room.currency}</div>
-          <button 
+          <button
+            type="button"
             onClick={() => setIsDetailOpen(true)}
             className="w-full !bg-[#029618] text-white font-bold py-3 hover:bg-[#027a14]"
           >
@@ -91,10 +105,10 @@ export const RoomCard: React.FC<{ room: RoomTypeL }> = ({ room }) => {
       {/* 1. MODAL XEM SLIDE ẢNH (CHỈ ẢNH - GIỮ NGUYÊN) */}
       {photoIndex !== null && (
         <div className="fixed inset-0 z-[200] bg-black/95 flex items-center justify-center select-none" onClick={() => setPhotoIndex(null)}>
-          <button className="absolute top-5 right-5 text-white text-4xl hover:text-gray-400">&times;</button>
-          
+          <button type="button" className="absolute top-5 right-5 text-white text-4xl hover:text-gray-400">&times;</button>
+
           {/* Nút lùi */}
-          <button onClick={prevPhoto} className="absolute left-5 p-4 text-white hover:bg-white/10 rounded-full transition-all text-3xl">❮</button>
+          <button type="button" onClick={prevPhoto} className="absolute left-5 p-4 text-white hover:bg-white/10 rounded-full transition-all text-3xl">❮</button>
 
           {/* Ảnh hiển thị */}
           <div className="max-w-5xl max-h-[85vh] p-4" onClick={(e) => e.stopPropagation()}>
@@ -109,7 +123,7 @@ export const RoomCard: React.FC<{ room: RoomTypeL }> = ({ room }) => {
           </div>
 
           {/* Nút tiến */}
-          <button onClick={nextPhoto} className="absolute right-5 p-4 text-white hover:bg-white/10 rounded-full transition-all text-3xl">❯</button>
+          <button type="button" onClick={nextPhoto} className="absolute right-5 p-4 text-white hover:bg-white/10 rounded-full transition-all text-3xl">❯</button>
         </div>
       )}
 

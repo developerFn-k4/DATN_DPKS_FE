@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Form, Input, Button, Select, message } from "antd";
+import { Form, Input, Button, message } from "antd";
 import {
   UserOutlined,
   MailOutlined,
@@ -49,7 +49,6 @@ export default function BookingPage() {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [bankCode, setBankCode] = useState("");
 
   const state = location.state as LocationState;
 
@@ -118,7 +117,6 @@ export default function BookingPage() {
         phone: values.phone,
         check_in: checkIn,
         check_out: checkOut,
-        amount: totalPrice,
         rooms: [
           {
             room_type_id: roomId,
@@ -131,13 +129,18 @@ export default function BookingPage() {
           service_id: s.id,
           quantity: roomCount,
         })),
-        bank_code: bankCode || undefined,
       };
 
       const response = await createBooking(payload);
 
-      if (response.payment_url) {
-        const bookingInfo = {
+      if (response.booking_id) {
+        message.success({
+          content: "Đặt phòng thành công! Chuyển đến trang thanh toán...",
+          duration: 1.5,
+          style: { marginTop: "20vh" },
+        });
+        // Lưu thông tin booking để dùng ở trang kết quả
+        sessionStorage.setItem("vietstay_booking_info", JSON.stringify({
           name: values.name,
           email: values.email,
           phone: values.phone,
@@ -147,29 +150,8 @@ export default function BookingPage() {
           nights,
           roomCount,
           totalPrice,
-          paymentUrl: response.payment_url,
-          bookingId: response.booking_id,
-          orderId: response.order_id,
-          amount: response.amount,
-        };
-        sessionStorage.setItem("vietstay_booking_info", JSON.stringify(bookingInfo));
-
-        message.success({
-          content: "Đặt phòng thành công! Chuyển đến trang thanh toán...",
-          duration: 2,
-          style: { marginTop: "20vh" },
-        });
-        window.location.href = response.payment_url;
-        return;
-      }
-
-      if (response.booking_id) {
-        message.success({
-          content: "Đặt phòng thành công!",
-          duration: 2,
-          style: { marginTop: "20vh" },
-        });
-        setTimeout(() => navigate("/"), 1800);
+        }));
+        setTimeout(() => navigate(`/checkout?bookingId=${response.booking_id}`), 1500);
       } else {
         message.error(response.message || "Đặt phòng thất bại!");
       }
@@ -357,36 +339,6 @@ export default function BookingPage() {
                     <Input
                       prefix={<MailOutlined className="text-gray-300" />}
                       placeholder="email@example.com"
-                      className="rounded-xl border-gray-200 hover:border-emerald-400 focus:border-emerald-500"
-                    />
-                  </Form.Item>
-
-                  <Form.Item
-                    label={<span className="text-gray-600 font-medium text-sm">Ngân hàng VNPay</span>}
-                    name="bank_code"
-                    rules={[
-                      { required: true, message: "Vui lòng chọn ngân hàng VNPay!" },
-                    ]}
-                  >
-                    <Select
-                      placeholder="Chọn ngân hàng/VNPAY"
-                      options={[
-                        { value: "VNPAYQR", label: "VNPay QR" },
-                        { value: "VCB", label: "Vietcombank" },
-                        { value: "BIDV", label: "BIDV" },
-                        { value: "VPB", label: "VPBank" },
-                        { value: "TPB", label: "TPBank" },
-                        { value: "ACB", label: "ACB" },
-                        { value: "TCB", label: "Techcombank" },
-                        { value: "MB", label: "MB Bank" },
-                        { value: "SCB", label: "SCB" },
-                        { value: "HDB", label: "HDBank" },
-                        { value: "AGRIBANK", label: "Agribank" },
-                        { value: "NCB", label: "NCB" },
-                      ]}
-                      onChange={(value) => setBankCode(value)}
-                      showSearch
-                      optionFilterProp="label"
                       className="rounded-xl border-gray-200 hover:border-emerald-400 focus:border-emerald-500"
                     />
                   </Form.Item>

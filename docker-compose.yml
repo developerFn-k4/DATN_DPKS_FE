@@ -7,6 +7,7 @@ services:
       dockerfile: Dockerfile
       target: development
     container_name: datn-dpks-fe
+    restart: always
     ports:
       - "5173:5173"
     volumes:
