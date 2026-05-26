@@ -32,6 +32,7 @@ export interface PaymentStatusResponse {
     check_out: string;
     name: string;
     room_name?: string;
+    payment_status?: string;
   };
 }
 
@@ -123,19 +124,22 @@ const normalizeBooking = (booking: RawMyBooking): MyBooking => {
 };
 export const paymentService = {
   checkout: async (bookingId: number, method: PaymentMethod): Promise<CheckoutResponse> => {
-   const endpointMap: Record<PaymentMethod, string> = {
-      vnpay: `/payment/vnpay/${bookingId}`,
-      momo: `/payment/momo/${bookingId}`,
-      cash: `/payment/cash/${bookingId}`,
-    };
-
-    const res = await api.post<CheckoutResponse>(endpointMap[method]);
+    const res = await api.post<CheckoutResponse>(`/payment/checkout/${bookingId}`, { method });
     return res.data;
   },
 
   getPaymentStatus: async (orderId: string): Promise<PaymentStatusResponse> => {
-    const res = await api.get<PaymentStatusResponse>(`/payment/status/${orderId}`);
-    return res.data;
+     const res = await api.get<{ success: boolean; data: PaymentStatusResponse }>(`/payment/status/${orderId}`);
+    const inner = res.data.data;
+    return {
+      success: res.data.success,
+      status: inner.booking?.payment_status ?? inner.status,
+      order_id: inner.order_id,
+      booking_id: inner.booking?.id,
+      amount: inner.amount,
+      method: inner.method,
+      booking: inner.booking,
+    };
   },
 
   getMyBookings: async (): Promise<MyBookingsResponse> => {
