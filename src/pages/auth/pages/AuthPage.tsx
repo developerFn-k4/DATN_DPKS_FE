@@ -68,7 +68,7 @@ const onLogin = async (values: LoginValues) => {
   const onRegister = async (values: RegisterValues) => {
     setRegisterLoading(true);
     try {
-      await apiClient.post("/register", {
+      await apiClient.post("/auth/register", {
         name: values.fullName,
         email: values.email,
         password: values.password,
