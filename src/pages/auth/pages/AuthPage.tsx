@@ -44,7 +44,7 @@ export default function AuthPage() {
 const onLogin = async (values: LoginValues) => {
   setLoginLoading(true);
   try {
-    const res = await apiClient.post("/auth/login", {
+    const res = await apiClient.post("/auth/login", { 
       email: values.email,
       password: values.password,
     });
