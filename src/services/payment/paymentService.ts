@@ -98,12 +98,13 @@ export interface MyBookingsResponse {
   };
 }
 const normalizeBooking = (booking: RawMyBooking): MyBooking => {
-  const mappedRooms = booking.rooms && booking.rooms.length > 0
-    ? booking.rooms
-    : (booking.booking_rooms ?? []).map((item) => ({
-        name: item.room?.room_type?.name ?? "Phòng",
-        quantity: item.quantity ?? 1,
-      }));
+  const mappedRooms =
+    booking.rooms && booking.rooms.length > 0
+      ? booking.rooms
+      : (booking.booking_rooms ?? []).map((item) => ({
+          name: item.room?.room_type?.name ?? "Phòng",
+          quantity: item.quantity ?? 1,
+        }));
 
   return {
     id: booking.id,
