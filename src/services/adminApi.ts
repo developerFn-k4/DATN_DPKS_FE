@@ -168,6 +168,12 @@ export const bookingApi = {
   delete: (id: string | number) => adminAxios.delete(`/admin/bookings/${id}`),
 };
 
+// ===================== PAYMENT API =====================
+export const paymentApi = {
+  cancel: (id: number) => adminAxios.post(`/admin/payments/${id}/cancel`),
+  delete: (id: number) => adminAxios.delete(`/admin/payments/${id}`),
+};
+
 // ===================== ROOM API =====================
 export const roomApi = {
   /** GET /admin/rooms */

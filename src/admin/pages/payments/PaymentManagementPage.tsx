@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Table, Card, Button, Tag, Modal, Input, Select, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { 
-  FiCreditCard, 
-  FiEye, 
+import {
+  FiCreditCard,
+  FiEye,
   FiCheck,
   FiSearch,
   FiFilter,
   FiDollarSign,
-  FiCalendar
+  FiCalendar,
+  FiXCircle,
+  FiTrash2,
 } from "react-icons/fi";
 import dayjs from "dayjs";
-import { bookingApi, type Booking } from "../../../services/adminApi";
+import { bookingApi, paymentApi, type Booking } from "../../../services/adminApi";
 
 interface Payment {
   id: number;
@@ -45,7 +46,6 @@ const toPaymentRows = (bookings: Booking[]): Payment[] => {
 };
 
 const PaymentManagementPage: React.FC = () => {
-  const navigate = useNavigate();
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -53,6 +53,7 @@ const PaymentManagementPage: React.FC = () => {
   const [filterMethod, setFilterMethod] = useState<string>("all");
   const [loading, setLoading] = useState(false);
   const [payments, setPayments] = useState<Payment[]>([]);
+  const [actionLoading, setActionLoading] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -74,6 +75,52 @@ const PaymentManagementPage: React.FC = () => {
   const showPaymentDetail = (payment: Payment) => {
     setSelectedPayment(payment);
     setIsModalVisible(true);
+  };
+
+  const handleCancel = (payment: Payment) => {
+    Modal.confirm({
+      title: "Hủy giao dịch",
+      content: `Bạn có chắc muốn hủy giao dịch #${payment.id} của khách ${payment.customer_name}?`,
+      okText: "Hủy giao dịch",
+      okButtonProps: { danger: true },
+      cancelText: "Đóng",
+      onOk: async () => {
+        setActionLoading(payment.id);
+        try {
+          await paymentApi.cancel(payment.id);
+          message.success("Đã hủy giao dịch thành công.");
+          setPayments((prev: Payment[]) =>
+            prev.map((p: Payment) => p.id === payment.id ? { ...p, status: "failed" as const } : p)
+          );
+        } catch (err: any) {
+          message.error(err?.response?.data?.message || "Không thể hủy giao dịch.");
+        } finally {
+          setActionLoading(null);
+        }
+      },
+    });
+  };
+
+  const handleDelete = (payment: Payment) => {
+    Modal.confirm({
+      title: "Xóa giao dịch",
+      content: `Bạn có chắc muốn xóa vĩnh viễn giao dịch #${payment.id}? Hành động này không thể hoàn tác.`,
+      okText: "Xóa",
+      okButtonProps: { danger: true },
+      cancelText: "Đóng",
+      onOk: async () => {
+        setActionLoading(payment.id);
+        try {
+          await paymentApi.delete(payment.id);
+          message.success("Đã xóa giao dịch thành công.");
+          setPayments((prev: Payment[]) => prev.filter((p: Payment) => p.id !== payment.id));
+        } catch (err: any) {
+          message.error(err?.response?.data?.message || "Không thể xóa giao dịch.");
+        } finally {
+          setActionLoading(null);
+        }
+      },
+    });
   };
 
   const getStatusTag = (status: string) => {
@@ -208,17 +255,45 @@ const PaymentManagementPage: React.FC = () => {
     {
       title: "Hành động",
       key: "action",
-      width: 70,
+      width: 160,
       fixed: "right",
       render: (_, record) => (
-        <Button
-          type="link"
-          icon={<FiEye />}
-          onClick={() => navigate(`/admin/payments/${record.booking_id}`)}
-          size="small"
-        >
-          Xem
-        </Button>
+        <div className="flex items-center gap-1">
+          <Button
+            type="link"
+            icon={<FiEye />}
+            onClick={() => showPaymentDetail(record)}
+            size="small"
+            className="text-blue-600 px-1"
+          >
+            Xem
+          </Button>
+          {record.status === "pending" && (
+            <Button
+              type="link"
+              icon={<FiXCircle />}
+              onClick={() => handleCancel(record)}
+              size="small"
+              loading={actionLoading === record.id}
+              className="text-orange-500 px-1"
+            >
+              Hủy
+            </Button>
+          )}
+          {record.status !== "success" && (
+            <Button
+              type="link"
+              icon={<FiTrash2 />}
+              onClick={() => handleDelete(record)}
+              size="small"
+              loading={actionLoading === record.id}
+              danger
+              className="px-1"
+            >
+              Xóa
+            </Button>
+          )}
+        </div>
       ),
     },
   ];
