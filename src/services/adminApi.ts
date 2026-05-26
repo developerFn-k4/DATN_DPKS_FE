@@ -167,6 +167,10 @@ export const bookingApi = {
   /** DELETE /admin/bookings/{id} */
   delete: (id: string | number) => adminAxios.delete(`/admin/bookings/${id}`),
 };
+export const paymentApi = {
+  cancel: (id: number) => adminAxios.post(`/admin/payments/${id}/cancel`),
+  delete: (id: number) => adminAxios.delete(`/admin/payments/${id}`),
+};  
 
 // ===================== PAYMENT API =====================
 export const paymentApi = {

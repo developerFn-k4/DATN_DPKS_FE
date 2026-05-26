@@ -72,6 +72,7 @@ const PaymentManagementPage: React.FC = () => {
 
     fetchPayments();
   }, []);
+
   const showPaymentDetail = (payment: Payment) => {
     setSelectedPayment(payment);
     setIsModalVisible(true);
@@ -152,11 +153,11 @@ const PaymentManagementPage: React.FC = () => {
   };
 
   const filteredPayments = payments.filter(payment => {
-    const matchSearch = 
+    const matchSearch =
       payment.customer_name.toLowerCase().includes(searchText.toLowerCase()) ||
       payment.room_number.includes(searchText) ||
       payment.booking_id.toString().includes(searchText);
-    
+
     const matchStatus = filterStatus === "all" || payment.status === filterStatus;
     const matchMethod = filterMethod === "all" || payment.payment_method === filterMethod;
 
@@ -298,39 +299,39 @@ const PaymentManagementPage: React.FC = () => {
     },
   ];
 
-  const totalAmount = payments.reduce((sum, p) => sum + p.amount, 0);
+  const totalAmount = payments.reduce((sum: number, p: Payment) => sum + p.amount, 0);
   const completedAmount = payments
-    .filter(p => p.status === "success")
-    .reduce((sum, p) => sum + p.amount, 0);
+    .filter((p: Payment) => p.status === "success")
+    .reduce((sum: number, p: Payment) => sum + p.amount, 0);
   const pendingAmount = payments
-    .filter(p => p.status === "pending")
-    .reduce((sum, p) => sum + p.amount, 0);
+    .filter((p: Payment) => p.status === "pending")
+    .reduce((sum: number, p: Payment) => sum + p.amount, 0);
 
   const stats = [
-    { 
-      label: "Tổng giao dịch", 
-      value: payments.length, 
+    {
+      label: "Tổng giao dịch",
+      value: payments.length,
       color: "text-blue-600",
       icon: <FiCreditCard className="text-2xl" />,
       bgColor: "bg-blue-50"
     },
-    { 
-      label: "Tổng doanh thu", 
-      value: `${totalAmount.toLocaleString()} ₫`, 
+    {
+      label: "Tổng doanh thu",
+      value: `${totalAmount.toLocaleString()} ₫`,
       color: "text-green-600",
       icon: <FiDollarSign className="text-2xl" />,
       bgColor: "bg-green-50"
     },
-    { 
-      label: "Đã thanh toán", 
-      value: `${completedAmount.toLocaleString()} ₫`, 
+    {
+      label: "Đã thanh toán",
+      value: `${completedAmount.toLocaleString()} ₫`,
       color: "text-emerald-600",
       icon: <FiCheck className="text-2xl" />,
       bgColor: "bg-emerald-50"
     },
-    { 
-      label: "Chờ xử lý", 
-      value: `${pendingAmount.toLocaleString()} ₫`, 
+    {
+      label: "Chờ xử lý",
+      value: `${pendingAmount.toLocaleString()} ₫`,
       color: "text-yellow-600",
       icon: <FiCalendar className="text-2xl" />,
       bgColor: "bg-yellow-50"
@@ -339,7 +340,6 @@ const PaymentManagementPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      
       <div>
         <h1 className="flex items-center gap-2 text-3xl font-bold text-slate-900">
           <FiCreditCard className="text-emerald-600" />
@@ -348,7 +348,6 @@ const PaymentManagementPage: React.FC = () => {
         <p className="mt-1 text-slate-500">Quản lý và theo dõi các giao dịch thanh toán</p>
       </div>
 
-    
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, index) => (
           <Card key={index} className="border-0 shadow-sm rounded-xl">
@@ -365,7 +364,6 @@ const PaymentManagementPage: React.FC = () => {
         ))}
       </div>
 
-     
       <Card className="border-0 shadow-sm rounded-xl">
         <div className="flex flex-col gap-4 md:flex-row">
           <Input
@@ -405,7 +403,6 @@ const PaymentManagementPage: React.FC = () => {
         </div>
       </Card>
 
-      {/* Table */}
       <Card className="overflow-hidden border-0 shadow-sm rounded-xl">
         <Table
           columns={columns}
