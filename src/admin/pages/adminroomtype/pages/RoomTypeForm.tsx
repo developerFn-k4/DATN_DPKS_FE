@@ -94,6 +94,7 @@ const RoomTypeForm = () => {
   const [keepImageIds, setKeepImageIds] = useState<Set<number>>(new Set());
   // Ảnh mới người dùng chọn upload
   const [newImages, setNewImages] = useState<File[]>([]);
+  const [fileInputKey, setFileInputKey] = useState(0);
 
   // --- State loading ---
   const [pageLoading, setPageLoading] = useState(false);
@@ -188,10 +189,10 @@ const RoomTypeForm = () => {
 
   // Xử lý chọn file ảnh mới
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    setNewImages((prev) => [...prev, ...Array.from(e.target.files!)]);
-    // Reset input để có thể chọn lại cùng file
-    e.target.value = '';
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setNewImages((prev) => [...prev, ...Array.from(files)]);
+    setFileInputKey((k) => k + 1);
   };
 
   // ===================== SUBMIT =====================
@@ -539,6 +540,7 @@ const RoomTypeForm = () => {
                 <PlusOutlined style={{ fontSize: '20px' }} />
                 <span className="text-[10px] font-bold mt-1 uppercase">Tải ảnh</span>
                 <input
+                  key={fileInputKey}
                   type="file"
                   multiple
                   accept="image/jpeg,image/jpg,image/png,image/webp"
